@@ -1,0 +1,50 @@
+const REQUEST_STATUS = {
+  CREATED: 'created',
+  PAID: 'paid',
+  IN_PROGRESS: 'in_progress',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+};
+
+const PAYMENT_STATUS = {
+  PENDING: 'pending',
+  PAID: 'paid',
+  FAILED: 'failed',
+  REFUNDED: 'refunded',
+};
+
+const USER_ROLES = {
+  USER: 'user',
+  ADMIN: 'admin',
+};
+
+const SUPPORTED_LANGUAGES = {
+  RU: 'ru',
+  EN: 'en',
+};
+
+const ERROR_CODES = {
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  AUTHENTICATION_ERROR: 'AUTHENTICATION_ERROR',
+  AUTHORIZATION_ERROR: 'AUTHORIZATION_ERROR',
+  NOT_FOUND_ERROR: 'NOT_FOUND_ERROR',
+  DUPLICATE_ERROR: 'DUPLICATE_ERROR',
+  PAYMENT_ERROR: 'PAYMENT_ERROR',
+  FILE_UPLOAD_ERROR: 'FILE_UPLOAD_ERROR',
+  INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
+};
+
+const FILE_LIMITS = {
+  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_FILES_PER_REQUEST: 10,
+  ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
+};
+
+module.exports = {
+  REQUEST_STATUS,
+  PAYMENT_STATUS,
+  USER_ROLES,
+  SUPPORTED_LANGUAGES,
+  ERROR_CODES,
+  FILE_LIMITS,
+};
