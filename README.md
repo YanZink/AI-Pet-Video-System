@@ -176,3 +176,81 @@ Expected Results:
 - Database stores users and requests
 - Redis handles rate limiting
 - No errors in console logs
+
+## Telegram Bot (Stage 2) - Ready for Testing!
+
+Telegram Stars Payments Integration
+
+Our Telegram bot is fully integrated with Telegram Stars payment system and ready for testing in the test environment.
+
+Key Features Implemented:
+✅ Multi-language support (English/Russian) with i18n
+
+✅ Photo upload flow with progress tracking
+
+✅ Script input with skip option
+
+✅ Telegram Stars payments with test environment setup
+
+✅ Payment handlers for pre-checkout and successful payments
+
+✅ Session management with Redis
+
+✅ Backend API integration
+
+Testing Telegram Stars Payments:
+The bot uses Telegram's test environment for Stars payments:
+
+```
+// Already configured in telegramPayment.js
+provider_token: '', // Empty string for test environment
+currency: 'XTR', // Telegram Stars currency
+```
+
+To test the Telegram bot:
+Configure bot in @BotFather:
+
+```
+/setinline
+/setuserpic
+/setdescription
+```
+
+# Enable payments in bot settings
+
+Start the bot:
+
+```
+cd telegram-bot
+npm install
+cp .env.example .env
+# Add your TELEGRAM_BOT_TOKEN to .env
+npm start
+```
+
+Test the complete flow:
+
+- Start conversation with bot
+- Upload photos (1-10 images)
+- Add optional script or skip
+- Proceed to payment
+- Test Stars payment in test environment
+- Verify status updates
+
+Payment Flow:
+
+- Bot sends invoice via sendInvoice method
+- User confirms payment in Telegram
+- Pre-checkout query validation
+- Successful payment processing
+- Backend integration updates request status
+- User receives confirmation
+
+Ready for Production:
+To move to production:
+
+- Replace empty "provider_token" with real token
+- Switch bot from test to production mode
+- Update environment variables
+
+The Telegram bot is fully functional and ready for demonstration!
