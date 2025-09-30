@@ -1,6 +1,6 @@
 const express = require('express');
 const { authMiddleware } = require('../middleware/auth');
-const { validateBody } = require('../middleware/validation');
+const { validateBody, validateUUIDParam } = require('../middleware/validation');
 const { requestSchemas } = require('../middleware/validation');
 const { getGeneralRateLimit } = require('../middleware/rateLimit');
 const requestController = require('../controllers/requestController');
@@ -12,6 +12,19 @@ requestRouter.get(
   '/queue/estimation',
   getGeneralRateLimit(),
   requestController.getQueueEstimation
+);
+
+requestRouter.get(
+  '/templates',
+  getGeneralRateLimit(),
+  requestController.getTemplates
+);
+
+requestRouter.get(
+  '/templates/:id',
+  getGeneralRateLimit(),
+  validateUUIDParam(),
+  requestController.getTemplate
 );
 
 // User routes (protected)

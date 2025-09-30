@@ -7,9 +7,9 @@ ai-pet-video-system/
 ├── backend/ # ✅
 │   ├── package.json # ✅
 │   ├── .env.example # ✅
-│   ├── .env # ✅
-│   ├── .gitignore # ✅
 │   ├── Dockerfile # ✅
+│   ├── scripts/
+│   │      └── migrate.js✅
 │   ├── src/
 │   │   ├── app.js # ✅
 │   │   ├── server.js # ✅
@@ -37,72 +37,51 @@ ai-pet-video-system/
 │   │   │   ├── s3Service.js # ✅
 │   │   │   ├── emailService.js # ✅
 │   │   │   ├── paymentService.js # ✅
-│   │   │   └── queueService.js # ✅
+│   │   │   ├── queueService.js # ✅
+│   │   │   └── translationService.js #
 │   │   ├── middleware/
 │   │   │   ├── auth.js # ✅
 │   │   │   ├── validation.js # ✅
 │   │   │   ├── rateLimit.js # ✅
-│   │   │   └── errorHandler.js # ✅
+│   │   │   ├── errorHandler.js # ✅
+│   │   │   └── i18n.js #
+│   │   ├── locales/ # 📍
+│   │   │   ├── en.json #
+│   │   │   ├── ru.json #
+│   │   │   └── index.js #
 │   │   └── utils/
 │   │       ├── logger.js # ✅
 │   │       ├── constants.js # ✅
-│   │       └── helpers.js # ✅
-│   └── migrations/
-│       ├── 001-create-users.sql # ✅
-│       ├── 002-create-requests.sql # ✅
-│       └── 003-create-templates.sql # ✅
-├── telegram-bot/ # ⏳ Stage 2
-│   ├── package.json
+│   │       ├── helpers.js # ✅
+│   │       └── index.js # ✅
+│   └── migrations/ #
+│       ├── 001-initial-schema.sql #
+│       └── 002-add-sample-data.sql #
+│
+├── telegram-bot/ # Stage 2
+│   ├── package.json #
 │   ├── .env.example
+│   ├── Dockerfile
 │   ├── bot.js
 │   └── src/
 │       ├── config/
-│       │   └── i18n.js
+│       │   ├── i18n.js #
+│       │   └── redis.js
 │       ├── handlers/
-│       │   ├── start.js
-│       │   ├── language.js
-│       │   ├── photoUpload.js
+│       │   ├── start.js #
+│       │   ├── language.js #
+│       │   ├── photoUpload.js #
 │       │   ├── scriptInput.js
 │       │   ├── payment.js
 │       │   └── status.js
 │       ├── services/
 │       │   ├── apiService.js
+│       │   ├── sessionService.js
 │       │   └── paymentTelegram.js
-│       ├── utils/
-│       │   └── keyboards.js
-│       └── locales/
-│           ├── en.json
-│           └── ru.json
-├── frontend/ # ⏳ Stage 3-4 + Admin Panel
-│   ├── package.json
-│   ├── .env.example
-│   ├── public/
-│   │   ├── index.html
-│   │   └── favicon.ico
-│   └── src/
-│       ├── index.js
-│       ├── App.js
-│       ├── config/
-│       │   └── i18n.js
-│       ├── components/
-│       │   ├── landing/
-│       │   ├── common/
-│       │   ├── forms/
-│       │   ├── admin/
-│       │   └── ui/
-│       ├── pages/
-│       ├── services/
-│       ├── contexts/
-│       ├── hooks/
-│       ├── utils/
-│       ├── styles/
-│       └── locales/
-├── docs/
-│   ├── deployment.md
-│   ├── api.md
-│   └── frontend-guide.md
-├── docker-compose.yml
-├── docker-compose.prod.yml
+│       └── utils/
+│           └── keyboards.js #
+│
+├── docker-compose.test.yml
 └── README.md
 ```
 

@@ -2,6 +2,7 @@ const { User } = require('../models');
 const { generateToken } = require('../middleware/auth');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
+const localeManager = require('../locales');
 const logger = require('../utils/logger');
 
 class UserController {
@@ -18,7 +19,7 @@ class UserController {
 
     if (existingUser) {
       throw createError(
-        'User already exists',
+        req.t('errors.user_exists', { defaultValue: 'User already exists' }),
         409,
         ERROR_CODES.DUPLICATE_ERROR
       );
@@ -34,10 +35,13 @@ class UserController {
     logger.info('New user created', {
       userId: user.id,
       method: userData.telegram_id ? 'telegram' : 'email',
+      language: user.language,
     });
 
     res.status(201).json({
-      message: 'User created successfully',
+      message: req.t('users.created_success', {
+        defaultValue: 'User created successfully',
+      }),
       user: user.getPublicData(),
       token,
     });
@@ -49,7 +53,9 @@ class UserController {
     const user = await User.findByEmail(email);
     if (!user) {
       throw createError(
-        'Invalid credentials',
+        req.t('errors.invalid_credentials', {
+          defaultValue: 'Invalid credentials',
+        }),
         401,
         ERROR_CODES.AUTHENTICATION_ERROR
       );
@@ -58,7 +64,9 @@ class UserController {
     const isValidPassword = await user.checkPassword(password);
     if (!isValidPassword) {
       throw createError(
-        'Invalid credentials',
+        req.t('errors.invalid_credentials', {
+          defaultValue: 'Invalid credentials',
+        }),
         401,
         ERROR_CODES.AUTHENTICATION_ERROR
       );
@@ -69,10 +77,13 @@ class UserController {
     logger.info('User logged in', {
       userId: user.id,
       email: user.email,
+      language: user.language,
     });
 
     res.json({
-      message: 'Login successful',
+      message: req.t('users.login_success', {
+        defaultValue: 'Login successful',
+      }),
       user: user.getPublicData(),
       token,
     });
@@ -81,6 +92,7 @@ class UserController {
   getCurrentUser = asyncHandler(async (req, res) => {
     res.json({
       user: req.user.getPublicData(),
+      language: req.language,
     });
   });
 
@@ -92,7 +104,9 @@ class UserController {
       const token = generateToken(existingUser);
 
       return res.json({
-        message: 'User already exists',
+        message: req.t('users.login_success', {
+          defaultValue: 'Login successful',
+        }),
         user: existingUser.getPublicData(),
         token,
         isNewUser: false,
@@ -112,13 +126,68 @@ class UserController {
     logger.info('New Telegram user created', {
       userId: user.id,
       telegramId: user.telegram_id,
+      language: user.language,
     });
 
     res.status(201).json({
-      message: 'User created from Telegram',
+      message: req.t('users.telegram_created', {
+        defaultValue: 'User created from Telegram',
+      }),
       user: user.getPublicData(),
       token,
       isNewUser: true,
+    });
+  });
+
+  /**
+   * Update user language preference
+   */
+  updateLanguage = asyncHandler(async (req, res) => {
+    const { language } = req.body;
+    const userId = req.user.id;
+
+    if (!localeManager.isLanguageSupported(language)) {
+      throw createError(
+        req.t('errors.unsupported_language', {
+          defaultValue: 'Unsupported language',
+        }),
+        400,
+        ERROR_CODES.VALIDATION_ERROR
+      );
+    }
+
+    await req.user.update({ language });
+
+    logger.info('User language updated', {
+      userId,
+      oldLanguage: req.user.language,
+      newLanguage: language,
+    });
+
+    res.json({
+      message: req.t('language.updated', {
+        defaultValue: 'Language updated successfully',
+      }),
+      user: req.user.getPublicData(),
+      language,
+    });
+  });
+
+  /**
+   * Get supported languages
+   */
+  getSupportedLanguages = asyncHandler(async (req, res) => {
+    const supportedLanguages = localeManager.getSupportedLanguages();
+
+    const languages = supportedLanguages.map((lang) => ({
+      code: lang,
+      name: lang === 'en' ? 'English' : 'Russian',
+      native_name: lang === 'en' ? 'English' : 'Русский',
+    }));
+
+    res.json({
+      languages,
+      default_language: 'en',
     });
   });
 }

@@ -2,6 +2,7 @@ const { Request, Template } = require('../models');
 const s3Service = require('../services/s3Service');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
+const localeManager = require('../locales');
 const logger = require('../utils/logger');
 
 class RequestController {
@@ -13,7 +14,9 @@ class RequestController {
       const template = await Template.findByPk(template_id);
       if (!template || !template.is_active) {
         throw createError(
-          'Template not found or inactive',
+          req.t('errors.template_not_found', {
+            defaultValue: 'Template not found or inactive',
+          }),
           404,
           ERROR_CODES.NOT_FOUND_ERROR
         );
@@ -21,7 +24,10 @@ class RequestController {
 
       if (photos.length > template.max_photos) {
         throw createError(
-          `Template allows maximum ${template.max_photos} photos`,
+          req.t('errors.template_photo_limit', {
+            max: template.max_photos,
+            defaultValue: `Template allows maximum ${template.max_photos} photos`,
+          }),
           400,
           ERROR_CODES.VALIDATION_ERROR
         );
@@ -46,10 +52,13 @@ class RequestController {
       requestId: request.id,
       userId,
       photosCount: photos.length,
+      language: req.language,
     });
 
     res.status(201).json({
-      message: 'Request created successfully',
+      message: req.t('requests.created_success', {
+        defaultValue: 'Request created successfully',
+      }),
       request: request.getPublicData(),
     });
   });
@@ -63,7 +72,7 @@ class RequestController {
         {
           model: Template,
           as: 'template',
-          attributes: ['id', 'name', 'name_ru', 'name_en'],
+          attributes: ['id', 'name', 'category'],
         },
       ],
       order: [['created_at', 'DESC']],
@@ -88,7 +97,9 @@ class RequestController {
                 return {
                   key: photoKey,
                   url: null,
-                  error: 'URL generation failed',
+                  error: req.t('errors.url_generation_failed', {
+                    defaultValue: 'URL generation failed',
+                  }),
                 };
               }
             })
@@ -120,7 +131,9 @@ class RequestController {
 
     if (!file_type || !file_type.startsWith('image/')) {
       throw createError(
-        'Invalid file type. Only images are supported',
+        req.t('errors.invalid_file_type', {
+          defaultValue: 'Invalid file type. Only images are supported',
+        }),
         400,
         ERROR_CODES.VALIDATION_ERROR
       );
@@ -133,7 +146,9 @@ class RequestController {
     }
 
     res.json({
-      message: 'Upload URLs generated successfully',
+      message: req.t('requests.upload_urls_generated', {
+        defaultValue: 'Upload URLs generated successfully',
+      }),
       uploads: uploadUrls,
     });
   });
@@ -144,6 +159,55 @@ class RequestController {
     res.json({
       estimated_wait_minutes: estimatedMinutes,
       estimated_wait_hours: Math.ceil(estimatedMinutes / 60),
+      message: req.t('queue.wait_time', {
+        minutes: estimatedMinutes,
+        defaultValue: `Estimated wait time: ${estimatedMinutes} minutes`,
+      }),
+    });
+  });
+
+  /**
+   * Get templates with localized data for the current user's language
+   */
+  getTemplates = asyncHandler(async (req, res) => {
+    const language = req.language;
+
+    const templates = await Template.findLocalized(language, {
+      where: { is_active: true },
+      order: [
+        ['sort_order', 'ASC'],
+        ['created_at', 'DESC'],
+      ],
+    });
+
+    res.json({
+      templates,
+      language,
+    });
+  });
+
+  /**
+   * Get single template with localized data
+   */
+  getTemplate = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const language = req.language;
+
+    const template = await Template.findByPk(id);
+    if (!template || !template.is_active) {
+      throw createError(
+        req.t('errors.template_not_found', {
+          defaultValue: 'Template not found',
+        }),
+        404,
+        ERROR_CODES.NOT_FOUND_ERROR
+      );
+    }
+
+    const localizedTemplate = await template.getLocalizedData(language);
+
+    res.json({
+      template: localizedTemplate,
     });
   });
 }

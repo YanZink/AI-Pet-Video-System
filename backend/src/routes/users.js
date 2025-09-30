@@ -32,12 +32,26 @@ userRouter.post(
   userController.createFromTelegram
 );
 
+userRouter.get(
+  '/languages',
+  getGeneralRateLimit(),
+  userController.getSupportedLanguages
+);
+
 // Protected routes
 userRouter.get(
   '/me',
   getGeneralRateLimit(),
   authMiddleware,
   userController.getCurrentUser
+);
+
+userRouter.patch(
+  '/language',
+  getGeneralRateLimit(),
+  authMiddleware,
+  validateBody(userSchemas.updateLanguage),
+  userController.updateLanguage
 );
 
 module.exports = userRouter;

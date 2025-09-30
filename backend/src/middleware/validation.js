@@ -1,26 +1,32 @@
 const Joi = require('joi');
 const { ERROR_CODES } = require('../utils/constants');
+const localeManager = require('../locales');
 
 const commonSchemas = {
   uuid: Joi.string().uuid().required(),
   email: Joi.string().email().min(5).max(255),
   password: Joi.string().min(6).max(128),
+  language: Joi.string().valid('ru', 'en').default('en'),
 };
 
 const userSchemas = {
   createUser: Joi.object({
     telegram_id: Joi.number().integer().positive().optional(),
     email: commonSchemas.email.optional(),
-    username: Joi.string().alphanum().min(3).max(50).optional(),
+    username: Joi.string().min(3).max(50).optional(),
     first_name: Joi.string().min(1).max(100).optional(),
     last_name: Joi.string().min(1).max(100).optional(),
     password: commonSchemas.password.optional(),
-    language: Joi.string().valid('ru', 'en').default('en'),
+    language: commonSchemas.language,
   }).or('telegram_id', 'email'),
 
   loginUser: Joi.object({
     email: commonSchemas.email.required(),
     password: commonSchemas.password.required(),
+  }),
+
+  updateLanguage: Joi.object({
+    language: commonSchemas.language.required(),
   }),
 };
 
@@ -31,8 +37,8 @@ const requestSchemas = {
       .min(1)
       .max(10)
       .required(),
-    script: Joi.string().max(1000).optional().allow(''),
-    template_id: Joi.string().max(50).optional(),
+    script: Joi.string().max(1000).optional().allow('').allow(null),
+    template_id: Joi.string().max(50).optional().allow(null),
   }),
 
   updateRequestStatus: Joi.object({
@@ -56,6 +62,10 @@ const paymentSchemas = {
     request_id: commonSchemas.uuid,
     payment_data: Joi.object().required(),
   }),
+
+  createPaymentIntent: Joi.object({
+    request_id: commonSchemas.uuid,
+  }),
 };
 
 const validateBody = (schema) => {
@@ -72,7 +82,13 @@ const validateBody = (schema) => {
       }));
 
       return res.status(400).json({
-        error: 'Validation error',
+        error: localeManager.translate(
+          'errors.validation_error',
+          req.language,
+          {
+            defaultValue: 'Validation error',
+          }
+        ),
         code: ERROR_CODES.VALIDATION_ERROR,
         details,
       });
@@ -89,7 +105,13 @@ const validateParams = (schema) => {
 
     if (error) {
       return res.status(400).json({
-        error: 'Invalid parameters',
+        error: localeManager.translate(
+          'errors.invalid_parameters',
+          req.language,
+          {
+            defaultValue: 'Invalid parameters',
+          }
+        ),
         code: ERROR_CODES.VALIDATION_ERROR,
         details: error.details,
       });

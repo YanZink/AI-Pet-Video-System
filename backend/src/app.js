@@ -1,89 +1,107 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const compression = require('compression');
-require('dotenv').config();
-
+const morgan = require('morgan');
+const { i18nMiddleware } = require('./middleware/i18n');
+const { errorHandler } = require('./middleware/errorHandler');
+const { initializeRateLimiters } = require('./middleware/rateLimit');
+const { redisManager } = require('./config/redis');
 const mainRouter = require('./routes');
-const {
-  errorHandler,
-  notFoundHandler,
-  requestLogger,
-} = require('./middleware/errorHandler');
-const { getGeneralRateLimit } = require('./middleware/rateLimit');
 const logger = require('./utils/logger');
 
-const app = express();
+class App {
+  constructor() {
+    this.app = express();
+  }
 
-// Trust proxy for correct IP addresses
-app.set('trust proxy', 1);
+  async initialize() {
+    try {
+      await this.setupMiddleware();
+      this.setupRoutes();
+      this.setupErrorHandling();
+      return this.app;
+    } catch (error) {
+      logger.error('Failed to initialize application:', error);
+      throw error;
+    }
+  }
 
-// Security middleware
-app.use(
-  helmet({
-    contentSecurityPolicy:
-      process.env.NODE_ENV === 'production' ? undefined : false,
-  })
-);
+  async setupMiddleware() {
+    // Security middleware
+    this.app.use(helmet());
+    this.app.use(
+      cors({
+        origin: process.env.ALLOWED_ORIGINS
+          ? process.env.ALLOWED_ORIGINS.split(',')
+          : ['http://localhost:3001'],
+        credentials: true,
+      })
+    );
 
-// CORS configuration
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = process.env.ALLOWED_ORIGINS
-        ? process.env.ALLOWED_ORIGINS.split(',')
-        : ['http://localhost:3001', 'http://localhost:3002'];
+    // Request parsing middleware
+    this.app.use(express.json({ limit: '10mb' }));
+    this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
+    // Logging middleware
+    this.app.use(
+      morgan('combined', {
+        stream: {
+          write: (message) => logger.info(message.trim()),
+        },
+      })
+    );
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        logger.warn('CORS blocked request from origin:', origin);
-        return callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  })
-);
+    // Custom request logging
+    this.app.use((req, res, next) => {
+      const start = Date.now();
+      res.on('finish', () => {
+        const duration = Date.now() - start;
+        logger.logRequest(req, res, duration);
+      });
+      next();
+    });
 
-// Response compression
-app.use(compression());
+    // Initialize Redis connection
+    logger.info('Connecting to Redis...');
+    await redisManager.connect();
 
-// Body parsing (special handling for Stripe webhook)
-app.use(
-  '/api/v1/payments/stripe/webhook',
-  express.raw({ type: 'application/json' })
-);
+    // Initialize rate limiters (after Redis is connected)
+    await initializeRateLimiters();
+  }
 
-// Standard body parsing for other routes
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+  setupRoutes() {
+    // Health check endpoint (no i18n needed)
+    this.app.get('/health', (req, res) => {
+      res.json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        uptime: Math.floor(process.uptime()),
+        version: '1.0.0',
+        environment: process.env.NODE_ENV || 'development',
+      });
+    });
 
-// Request logging
-app.use(requestLogger);
+    // API routes with i18n support
+    this.app.use('/api/v1', i18nMiddleware, mainRouter);
 
-// Rate limiting (используем геттер который вернет middleware)
-app.use('/api/', getGeneralRateLimit());
+    // 404 handler
+    this.app.use('*', (req, res) => {
+      res.status(404).json({
+        error: 'Route not found',
+        code: 'NOT_FOUND_ERROR',
+        path: req.originalUrl,
+      });
+    });
+  }
 
-// API routes
-app.use('/api/v1', mainRouter);
+  setupErrorHandling() {
+    // Error handling middleware (should be last)
+    this.app.use(errorHandler);
+  }
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: Math.floor(process.uptime()),
-    version: '1.0.0',
-  });
-});
+  async close() {
+    await redisManager.disconnect();
+  }
+}
 
-// Error handlers (must be last)
-app.use(notFoundHandler);
-app.use(errorHandler);
-
-module.exports = app;
+module.exports = App;
