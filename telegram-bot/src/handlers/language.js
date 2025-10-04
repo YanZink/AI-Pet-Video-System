@@ -1,3 +1,4 @@
+const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
 
@@ -13,8 +14,8 @@ class LanguageHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.reply(errorMessage);
         return;
       }
@@ -26,16 +27,16 @@ class LanguageHandler {
       session.state = 'menu';
       await sessionService.saveSession(userId, session);
 
-      const t = await Keyboards.getLocale(lang);
-      const selectedMessage = await t('language.selected');
+      const t = TelegramI18n.getT(lang);
+      const selectedMessage = t('language.selected');
 
       await ctx.reply(selectedMessage);
 
       // Show main menu
       setTimeout(async () => {
         const name = ctx.from.first_name || ctx.from.username || 'User';
-        const welcomeBack = await t('system.welcome_back', { name });
-        const mainMenu = await Keyboards.mainMenu(lang);
+        const welcomeBack = t('welcome_back', { name });
+        const mainMenu = Keyboards.mainMenu(lang);
 
         await ctx.reply(welcomeBack, {
           reply_markup: mainMenu,
@@ -43,8 +44,8 @@ class LanguageHandler {
       }, 1000);
     } catch (error) {
       console.error('Language handler error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.reply(errorMessage);
     }
   }
@@ -55,22 +56,22 @@ class LanguageHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.reply(errorMessage);
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
-      const chooseMessage = await t('language.choose');
+      const t = TelegramI18n.getT(session.language);
+      const chooseMessage = t('language.choose');
 
       await ctx.reply(chooseMessage, {
         reply_markup: Keyboards.languageKeyboard(),
       });
     } catch (error) {
       console.error('Language menu error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.reply(errorMessage);
     }
   }

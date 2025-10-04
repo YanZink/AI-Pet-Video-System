@@ -5,6 +5,7 @@ require('dotenv').config();
 // Import services and handlers
 const ApiService = require('./src/services/apiService');
 const TelegramPaymentService = require('./src/services/telegramPayment');
+const TelegramI18n = require('./src/config/i18n');
 const StartHandler = require('./src/handlers/start');
 const LanguageHandler = require('./src/handlers/language');
 const PhotoUploadHandler = require('./src/handlers/photoUpload');
@@ -51,7 +52,7 @@ class AIPetVideoBot {
     );
 
     this.setupHandlers();
-    this.setupWebhook(); //Setup webhook for backend notifications
+    this.setupWebhook();
   }
 
   setupHandlers() {
@@ -125,14 +126,14 @@ class AIPetVideoBot {
         if (session) {
           session.state = 'menu';
           await sessionService.saveSession(userId, session);
-          const t = await Keyboards.getLocale(session.language);
+          const t = TelegramI18n.getT(session.language);
 
-          const mainMenuText = await t('system.main_menu');
+          const mainMenuText = t('main_menu');
           await ctx.reply(mainMenuText);
 
           setTimeout(async () => {
-            const chooseOption = await t('system.choose_option');
-            const mainMenu = await Keyboards.mainMenu(session.language);
+            const chooseOption = t('choose_option');
+            const mainMenu = Keyboards.mainMenu(session.language);
             await ctx.reply(chooseOption, {
               reply_markup: mainMenu,
             });
@@ -140,8 +141,8 @@ class AIPetVideoBot {
         }
       } catch (error) {
         console.error('Main menu navigation error:', error);
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('system.something_wrong');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.reply(errorMessage);
       }
     });
@@ -150,8 +151,8 @@ class AIPetVideoBot {
     this.bot.catch(async (err, ctx) => {
       console.error('Bot error:', err);
       try {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('system.something_wrong');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.reply(errorMessage).catch(() => {});
       } catch (error) {
         console.error('Error in error handler:', error);
@@ -170,7 +171,7 @@ class AIPetVideoBot {
   // Setup webhook endpoint for backend notifications
   setupWebhook() {
     this.webhookApp.use(express.json());
-    // Webhook endpoint for backend notifications
+
     this.webhookApp.post('/webhook', async (req, res) => {
       try {
         const { userId, requestId, status, language = 'en' } = req.body;
@@ -231,7 +232,6 @@ class AIPetVideoBot {
     });
   }
 
-  // Add this method to the AIPetVideoBot class
   isValidUUID(uuid) {
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -241,29 +241,20 @@ class AIPetVideoBot {
   // Method to send status notifications (called by backend webhook)
   async sendStatusNotification(userId, requestId, status, language = 'en') {
     try {
-      const locale = Keyboards.getLocale(language);
-      const statusText = locale.status[status] || status;
+      const t = TelegramI18n.getT(language);
+      const statusText = t(`status.${status}`) || status;
 
-      let message = `${
-        locale.notifications?.update_title || '🔔 Video Request Update'
-      }\n\n`;
-      message += `${
-        locale.notifications?.request_id || '📋 Request:'
-      } #${requestId.substring(0, 8)}\n`;
-      message += `${
-        locale.notifications?.status || '📊 Status:'
-      } ${statusText}\n\n`;
+      let message = `${t('notifications.update_title')}\n\n`;
+      message += `${t('notifications.request_id')} #${requestId.substring(
+        0,
+        8
+      )}\n`;
+      message += `${t('notifications.status')} ${statusText}\n\n`;
 
       if (status === 'completed') {
-        message += `${
-          locale.notifications?.completed_message ||
-          '🎉 Your video is ready for download!'
-        }`;
+        message += t('notifications.completed');
       } else if (status === 'in_progress') {
-        message += `${
-          locale.notifications?.in_progress_message ||
-          '⚙️ Your video is being created...'
-        }`;
+        message += t('notifications.in_progress');
       }
 
       await this.bot.telegram.sendMessage(userId, message);
@@ -312,7 +303,7 @@ class AIPetVideoBot {
     console.log('🤖 Starting AI Pet Video Bot...');
 
     try {
-      // Connect to Redis first (await instead of .then)
+      // Connect to Redis first
       const redisConnected = await connectRedis();
       if (!redisConnected) {
         console.warn('⚠️ Redis connection failed - sessions will not persist');
@@ -352,7 +343,6 @@ class AIPetVideoBot {
               console.log(`📱 Bot username: @${this.bot.botInfo.username}`);
             } else {
               console.log('📱 Bot username: Loading...');
-              // Try again after another delay
               setTimeout(() => {
                 if (this.bot.botInfo && this.bot.botInfo.username) {
                   console.log(`📱 Bot username: @${this.bot.botInfo.username}`);

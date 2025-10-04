@@ -1,3 +1,4 @@
+const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
 
@@ -17,8 +18,8 @@ class StartHandler {
       const result = await this.api.registerTelegramUser(user);
 
       if (!result.success) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.api_error');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.reply(errorMessage);
         return;
       }
@@ -39,20 +40,19 @@ class StartHandler {
       await sessionService.saveSession(user.id, session);
 
       const lang = result.user.language || 'en';
+      const t = TelegramI18n.getT(lang);
 
       if (result.isNewUser) {
         // New user - show language selection
-        const t = await Keyboards.getLocale(lang);
-        const welcomeMessage = await t('system.welcome');
+        const welcomeMessage = t('welcome');
         await ctx.reply(welcomeMessage, {
           reply_markup: Keyboards.languageKeyboard(),
         });
       } else {
         // Existing user - show main menu
-        const t = await Keyboards.getLocale(lang);
         const name = user.first_name || user.username || 'User';
-        const welcomeBack = await t('system.welcome_back', { name });
-        const mainMenu = await Keyboards.mainMenu(lang);
+        const welcomeBack = t('welcome_back', { name });
+        const mainMenu = Keyboards.mainMenu(lang);
 
         await ctx.reply(welcomeBack, {
           reply_markup: mainMenu,
@@ -60,8 +60,8 @@ class StartHandler {
       }
     } catch (error) {
       console.error('Start handler error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.reply(errorMessage);
     }
   }

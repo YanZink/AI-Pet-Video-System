@@ -1,3 +1,4 @@
+const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
 
@@ -16,16 +17,16 @@ class PhotoUploadHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.reply(errorMessage);
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
-      const requestMessage = await t('photos.request');
+      const t = TelegramI18n.getT(session.language);
+      const requestMessage = t('photos.request');
 
-      // Initialize photo upload session with uploadData structure
+      // Initialize photo upload session
       session.state = 'uploading_photos';
       session.uploadData = {
         photos: [],
@@ -40,8 +41,8 @@ class PhotoUploadHandler {
       });
     } catch (error) {
       console.error('Start photo upload error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.reply(errorMessage);
     }
   }
@@ -55,11 +56,11 @@ class PhotoUploadHandler {
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
+      const t = TelegramI18n.getT(session.language);
 
-      // Check photo limit using uploadData structure
+      // Check photo limit
       if (session.uploadData.photos.length >= this.maxPhotos) {
-        const maxReached = await t('photos.max_reached');
+        const maxReached = t('photos.max_reached');
         await ctx.reply(maxReached);
         return;
       }
@@ -67,7 +68,7 @@ class PhotoUploadHandler {
       const photo = ctx.message.photo[ctx.message.photo.length - 1];
 
       if (photo.file_size > this.maxFileSize) {
-        const fileTooLarge = await t('errors.file_too_large');
+        const fileTooLarge = t('errors.file_too_large');
         await ctx.reply(fileTooLarge);
         return;
       }
@@ -78,7 +79,7 @@ class PhotoUploadHandler {
           .toString(36)
           .substring(7)}.jpg`;
 
-        // Store photo info using uploadData structure
+        // Store photo info
         session.uploadData.photos.push({
           telegramFileId: photo.file_id,
           s3Key: simulatedS3Key,
@@ -90,7 +91,7 @@ class PhotoUploadHandler {
 
         const current = session.uploadData.photos.length;
         const progressBar = Keyboards.progressBar(current, this.maxPhotos);
-        const receivedMessage = await t('photos.received', {
+        const receivedMessage = t('photos.received', {
           current,
           max: this.maxPhotos,
         });
@@ -99,23 +100,20 @@ class PhotoUploadHandler {
           `📸 ${progressBar} (${current}/${this.maxPhotos})\n` +
             receivedMessage,
           {
-            reply_markup: await Keyboards.photoContinue(
-              current,
-              session.language
-            ),
+            reply_markup: Keyboards.photoContinue(current, session.language),
           }
         );
 
         await sessionService.saveSession(userId, session);
       } catch (uploadError) {
         console.error('Photo processing error:', uploadError);
-        const uploadFailed = await t('errors.upload_failed');
+        const uploadFailed = t('errors.upload_failed');
         await ctx.reply(uploadFailed);
       }
     } catch (error) {
       console.error('Handle photo error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.invalid_file');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.invalid_file');
       await ctx.reply(errorMessage);
     }
   }
@@ -130,19 +128,19 @@ class PhotoUploadHandler {
         !session.uploadData.photos ||
         session.uploadData.photos.length === 0
       ) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.no_photos');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.no_photos');
         await ctx.editMessageText(errorMessage);
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
+      const t = TelegramI18n.getT(session.language);
 
       // Move to script input
       session.state = 'entering_script';
       await sessionService.saveSession(userId, session);
 
-      const uploadComplete = await t('photos.upload_complete', {
+      const uploadComplete = t('photos.upload_complete', {
         count: session.uploadData.photos.length,
       });
 
@@ -150,8 +148,8 @@ class PhotoUploadHandler {
 
       // Show script input
       setTimeout(async () => {
-        const scriptRequest = await t('script.request');
-        const scriptOptions = await Keyboards.scriptOptions(session.language);
+        const scriptRequest = t('script.request');
+        const scriptOptions = Keyboards.scriptOptions(session.language);
 
         await ctx.reply(scriptRequest, {
           reply_markup: scriptOptions,
@@ -159,8 +157,8 @@ class PhotoUploadHandler {
       }, 1000);
     } catch (error) {
       console.error('Photo continue error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.editMessageText(errorMessage);
     }
   }

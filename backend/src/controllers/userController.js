@@ -2,7 +2,7 @@ const { User } = require('../models');
 const { generateToken } = require('../middleware/auth');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
-const localeManager = require('../locales');
+const localeManager = require('../../../shared-locales');
 const logger = require('../utils/logger');
 
 class UserController {
@@ -19,7 +19,7 @@ class UserController {
 
     if (existingUser) {
       throw createError(
-        req.t('errors.user_exists', { defaultValue: 'User already exists' }),
+        req.t('auth.user_exists', { defaultValue: 'User already exists' }),
         409,
         ERROR_CODES.DUPLICATE_ERROR
       );
@@ -39,7 +39,7 @@ class UserController {
     });
 
     res.status(201).json({
-      message: req.t('users.created_success', {
+      message: req.t('auth.created_success', {
         defaultValue: 'User created successfully',
       }),
       user: user.getPublicData(),
@@ -53,7 +53,7 @@ class UserController {
     const user = await User.findByEmail(email);
     if (!user) {
       throw createError(
-        req.t('errors.invalid_credentials', {
+        req.t('auth.invalid_credentials', {
           defaultValue: 'Invalid credentials',
         }),
         401,
@@ -64,7 +64,7 @@ class UserController {
     const isValidPassword = await user.checkPassword(password);
     if (!isValidPassword) {
       throw createError(
-        req.t('errors.invalid_credentials', {
+        req.t('auth.invalid_credentials', {
           defaultValue: 'Invalid credentials',
         }),
         401,
@@ -81,7 +81,7 @@ class UserController {
     });
 
     res.json({
-      message: req.t('users.login_success', {
+      message: req.t('auth.login_success', {
         defaultValue: 'Login successful',
       }),
       user: user.getPublicData(),
@@ -104,7 +104,7 @@ class UserController {
       const token = generateToken(existingUser);
 
       return res.json({
-        message: req.t('users.login_success', {
+        message: req.t('auth.login_success', {
           defaultValue: 'Login successful',
         }),
         user: existingUser.getPublicData(),
@@ -130,7 +130,7 @@ class UserController {
     });
 
     res.status(201).json({
-      message: req.t('users.telegram_created', {
+      message: req.t('auth.telegram_created', {
         defaultValue: 'User created from Telegram',
       }),
       user: user.getPublicData(),
@@ -148,7 +148,7 @@ class UserController {
 
     if (!localeManager.isLanguageSupported(language)) {
       throw createError(
-        req.t('errors.unsupported_language', {
+        req.t('auth.unsupported_language', {
           defaultValue: 'Unsupported language',
         }),
         400,
@@ -165,7 +165,7 @@ class UserController {
     });
 
     res.json({
-      message: req.t('language.updated', {
+      message: req.t('common.language_selected', {
         defaultValue: 'Language updated successfully',
       }),
       user: req.user.getPublicData(),

@@ -1,4 +1,4 @@
-const i18nService = require('../config/i18n');
+const localeManager = require('../../../shared-locales');
 
 class Keyboards {
   /// Get progress bar
@@ -25,11 +25,14 @@ class Keyboards {
   }
 
   static async mainMenu(lang = 'en') {
-    const createVideo = await i18nService.translate('menu.create_video', lang);
-    const myVideos = await i18nService.translate('menu.my_videos', lang);
-    const language = await i18nService.translate('menu.language', lang);
-    const help = await i18nService.translate('menu.help', lang);
-    const status = await i18nService.translate('menu.status', lang);
+    const createVideo = localeManager.translate(
+      'telegram.menu.create_video',
+      lang
+    );
+    const myVideos = localeManager.translate('telegram.menu.my_videos', lang);
+    const language = localeManager.translate('telegram.menu.language', lang);
+    const help = localeManager.translate('telegram.menu.help', lang);
+    const status = localeManager.translate('telegram.menu.status', lang);
 
     return {
       keyboard: [
@@ -43,9 +46,13 @@ class Keyboards {
   }
 
   static async photoContinue(photoCount, lang = 'en') {
-    const continueText = await i18nService.translate('photos.continue', lang, {
-      count: photoCount,
-    });
+    const continueText = localeManager.translate(
+      'telegram.photos.continue',
+      lang,
+      {
+        count: photoCount,
+      }
+    );
 
     return {
       inline_keyboard: [
@@ -60,8 +67,11 @@ class Keyboards {
   }
 
   static async scriptOptions(lang = 'en') {
-    const skip = await i18nService.translate('script.skip', lang);
-    const continueText = await i18nService.translate('script.continue', lang);
+    const skip = localeManager.translate('telegram.script.skip', lang);
+    const continueText = localeManager.translate(
+      'telegram.script.continue',
+      lang
+    );
 
     return {
       inline_keyboard: [
@@ -72,10 +82,10 @@ class Keyboards {
   }
 
   static async paymentConfirm(price, lang = 'en') {
-    const confirm = await i18nService.translate('payment.confirm', lang, {
+    const confirm = localeManager.translate('telegram.payment.confirm', lang, {
       price,
     });
-    const cancel = await i18nService.translate('payment.cancel', lang);
+    const cancel = localeManager.translate('telegram.payment.cancel', lang);
 
     return {
       inline_keyboard: [
@@ -96,7 +106,7 @@ class Keyboards {
   }
 
   static async backToMenu(lang = 'en') {
-    const menu = await i18nService.translate('buttons.menu', lang);
+    const menu = localeManager.translate('telegram.buttons.menu', lang);
 
     return {
       inline_keyboard: [[{ text: menu, callback_data: 'main_menu' }]],
@@ -107,12 +117,15 @@ class Keyboards {
     const buttons = [];
 
     if (hasVideo) {
-      const download = await i18nService.translate('my_videos.download', lang);
+      const download = localeManager.translate(
+        'telegram.my_videos.download',
+        lang
+      );
       buttons.push([{ text: download, callback_data: 'download_video' }]);
     }
 
-    const back = await i18nService.translate('buttons.back', lang);
-    const menu = await i18nService.translate('buttons.menu', lang);
+    const back = localeManager.translate('telegram.buttons.back', lang);
+    const menu = localeManager.translate('telegram.buttons.menu', lang);
 
     buttons.push([{ text: back, callback_data: 'my_videos' }]);
     buttons.push([{ text: menu, callback_data: 'main_menu' }]);
@@ -120,42 +133,44 @@ class Keyboards {
     return { inline_keyboard: buttons };
   }
 
-  /**
-   * Get translation function for specific language
-   * @param {string} lang - Language code
-   * @returns {Function} Async translation function
-   */
-  static getLocale(lang) {
-    return async (key, variables = {}) => {
-      return await i18nService.translate(key, lang, variables);
-    };
-  }
-
-  // Get cancel button
   static async cancelButton(lang = 'en') {
-    const cancel = await i18nService.translate('buttons.cancel', lang);
+    const cancel = localeManager.translate('telegram.buttons.cancel', lang);
 
     return {
       inline_keyboard: [[{ text: cancel, callback_data: 'cancel' }]],
     };
   }
 
-  // Get retry button
   static async retryButton(lang = 'en') {
-    const retry = await i18nService.translate('buttons.retry', lang);
+    const retry = localeManager.translate('telegram.buttons.retry', lang);
 
     return {
       inline_keyboard: [[{ text: retry, callback_data: 'retry' }]],
     };
   }
 
-  // Get back button
   static async backButton(lang = 'en') {
-    const back = await i18nService.translate('buttons.back', lang);
+    const back = localeManager.translate('telegram.buttons.back', lang);
 
     return {
       inline_keyboard: [[{ text: back, callback_data: 'back' }]],
     };
+  }
+
+  /**
+   * Get simple inline keyboard with custom buttons
+   */
+  static inlineKeyboard(buttons, lang = 'en') {
+    const keyboard = buttons.map((button) => {
+      const translatedText = localeManager.translate(
+        button.textKey,
+        lang,
+        button.variables
+      );
+      return [{ text: translatedText, callback_data: button.callbackData }];
+    });
+
+    return { inline_keyboard: keyboard };
   }
 }
 

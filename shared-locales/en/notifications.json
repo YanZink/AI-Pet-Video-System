@@ -1,0 +1,16 @@
+{
+  "update_title": "🔔 Video Request Update",
+  "request_id": "📋 Request:",
+  "status": "📊 Status:",
+  "completed": "🎉 Your video is ready for download!",
+  "in_progress": "⚙️ Your video is being created...",
+  "email": {
+    "status_updated": "AI Pet Video - Request Status Updated",
+    "hello": "Hello {name},",
+    "request_details": "Request Details:",
+    "request_id": "Request ID:",
+    "new_status": "New Status:",
+    "view_request": "View Request",
+    "regards": "Best regards,\nAI Pet Video Team"
+  }
+}

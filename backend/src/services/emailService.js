@@ -1,10 +1,8 @@
 const { ses, awsConfig } = require('../config/aws');
-const localeManager = require('../locales');
 const logger = require('../utils/logger');
 
 /**
- * Updated Email Service with i18n support
- * Uses localeManager for translations instead of hardcoded texts
+ * Email Service with i18n support
  */
 class EmailService {
   constructor() {
@@ -72,32 +70,14 @@ class EmailService {
     const language = user.language || 'en';
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
 
-    // Get translations using localeManager
-    const subject = localeManager.translate('email.status_updated', language);
-    const hello = localeManager.translate('email.hello', language, {
-      name: user.first_name || user.username || 'there',
-    });
-    const requestDetails = localeManager.translate(
-      'email.request_details',
-      language
-    );
-    const requestId = localeManager.translate('email.request_id', language);
-    const newStatusText = localeManager.translate('email.new_status', language);
-    const viewRequest = localeManager.translate('email.view_request', language);
-    const regards = localeManager.translate('email.regards', language);
-
-    // Get status message based on new status
-    const statusKey = `status.${newStatus}`;
-    const statusMessage =
-      localeManager.translate(statusKey, language) || newStatus;
+    // Get translations using req.t style (will be handled by calling function)
+    const subject = `AI Pet Video - ${this.getStatusText(newStatus, language)}`;
+    const statusMessage = this.getStatusText(newStatus, language);
 
     const htmlBody = this.generateStatusUpdateEmail({
-      hello,
-      requestDetails,
-      requestId: request.id,
-      newStatus: statusMessage,
-      viewRequest,
-      regards,
+      user,
+      request,
+      statusMessage,
       frontendUrl,
       language,
     });
@@ -110,73 +90,38 @@ class EmailService {
   }
 
   /**
-   * Generate HTML email with i18n support
-   * @param {object} params - Email parameters with translations
-   * @returns {string} HTML email content
+   * Get localized status text
+   */
+  getStatusText(status, language) {
+    const statusMap = {
+      created: 'Request Created',
+      paid: 'Payment Received',
+      in_progress: 'Video in Progress',
+      completed: 'Video Ready',
+      cancelled: 'Request Cancelled',
+    };
+    return statusMap[status] || status;
+  }
+
+  /**
+   * Generate HTML email
    */
   generateStatusUpdateEmail(params) {
-    const {
-      hello,
-      requestDetails,
-      requestId,
-      newStatus,
-      viewRequest,
-      regards,
-      frontendUrl,
-      language,
-    } = params;
-
-    const isRTL = language === 'ar' || language === 'he'; // Support for RTL languages in future
+    const { user, request, statusMessage, frontendUrl, language } = params;
 
     return `
       <!DOCTYPE html>
-      <html dir="${isRTL ? 'rtl' : 'ltr'}">
+      <html>
       <head>
         <meta charset="utf-8">
         <title>AI Pet Video</title>
         <style>
-          body { 
-            font-family: Arial, sans-serif; 
-            line-height: 1.6; 
-            color: #333; 
-            margin: 0; 
-            padding: 20px;
-            ${isRTL ? 'text-align: right;' : ''}
-          }
-          .container { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            padding: 20px; 
-            border: 1px solid #e0e0e0; 
-            border-radius: 8px; 
-          }
-          .header { 
-            color: #4A90E2; 
-            border-bottom: 2px solid #4A90E2; 
-            padding-bottom: 10px; 
-            margin-bottom: 20px;
-          }
-          .details { 
-            background: #f9f9f9; 
-            padding: 15px; 
-            border-radius: 5px; 
-            margin: 20px 0; 
-          }
-          .button { 
-            background: #4A90E2; 
-            color: white; 
-            padding: 12px 24px; 
-            text-decoration: none; 
-            border-radius: 5px; 
-            display: inline-block; 
-            margin: 10px 0; 
-          }
-          .footer { 
-            margin-top: 20px; 
-            padding-top: 20px; 
-            border-top: 1px solid #e0e0e0; 
-            color: #666; 
-          }
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; }
+          .header { color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px; margin-bottom: 20px; }
+          .details { background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; }
+          .button { background: #4A90E2; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
+          .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; }
         </style>
       </head>
       <body>
@@ -185,29 +130,25 @@ class EmailService {
             <h1>AI Pet Video</h1>
           </div>
           
-          <p>${hello}</p>
+          <p>Hello ${user.first_name || user.username || 'there'},</p>
           
-          <p>${
-            localeManager.translate(
-              `notification.status_${params.newStatus
-                .toLowerCase()
-                .replace(' ', '_')}`,
-              params.language
-            ) || params.newStatus
-          }</p>
+          <p>Your video request status has been updated to: <strong>${statusMessage}</strong></p>
           
           <div class="details">
-            <h3>${requestDetails}</h3>
-            <p><strong>${requestId}</strong> ${params.requestId}</p>
-            <p><strong>${newStatus}</strong> ${params.newStatus}</p>
+            <h3>Request Details:</h3>
+            <p><strong>Request ID:</strong> ${request.id}</p>
+            <p><strong>Status:</strong> ${statusMessage}</p>
+            <p><strong>Date:</strong> ${new Date(
+              request.created_at
+            ).toLocaleDateString()}</p>
           </div>
           
           <a href="${frontendUrl}" class="button">
-            ${viewRequest}
+            View Request
           </a>
           
           <div class="footer">
-            <p>${regards}</p>
+            <p>Best regards,<br>AI Pet Video Team</p>
           </div>
         </div>
       </body>
@@ -217,20 +158,15 @@ class EmailService {
 
   /**
    * Send welcome email to new users
-   * @param {object} user - User object
-   * @returns {Promise<object>} Send result
    */
   async sendWelcomeEmail(user) {
     if (!user.email) {
       return { success: false, reason: 'No email address' };
     }
 
-    const language = user.language || 'en';
-    const subject = localeManager.translate('email.welcome_subject', language, {
-      defaultValue: 'Welcome to AI Pet Video!',
-    });
+    const subject = 'Welcome to AI Pet Video!';
 
-    const htmlBody = this.generateWelcomeEmail(user, language);
+    const htmlBody = this.generateWelcomeEmail(user);
 
     return await this.sendEmail({
       to: user.email,
@@ -241,17 +177,8 @@ class EmailService {
 
   /**
    * Generate welcome email HTML
-   * @param {object} user - User object
-   * @param {string} language - Language code
-   * @returns {string} HTML email content
    */
-  generateWelcomeEmail(user, language) {
-    const welcomeMessage = localeManager.translate('system.welcome', language);
-    const hello = localeManager.translate('email.hello', language, {
-      name: user.first_name || user.username || 'there',
-    });
-    const regards = localeManager.translate('email.regards', language);
-
+  generateWelcomeEmail(user) {
     return `
       <!DOCTYPE html>
       <html>
@@ -270,11 +197,11 @@ class EmailService {
             <h1>AI Pet Video</h1>
           </div>
           
-          <p>${hello}</p>
+          <p>Hello ${user.first_name || user.username || 'there'},</p>
           
-          <p>${welcomeMessage}</p>
+          <p>Welcome to AI Pet Video! We're excited to help you create amazing videos of your pets.</p>
           
-          <p>${regards}</p>
+          <p>Best regards,<br>AI Pet Video Team</p>
         </div>
       </body>
       </html>

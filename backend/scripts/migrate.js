@@ -1,56 +1,99 @@
 const { sequelize } = require('../src/config/database');
 const logger = require('../src/utils/logger');
+const fs = require('fs').promises;
+const path = require('path');
 
-async function runMigrations() {
-  try {
-    logger.info('Starting database migrations...');
+// Table for keeping track of executed migrations
+const MIGRATIONS_TABLE = `
+CREATE TABLE IF NOT EXISTS _migrations (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+`;
 
-    // Test database connection
-    await sequelize.authenticate();
-    logger.info('Database connection established successfully');
+class MigrationManager {
+  constructor() {
+    this.migrationsDir = path.join(__dirname, '../migrations');
+  }
 
-    // Only 2 migrations now
-    const migrations = [
-      '001-initial-schema.sql',
-      '002-add-sample-data.sql', // Optional
-    ];
+  async init() {
+    // Create migrations table
+    await sequelize.query(MIGRATIONS_TABLE);
+    logger.info('Migrations table initialized');
+  }
 
-    for (const migrationFile of migrations) {
-      try {
-        logger.info(`Running migration: ${migrationFile}`);
+  async getExecutedMigrations() {
+    const [results] = await sequelize.query(
+      'SELECT name FROM _migrations ORDER BY executed_at'
+    );
+    return results.map((row) => row.name);
+  }
 
-        // In a real implementation, we would read and execute SQL files
-        // For now, we'll rely on Sequelize sync and manual migration execution
-        logger.info(`Migration ${migrationFile} would be executed here`);
+  async markMigrationExecuted(name) {
+    await sequelize.query('INSERT INTO _migrations (name) VALUES (?)', {
+      replacements: [name],
+    });
+  }
 
-        // Simulate migration execution
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        logger.info(`✓ Migration ${migrationFile} completed`);
-      } catch (error) {
-        logger.error(`✗ Migration ${migrationFile} failed:`, error);
-        throw error;
+  async getPendingMigrations() {
+    const allFiles = await fs.readdir(this.migrationsDir);
+    const migrationFiles = allFiles
+      .filter((file) => file.endsWith('.sql'))
+      .sort();
+
+    const executed = await this.getExecutedMigrations();
+    return migrationFiles.filter((file) => !executed.includes(file));
+  }
+
+  async executeMigration(fileName) {
+    const filePath = path.join(this.migrationsDir, fileName);
+    const sql = await fs.readFile(filePath, 'utf8');
+
+    logger.info(`Executing migration: ${fileName}`);
+    await sequelize.query(sql);
+    await this.markMigrationExecuted(fileName);
+
+    logger.info(`✓ Migration ${fileName} completed`);
+  }
+
+  async runMigrations() {
+    try {
+      logger.info('Starting database migrations...');
+
+      await sequelize.authenticate();
+      logger.info('Database connection established');
+
+      await this.init();
+
+      const pendingMigrations = await this.getPendingMigrations();
+
+      if (pendingMigrations.length === 0) {
+        logger.info('No pending migrations');
+        return;
       }
+
+      logger.info(`Found ${pendingMigrations.length} pending migrations`);
+
+      for (const migrationFile of pendingMigrations) {
+        await this.executeMigration(migrationFile);
+      }
+
+      logger.info('All migrations completed successfully');
+    } catch (error) {
+      logger.error('Migration failed:', error);
+      throw error;
     }
-
-    logger.info('All migrations completed successfully');
-
-    // Sync Sequelize models (for development)
-    if (process.env.NODE_ENV === 'development') {
-      logger.info('Syncing Sequelize models...');
-      await sequelize.sync({ alter: false });
-      logger.info('Sequelize models synced');
-    }
-
-    process.exit(0);
-  } catch (error) {
-    logger.error('Migration failed:', error);
-    process.exit(1);
   }
 }
 
-// Run migrations if called directly
+// Run migrations
 if (require.main === module) {
-  runMigrations();
+  const manager = new MigrationManager();
+  manager
+    .runMigrations()
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1));
 }
 
-module.exports = { runMigrations };
+module.exports = MigrationManager;

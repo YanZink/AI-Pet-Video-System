@@ -1,3 +1,4 @@
+const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
 
@@ -15,14 +16,14 @@ class PaymentHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.editMessageText(errorMessage);
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
-      const processingMessage = await t('payment.processing');
+      const t = TelegramI18n.getT(session.language);
+      const processingMessage = t('payment.processing');
 
       // Create request using uploadData structure
       const requestResult = await this.api.createRequest(
@@ -32,7 +33,7 @@ class PaymentHandler {
       );
 
       if (!requestResult.success) {
-        const requestFailed = await t('errors.request_failed');
+        const requestFailed = t('errors.request_failed');
         await ctx.editMessageText(requestFailed);
         return;
       }
@@ -54,14 +55,14 @@ class PaymentHandler {
       );
 
       if (!invoiceResult.success) {
-        const paymentError = await t('errors.payment_error');
+        const paymentError = t('errors.payment_error');
         await ctx.reply(paymentError);
         return;
       }
     } catch (error) {
       console.error('Payment confirm error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.editMessageText(errorMessage);
     }
   }
@@ -72,14 +73,14 @@ class PaymentHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.editMessageText(errorMessage);
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
-      const cancelledMessage = await t('payment.cancelled');
+      const t = TelegramI18n.getT(session.language);
+      const cancelledMessage = t('payment.cancelled');
 
       // Reset session using uploadData structure
       session.state = 'menu';
@@ -95,16 +96,16 @@ class PaymentHandler {
 
       // Show main menu
       setTimeout(async () => {
-        const menuText = await t('buttons.menu');
-        const mainMenu = await Keyboards.mainMenu(session.language);
+        const menuText = t('buttons.menu');
+        const mainMenu = Keyboards.mainMenu(session.language);
         await ctx.reply(menuText, {
           reply_markup: mainMenu,
         });
       }, 1500);
     } catch (error) {
       console.error('Payment cancel error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.editMessageText(errorMessage);
     }
   }
@@ -115,20 +116,20 @@ class PaymentHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.reply(errorMessage);
         return;
       }
 
       const paymentData = ctx.message.successful_payment;
-      const t = await Keyboards.getLocale(session.language);
+      const t = TelegramI18n.getT(session.language);
 
       // Validate payment
       const validation = this.payment.validatePayment(paymentData);
 
       if (!validation.valid) {
-        const invalidPayment = await t('errors.invalid_payment');
+        const invalidPayment = t('errors.invalid_payment');
         await ctx.reply(invalidPayment);
         return;
       }
@@ -141,7 +142,7 @@ class PaymentHandler {
       );
 
       if (!paymentResult.success) {
-        const paymentFailed = await t('payment.failed');
+        const paymentFailed = t('payment.failed');
         await ctx.reply(paymentFailed);
         return;
       }
@@ -157,23 +158,23 @@ class PaymentHandler {
       await sessionService.saveSession(userId, session);
 
       // Send success message
-      const successMessage = await t('payment.success', {
+      const successMessage = t('payment.success', {
         requestId: validation.requestId.substring(0, 8),
       });
       await ctx.reply(successMessage);
 
       // Show main menu
       setTimeout(async () => {
-        const menuText = await t('buttons.menu');
-        const mainMenu = await Keyboards.mainMenu(session.language);
+        const menuText = t('buttons.menu');
+        const mainMenu = Keyboards.mainMenu(session.language);
         await ctx.reply(menuText, {
           reply_markup: mainMenu,
         });
       }, 2000);
     } catch (error) {
       console.error('Successful payment handler error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.reply(errorMessage);
     }
   }
@@ -184,8 +185,8 @@ class PaymentHandler {
       await ctx.answerPreCheckoutQuery(true);
     } catch (error) {
       console.error('Pre-checkout query error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.payment_error');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.payment_error');
       await ctx.answerPreCheckoutQuery(false, errorMessage);
     }
   }

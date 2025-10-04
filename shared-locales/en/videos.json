@@ -1,0 +1,23 @@
+{
+  "create_video": "🎬 Create New Video",
+  "my_videos": "📋 My Videos",
+  "queue_status": "📊 Queue Status",
+  "photos_request": "📸 Please send me 1-10 photos of your pet.\n\nYou can send them one by one or as an album.\n\nWhen finished, click 'Continue' button.",
+  "photo_received": "📸 Photo {current}/{max} received",
+  "upload_complete": "✅ {count} photos uploaded successfully!",
+  "script_request": "✍️ Describe what kind of video you want (optional).\n\nFor example:\n• My dog playing in the park\n• Cat sleeping peacefully\n• Pet birthday party\n\nOr click 'Skip' for a surprise video:",
+  "script_received": "✅ Script saved: {script}",
+  "script_skipped": "✅ Script skipped",
+  "status_created": "📝 Created - waiting for payment",
+  "status_paid": "💳 Paid - added to processing queue",
+  "status_in_progress": "⚙️ In Progress - your video is being created",
+  "status_completed": "✅ Completed - your video is ready!",
+  "status_cancelled": "❌ Cancelled",
+  "my_videos_title": "📋 Your Video Requests:",
+  "no_requests": "You haven't created any video requests yet.\n\nClick 'Create New Video' to get started!",
+  "request_item": "🎬 Request #{id}\n📅 {date}\n📊 Status: {status}\n\n",
+  "download": "⬇️ Download Video",
+  "queue_title": "📊 Processing Queue Status:",
+  "estimated_wait": "⏱️ Estimated wait time: {minutes} minutes",
+  "queue_position": "📍 Your position in queue: #{position}"
+}

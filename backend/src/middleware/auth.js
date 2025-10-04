@@ -24,9 +24,9 @@ const authMiddleware = async (req, res, next) => {
 
     if (!token) {
       return res.status(401).json({
-        error: 'Authentication required',
+        error: req.t('errors.authentication_required'),
         code: ERROR_CODES.AUTHENTICATION_ERROR,
-        message: 'Access token is missing',
+        message: req.t('errors.missing_token'),
       });
     }
 
@@ -35,9 +35,9 @@ const authMiddleware = async (req, res, next) => {
     const user = await User.findByPk(decoded.userId);
     if (!user || !user.is_active) {
       return res.status(401).json({
-        error: 'Invalid token',
+        error: req.t('errors.invalid_token'),
         code: ERROR_CODES.AUTHENTICATION_ERROR,
-        message: 'User not found or inactive',
+        message: req.t('errors.user_not_found'),
       });
     }
 
@@ -48,23 +48,23 @@ const authMiddleware = async (req, res, next) => {
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({
-        error: 'Invalid token',
+        error: req.t('errors.invalid_token'),
         code: ERROR_CODES.AUTHENTICATION_ERROR,
-        message: 'Token is malformed',
+        message: req.t('errors.malformed_token'),
       });
     }
 
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({
-        error: 'Token expired',
+        error: req.t('errors.token_expired'),
         code: ERROR_CODES.AUTHENTICATION_ERROR,
-        message: 'Token has expired',
+        message: req.t('errors.token_expired'),
       });
     }
 
     logger.error('Authentication middleware error:', error);
     res.status(500).json({
-      error: 'Authentication error',
+      error: req.t('errors.authentication_error'),
       code: ERROR_CODES.INTERNAL_SERVER_ERROR,
     });
   }
@@ -73,7 +73,7 @@ const authMiddleware = async (req, res, next) => {
 const adminMiddleware = (req, res, next) => {
   if (!req.user.isAdmin()) {
     return res.status(403).json({
-      error: 'Admin access required',
+      error: req.t('errors.admin_required'),
       code: ERROR_CODES.AUTHORIZATION_ERROR,
     });
   }

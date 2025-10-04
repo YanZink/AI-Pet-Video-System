@@ -1,4 +1,4 @@
-const localeManager = require('../locales');
+const localeManager = require('../../../shared-locales');
 const { User } = require('../models');
 const { SUPPORTED_LANGUAGES } = require('../utils/constants');
 
@@ -40,9 +40,14 @@ const i18nMiddleware = async (req, res, next) => {
     // Add language to request for other middleware to use
     req.language = language;
 
-    // Add helper to check if translation exists
+    // Add helper to check if translation exists (simple version)
     req.hasTranslation = (key) => {
-      return !!localeManager.getTranslationFromLocale(key, language);
+      try {
+        const translation = localeManager.translate(key, language);
+        return translation !== key; // If translation exists and is different from key
+      } catch (error) {
+        return false;
+      }
     };
 
     next();

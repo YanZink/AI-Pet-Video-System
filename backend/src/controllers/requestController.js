@@ -2,7 +2,6 @@ const { Request, Template } = require('../models');
 const s3Service = require('../services/s3Service');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
-const localeManager = require('../locales');
 const logger = require('../utils/logger');
 
 class RequestController {
@@ -14,9 +13,7 @@ class RequestController {
       const template = await Template.findByPk(template_id);
       if (!template || !template.is_active) {
         throw createError(
-          req.t('errors.template_not_found', {
-            defaultValue: 'Template not found or inactive',
-          }),
+          req.t('errors.template_not_found'),
           404,
           ERROR_CODES.NOT_FOUND_ERROR
         );
@@ -24,10 +21,7 @@ class RequestController {
 
       if (photos.length > template.max_photos) {
         throw createError(
-          req.t('errors.template_photo_limit', {
-            max: template.max_photos,
-            defaultValue: `Template allows maximum ${template.max_photos} photos`,
-          }),
+          req.t('errors.max_photos_reached'),
           400,
           ERROR_CODES.VALIDATION_ERROR
         );
@@ -56,9 +50,7 @@ class RequestController {
     });
 
     res.status(201).json({
-      message: req.t('requests.created_success', {
-        defaultValue: 'Request created successfully',
-      }),
+      message: req.t('common.continue'),
       request: request.getPublicData(),
     });
   });
@@ -97,9 +89,7 @@ class RequestController {
                 return {
                   key: photoKey,
                   url: null,
-                  error: req.t('errors.url_generation_failed', {
-                    defaultValue: 'URL generation failed',
-                  }),
+                  error: req.t('errors.upload_failed'),
                 };
               }
             })
@@ -131,9 +121,7 @@ class RequestController {
 
     if (!file_type || !file_type.startsWith('image/')) {
       throw createError(
-        req.t('errors.invalid_file_type', {
-          defaultValue: 'Invalid file type. Only images are supported',
-        }),
+        req.t('errors.invalid_file'),
         400,
         ERROR_CODES.VALIDATION_ERROR
       );
@@ -141,9 +129,9 @@ class RequestController {
 
     const uploadUrls = [];
     const useMock = process.env.MOCK_UPLOADS === 'true';
+
     for (let i = 0; i < file_count; i++) {
       if (useMock) {
-        // Return mock upload URL to local endpoint
         const { v4: uuidv4 } = require('uuid');
         const ext = file_type.split('/')[1] || 'bin';
         const key = `photos/${uuidv4()}.${ext}`;
@@ -167,9 +155,7 @@ class RequestController {
     }
 
     res.json({
-      message: req.t('requests.upload_urls_generated', {
-        defaultValue: 'Upload URLs generated successfully',
-      }),
+      message: req.t('common.upload_urls_generated'),
       uploads: uploadUrls,
     });
   });
@@ -180,10 +166,7 @@ class RequestController {
     res.json({
       estimated_wait_minutes: estimatedMinutes,
       estimated_wait_hours: Math.ceil(estimatedMinutes / 60),
-      message: req.t('queue.wait_time', {
-        minutes: estimatedMinutes,
-        defaultValue: `Estimated wait time: ${estimatedMinutes} minutes`,
-      }),
+      message: req.t('common.wait_time', { minutes: estimatedMinutes }),
     });
   });
 
@@ -217,9 +200,7 @@ class RequestController {
     const template = await Template.findByPk(id);
     if (!template || !template.is_active) {
       throw createError(
-        req.t('errors.template_not_found', {
-          defaultValue: 'Template not found',
-        }),
+        req.t('errors.template_not_found'),
         404,
         ERROR_CODES.NOT_FOUND_ERROR
       );

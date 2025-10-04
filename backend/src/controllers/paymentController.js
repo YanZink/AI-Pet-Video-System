@@ -3,7 +3,6 @@ const paymentService = require('../services/paymentService');
 const queueService = require('../services/queueService');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
-const localeManager = require('../locales');
 const logger = require('../utils/logger');
 
 class PaymentController {
@@ -28,9 +27,7 @@ class PaymentController {
 
     if (!request) {
       throw createError(
-        req.t('errors.request_not_found', {
-          defaultValue: 'Request not found',
-        }),
+        req.t('errors.request_not_found'),
         404,
         ERROR_CODES.NOT_FOUND_ERROR
       );
@@ -39,9 +36,7 @@ class PaymentController {
     // Check if request is already paid
     if (request.payment_status === 'paid') {
       throw createError(
-        req.t('errors.already_paid', {
-          defaultValue: 'Request is already paid',
-        }),
+        req.t('errors.already_paid'),
         400,
         ERROR_CODES.VALIDATION_ERROR
       );
@@ -52,10 +47,7 @@ class PaymentController {
 
     if (!validation.valid) {
       throw createError(
-        req.t('errors.invalid_payment', {
-          error: validation.error,
-          defaultValue: `Invalid payment data: ${validation.error}`,
-        }),
+        req.t('errors.invalid_payment', { error: validation.error }),
         400,
         ERROR_CODES.PAYMENT_ERROR
       );
@@ -91,9 +83,7 @@ class PaymentController {
 
     res.json({
       success: true,
-      message: req.t('payment.processed_success', {
-        defaultValue: 'Payment processed successfully',
-      }),
+      message: req.t('payments.success'),
       request: request.getPublicData(),
     });
   });
@@ -112,9 +102,7 @@ class PaymentController {
 
     if (!request) {
       throw createError(
-        req.t('errors.request_not_found', {
-          defaultValue: 'Request not found',
-        }),
+        req.t('errors.request_not_found'),
         404,
         ERROR_CODES.NOT_FOUND_ERROR
       );
@@ -126,13 +114,12 @@ class PaymentController {
     res.json({
       price_stars: priceStars,
       price_usd: priceUsd,
-      currency: 'XTR', // Telegram Stars currency
+      currency: 'XTR',
       request_status: request.status,
       payment_status: request.payment_status,
-      formatted_price: req.t('payment.price_stars', {
+      formatted_price: req.t('payments.price_stars', {
         stars: priceStars,
         usd: priceUsd,
-        defaultValue: `${priceStars} stars ($${priceUsd})`,
       }),
     });
   });
@@ -153,9 +140,7 @@ class PaymentController {
 
     if (!request) {
       throw createError(
-        req.t('errors.request_not_found', {
-          defaultValue: 'Request not found',
-        }),
+        req.t('errors.request_not_found'),
         404,
         ERROR_CODES.NOT_FOUND_ERROR
       );
@@ -163,33 +148,29 @@ class PaymentController {
 
     if (request.payment_status === 'paid') {
       throw createError(
-        req.t('errors.already_paid', {
-          defaultValue: 'Request is already paid',
-        }),
+        req.t('errors.already_paid'),
         400,
         ERROR_CODES.VALIDATION_ERROR
       );
     }
 
-    // For now, return mock data - will integrate with Stripe in Stage 3
+    // Mock payment intent
     const mockPaymentIntent = {
       id: `pi_mock_${Date.now()}`,
       client_secret: `cs_mock_${Date.now()}`,
-      amount: 999, // $9.99 in cents
+      amount: 999,
       currency: 'usd',
       status: 'requires_payment_method',
     };
 
     res.json({
       payment_intent: mockPaymentIntent,
-      message: req.t('payment.intent_created', {
-        defaultValue: 'Payment intent created successfully',
-      }),
+      message: req.t('payments.intent_created'),
     });
   });
 
   /**
-   * Mock Stripe Checkout session creation for web integration (Stage 3)
+   * Mock Stripe Checkout session creation
    */
   createStripeCheckout = asyncHandler(async (req, res) => {
     const { request_id, success_url, cancel_url } = req.validatedBody;
@@ -204,9 +185,7 @@ class PaymentController {
 
     if (!request) {
       throw createError(
-        req.t('errors.request_not_found', {
-          defaultValue: 'Request not found',
-        }),
+        req.t('errors.request_not_found'),
         404,
         ERROR_CODES.NOT_FOUND_ERROR
       );
@@ -214,22 +193,17 @@ class PaymentController {
 
     if (request.payment_status === 'paid') {
       throw createError(
-        req.t('errors.already_paid', {
-          defaultValue: 'Request is already paid',
-        }),
+        req.t('errors.already_paid'),
         400,
         ERROR_CODES.VALIDATION_ERROR
       );
     }
 
-    // Mock: immediately return success_url as checkout_url
     const checkoutUrl = success_url;
 
     res.json({
       checkout_url: checkoutUrl,
-      message: req.t('payment.checkout_created', {
-        defaultValue: 'Checkout session created (mock)',
-      }),
+      message: req.t('payments.checkout_created'),
     });
   });
 }

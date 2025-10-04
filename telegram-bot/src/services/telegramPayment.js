@@ -1,20 +1,17 @@
-const Keyboards = require('../utils/keyboards');
+const TelegramI18n = require('../config/i18n');
 
 class TelegramPaymentService {
   constructor(bot) {
     this.bot = bot;
-    // Telegram Stars doesn't require providerToken!
   }
 
   // Create payment invoice for Telegram Stars
   createPaymentInvoice(requestId, photoCount, script, lang = 'en') {
     const priceStars = parseInt(process.env.VIDEO_PRICE_STARS) || 1000;
+    const t = TelegramI18n.getT(lang);
 
-    // Use English titles for Telegram (required)
-    const title = 'AI Pet Video Creation';
-    const description = `Create AI video with ${photoCount} photo${
-      photoCount > 1 ? 's' : ''
-    }`;
+    const title = t('payment.invoice_title');
+    const description = t('payment.invoice_description', { photoCount });
 
     console.log('📦 Creating Telegram Stars invoice:', {
       title,
@@ -35,7 +32,7 @@ class TelegramPaymentService {
       prices: [
         {
           label: 'Video Creation',
-          amount: priceStars, // Stars amount
+          amount: priceStars,
         },
       ],
     };

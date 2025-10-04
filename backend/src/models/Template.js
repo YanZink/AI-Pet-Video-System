@@ -1,10 +1,10 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
-const translationService = require('../services/translationService');
+const localeManager = require('../../../shared-locales');
 
 /**
  * Template model with translation support
- * Uses translations table for multi-language support
+ * Uses shared-locales for multi-language support
  */
 const Template = sequelize.define(
   'Template',
@@ -71,14 +71,12 @@ const Template = sequelize.define(
 /**
  * Get localized template name
  * @param {string} language - Language code (en/ru)
- * @returns {Promise<string>} Localized name
+ * @returns {string} Localized name
  */
-Template.prototype.getLocalizedName = async function (language = 'en') {
+Template.prototype.getLocalizedName = function (language = 'en') {
   try {
-    const translation = await translationService.getTranslation(
-      'template',
-      this.id,
-      'name',
+    const translation = localeManager.translate(
+      `templates.${this.id}.name`,
       language
     );
     return translation || this.name || '';
@@ -91,14 +89,12 @@ Template.prototype.getLocalizedName = async function (language = 'en') {
 /**
  * Get localized template description
  * @param {string} language - Language code (en/ru)
- * @returns {Promise<string>} Localized description
+ * @returns {string} Localized description
  */
-Template.prototype.getLocalizedDescription = async function (language = 'en') {
+Template.prototype.getLocalizedDescription = function (language = 'en') {
   try {
-    const translation = await translationService.getTranslation(
-      'template',
-      this.id,
-      'description',
+    const translation = localeManager.translate(
+      `templates.${this.id}.description`,
       language
     );
     return translation || this.description || '';
@@ -111,13 +107,11 @@ Template.prototype.getLocalizedDescription = async function (language = 'en') {
 /**
  * Get complete localized template data
  * @param {string} language - Language code (en/ru)
- * @returns {Promise<object>} Localized template data
+ * @returns {object} Localized template data
  */
-Template.prototype.getLocalizedData = async function (language = 'en') {
-  const [name, description] = await Promise.all([
-    this.getLocalizedName(language),
-    this.getLocalizedDescription(language),
-  ]);
+Template.prototype.getLocalizedData = function (language = 'en') {
+  const name = this.getLocalizedName(language);
+  const description = this.getLocalizedDescription(language);
 
   return {
     id: this.id,
@@ -153,8 +147,8 @@ Template.findLocalized = async function (language = 'en', options = {}) {
     ],
   });
 
-  const localizedTemplates = await Promise.all(
-    templates.map((template) => template.getLocalizedData(language))
+  const localizedTemplates = templates.map((template) =>
+    template.getLocalizedData(language)
   );
 
   return localizedTemplates;
@@ -166,22 +160,6 @@ Template.findLocalized = async function (language = 'en', options = {}) {
 Template.prototype.incrementUsage = async function () {
   this.usage_count += 1;
   await this.save();
-};
-
-/**
- * Add or update translation for this template
- * @param {string} key - Translation key (name/description)
- * @param {string} language - Language code
- * @param {string} text - Translated text
- */
-Template.prototype.setTranslation = async function (key, language, text) {
-  await translationService.setTranslation(
-    'template',
-    this.id,
-    key,
-    language,
-    text
-  );
 };
 
 module.exports = Template;

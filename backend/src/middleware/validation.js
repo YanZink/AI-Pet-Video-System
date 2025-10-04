@@ -1,6 +1,5 @@
 const Joi = require('joi');
 const { ERROR_CODES } = require('../utils/constants');
-const localeManager = require('../locales');
 
 const commonSchemas = {
   uuid: Joi.string().uuid().required(),
@@ -82,13 +81,7 @@ const validateBody = (schema) => {
       }));
 
       return res.status(400).json({
-        error: localeManager.translate(
-          'errors.validation_error',
-          req.language,
-          {
-            defaultValue: 'Validation error',
-          }
-        ),
+        error: req.t('errors.validation_error'),
         code: ERROR_CODES.VALIDATION_ERROR,
         details,
       });
@@ -105,13 +98,7 @@ const validateParams = (schema) => {
 
     if (error) {
       return res.status(400).json({
-        error: localeManager.translate(
-          'errors.invalid_parameters',
-          req.language,
-          {
-            defaultValue: 'Invalid parameters',
-          }
-        ),
+        error: req.t('errors.invalid_parameters'),
         code: ERROR_CODES.VALIDATION_ERROR,
         details: error.details,
       });

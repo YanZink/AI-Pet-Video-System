@@ -1,9 +1,7 @@
+const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
 
-/**
- * Updated ScriptInputHandler with proper async handling
- */
 class ScriptInputHandler {
   constructor(bot, userSessions) {
     this.bot = bot;
@@ -16,14 +14,14 @@ class ScriptInputHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.editMessageText(errorMessage);
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
-      const skippedMessage = await t('script.skipped');
+      const t = TelegramI18n.getT(session.language);
+      const skippedMessage = t('script.skipped');
 
       // Use uploadData structure for script
       session.uploadData.script = null;
@@ -36,8 +34,8 @@ class ScriptInputHandler {
       await this.showPaymentConfirmation(ctx, session);
     } catch (error) {
       console.error('Script skip error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.editMessageText(errorMessage);
     }
   }
@@ -56,10 +54,10 @@ class ScriptInputHandler {
       }
 
       const script = ctx.message.text.trim();
-      const t = await Keyboards.getLocale(session.language);
+      const t = TelegramI18n.getT(session.language);
 
       if (script.length > 1000) {
-        const scriptTooLong = await t('errors.script_too_long');
+        const scriptTooLong = t('errors.script_too_long');
         await ctx.reply(scriptTooLong);
         return;
       }
@@ -69,7 +67,7 @@ class ScriptInputHandler {
       session.state = 'confirming_payment';
       await sessionService.saveSession(userId, session);
 
-      const receivedMessage = await t('script.received', {
+      const receivedMessage = t('script.received', {
         script: script.substring(0, 100) + (script.length > 100 ? '...' : ''),
       });
 
@@ -81,30 +79,30 @@ class ScriptInputHandler {
       }, 1000);
     } catch (error) {
       console.error('Script input error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.reply(errorMessage);
     }
   }
 
   async showPaymentConfirmation(ctx, session) {
     try {
-      const t = await Keyboards.getLocale(session.language);
+      const t = TelegramI18n.getT(session.language);
       const priceStars = process.env.VIDEO_PRICE_STARS || '714';
 
       const scriptText = session.uploadData.script
         ? `"${session.uploadData.script.substring(0, 50)}${
             session.uploadData.script.length > 50 ? '...' : ''
           }"`
-        : await t('payment.no_script');
+        : t('payment.no_script');
 
-      const summary = await t('payment.summary', {
+      const summary = t('payment.summary', {
         photoCount: session.uploadData.photos.length,
         script: scriptText,
         price: priceStars,
       });
 
-      const paymentConfirm = await Keyboards.paymentConfirm(
+      const paymentConfirm = Keyboards.paymentConfirm(
         priceStars,
         session.language
       );
@@ -113,8 +111,8 @@ class ScriptInputHandler {
       });
     } catch (error) {
       console.error('Payment confirmation error:', error);
-      const t = await Keyboards.getLocale(session.language);
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT(session.language);
+      const errorMessage = t('errors.something_wrong');
       await ctx.reply(errorMessage);
     }
   }
@@ -125,14 +123,14 @@ class ScriptInputHandler {
       const session = await sessionService.getSession(userId);
 
       if (!session) {
-        const t = await Keyboards.getLocale('en');
-        const errorMessage = await t('errors.network');
+        const t = TelegramI18n.getT('en');
+        const errorMessage = t('errors.something_wrong');
         await ctx.editMessageText(errorMessage);
         return;
       }
 
-      const t = await Keyboards.getLocale(session.language);
-      const requestMessage = await t('script.request');
+      const t = TelegramI18n.getT(session.language);
+      const requestMessage = t('script.request');
 
       session.state = 'entering_script';
       await sessionService.saveSession(userId, session);
@@ -142,8 +140,8 @@ class ScriptInputHandler {
       });
     } catch (error) {
       console.error('Script input start error:', error);
-      const t = await Keyboards.getLocale('en');
-      const errorMessage = await t('errors.network');
+      const t = TelegramI18n.getT('en');
+      const errorMessage = t('errors.something_wrong');
       await ctx.editMessageText(errorMessage);
     }
   }
