@@ -86,9 +86,8 @@ ai-pet-video-system/
 │   │   ├── videos.json
 │   │   ├── payments.json
 │   │   ├── errors.json
-│   │   ├── notifications.json
-│   │   ├── notifications.json
-│   │   └── telegram.json
+│   │   └── notifications.json
+│   │
 │   │
 │   └── ru/
 │        ├── common.json
@@ -96,9 +95,8 @@ ai-pet-video-system/
 │        ├── videos.json
 │        ├── payments.json
 │        ├── errors.json
-│        ├── notifications.json
-│        ├── notifications.json
-│        └── telegram.json
+│        └── notifications.json
+│
 │
 │
 ├── docker-compose.test.yml
