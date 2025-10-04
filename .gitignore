@@ -1,5 +1,7 @@
 text.md
 frontend/
+migrate-locales.js
+shared-locales/
 
 # Dependencies
 node_modules/

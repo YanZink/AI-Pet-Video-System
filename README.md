@@ -78,8 +78,14 @@ ai-pet-video-system/
 │       │   ├── apiService.js
 │       │   ├── sessionService.js
 │       │   └── paymentTelegram.js
-│       └── utils/
-│           └── keyboards.js #
+│       ├──  utils/
+│       │   ├── keyboards.js #
+│       │   └── logger.js
+│       │
+│       ├── locales/ #
+│           ├── en.json #
+│           ├── ru.json #
+│           └── index.js #
 │
 ├── docker-compose.test.yml
 └── README.md
