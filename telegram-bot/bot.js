@@ -242,7 +242,8 @@ class AIPetVideoBot {
   async sendStatusNotification(userId, requestId, status, language = 'en') {
     try {
       const t = TelegramI18n.getT(language);
-      const statusText = t(`status.${status}`) || status;
+
+      const statusText = t(`videos.status_${status}`) || status;
 
       let message = `${t('notifications.update_title')}\n\n`;
       message += `${t('notifications.request_id')} #${requestId.substring(
@@ -337,19 +338,12 @@ class AIPetVideoBot {
         .then(() => {
           console.log('🚀 Bot is running!');
 
-          // Get bot info with delay to ensure it's loaded
+          // Get bot info
           setTimeout(() => {
             if (this.bot.botInfo && this.bot.botInfo.username) {
               console.log(`📱 Bot username: @${this.bot.botInfo.username}`);
             } else {
-              console.log('📱 Bot username: Loading...');
-              setTimeout(() => {
-                if (this.bot.botInfo && this.bot.botInfo.username) {
-                  console.log(`📱 Bot username: @${this.bot.botInfo.username}`);
-                } else {
-                  console.log('❌ Could not load bot username');
-                }
-              }, 2000);
+              console.log('❌ Could not load bot username');
             }
           }, 1000);
         })

@@ -1,27 +1,94 @@
 {
-  "welcome": "🐾 Welcome to AI Pet Video!\n\nI'll help you create amazing AI-generated videos with your pet photos.\n\nChoose your language:",
-  "welcome_back": "🐾 Welcome back, {name}!\n\nWhat would you like to do?",
+  "welcome": "🐾 Welcome to AI Pet Video Bot!\n\nI'll help you create amazing AI-generated videos with your pet photos.\n\nChoose your language:",
+  "welcome_back": "🐾 Welcome back, {name}!",
   "choose_option": "Choose an option:",
   "main_menu": "🏠 Main Menu",
-  "change_language": "🌍 Change Language",
-  "help": "❓ Help",
-  "language_selected": "✅ Language changed to English",
-  "choose_language": "🌍 Choose your language:",
-  "continue_with_count": "Continue with {count} photos",
-  "skip": "Skip script",
-  "continue": "Continue",
-  "cancel": "Cancel",
-  "details": "📋 Details",
-  "back": "⬅️ Back",
-  "menu": "🏠 Main Menu",
-  "retry": "🔄 Retry",
-  "request_updated": "Request status updated successfully",
-  "total_requests": "Total Requests",
-  "paid_requests": "Paid Requests",
-  "completed_requests": "Completed Requests",
-  "total_revenue": "Total Revenue",
-  "conversion_rate": "Conversion Rate",
-  "upload_urls_generated": "Upload URLs generated successfully",
-  "wait_time": "Estimated wait time: {minutes} minutes",
-  "help_text": "❓ How to use AI Pet Video Bot:\n\n1️⃣ Send 1-10 photos of your pet\n2️⃣ Optionally describe the desired video\n3️⃣ Pay with Telegram Stars\n4️⃣ Wait for your AI-generated video\n\n💰 Price: {price} stars per video\n⏱️ Processing time: ~10 minutes per request in queue\n\nNeed help? Contact @Yan_Zink"
+
+  "menu": {
+    "create_video": "🎬 Create Video",
+    "my_videos": "📋 My Videos",
+    "language": "🌍 Language",
+    "help": "❓ Help",
+    "status": "📊 Status"
+  },
+
+  "photos": {
+    "request": "📸 Please send me 1-10 photos of your pet",
+    "received": "Photo {current}/{max} received",
+    "upload_complete": "✅ {count} photos uploaded successfully!",
+    "max_reached": "❌ Maximum 10 photos reached",
+    "continue": "Continue with {count} photos"
+  },
+
+  "script": {
+    "request": "✍️ Describe what kind of video you want (optional)",
+    "received": "✅ Script saved: {script}",
+    "skipped": "✅ Script skipped",
+    "skip": "Skip script",
+    "continue": "Continue"
+  },
+
+  "payment": {
+    "summary": "📋 Order Summary:\n\n📸 Photos: {photoCount}\n✍️ Script: {script}\n💰 Price: {price} stars\n\nProceed with payment?",
+    "no_script": "No script (surprise video)",
+    "confirm": "💳 Pay {price} stars",
+    "cancel": "Cancel",
+    "processing": "⏳ Processing payment...",
+    "success": "✅ Payment successful! Your video request has been submitted.\n\nRequest ID: {requestId}\n\nYou'll receive notifications about status updates.",
+    "cancelled": "❌ Payment cancelled",
+    "failed": "❌ Payment failed",
+    "invoice_title": "AI Pet Video Creation",
+    "invoice_description": "Create AI video with {photoCount} photos"
+  },
+
+  "my_videos": {
+    "title": "📋 Your Video Requests:",
+    "empty": "You haven't created any video requests yet",
+    "item": "🎬 Request #{id}\n📅 {date}\n📊 Status: {status}\n\n",
+    "download": "⬇️ Download"
+  },
+
+  "queue": {
+    "title": "📊 Processing Queue Status:",
+    "wait_time": "⏱️ Estimated wait time: {minutes} minutes"
+  },
+
+  "status": {
+    "created": "📝 Created - waiting for payment",
+    "paid": "💳 Paid - added to processing queue",
+    "in_progress": "⚙️ In Progress - your video is being created",
+    "completed": "✅ Completed - your video is ready!",
+    "cancelled": "❌ Cancelled"
+  },
+
+  "buttons": {
+    "menu": "🏠 Main Menu",
+    "back": "⬅️ Back",
+    "cancel": "Cancel",
+    "retry": "🔄 Retry"
+  },
+
+  "language": {
+    "choose": "🌍 Choose your language:",
+    "selected": "✅ Language changed to English"
+  },
+
+  "help": "❓ How to use AI Pet Video Bot:\n\n1️⃣ Send 1-10 photos of your pet\n2️⃣ Optionally describe the desired video\n3️⃣ Pay with Telegram Stars\n4️⃣ Wait for your AI-generated video\n\n💰 Price: {price} stars per video\n⏱️ Processing time: ~10 minutes per request in queue\n\nNeed help? Contact @Yan_Zink",
+
+  "errors": {
+    "something_wrong": "❌ Something went wrong. Please try again.",
+    "max_photos_reached": "❌ Maximum 10 photos allowed",
+    "need_photos": "Please send at least 1 photo first",
+    "payment_failed": "❌ Payment failed. Please try again.",
+    "network_error": "❌ Connection error. Please try again.",
+    "file_too_large": "❌ File too large. Maximum size: 10MB",
+    "invalid_file": "❌ Please send only photos",
+    "api_error": "❌ Server error. Please try again later.",
+    "no_photos": "❌ Please send at least 1 photo",
+    "payment_error": "❌ Payment error. Please contact support.",
+    "script_too_long": "❌ Script too long. Maximum 1000 characters.",
+    "upload_failed": "❌ Photo upload failed. Please try again.",
+    "invalid_payment": "❌ Invalid payment data",
+    "request_failed": "❌ Request creation failed"
+  }
 }

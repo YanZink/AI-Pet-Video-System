@@ -3,10 +3,9 @@ const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
 
 class StartHandler {
-  constructor(bot, apiService, userSessions) {
+  constructor(bot, apiService) {
     this.bot = bot;
     this.api = apiService;
-    this.sessions = userSessions;
   }
 
   async handleStart(ctx) {
@@ -14,13 +13,10 @@ class StartHandler {
       const user = ctx.from;
       console.log(`New user started bot: ${user.id} (${user.first_name})`);
 
-      // Register or login user via API
       const result = await this.api.registerTelegramUser(user);
-
       if (!result.success) {
         const t = TelegramI18n.getT('en');
-        const errorMessage = t('errors.something_wrong');
-        await ctx.reply(errorMessage);
+        await ctx.reply(t('errors.something_wrong'));
         return;
       }
 
@@ -39,30 +35,23 @@ class StartHandler {
 
       await sessionService.saveSession(user.id, session);
 
-      const lang = result.user.language || 'en';
+      const lang = session.language;
       const t = TelegramI18n.getT(lang);
 
       if (result.isNewUser) {
-        // New user - show language selection
-        const welcomeMessage = t('welcome');
-        await ctx.reply(welcomeMessage, {
+        await ctx.reply(t('welcome'), {
           reply_markup: Keyboards.languageKeyboard(),
         });
       } else {
-        // Existing user - show main menu
         const name = user.first_name || user.username || 'User';
-        const welcomeBack = t('welcome_back', { name });
-        const mainMenu = Keyboards.mainMenu(lang);
-
-        await ctx.reply(welcomeBack, {
-          reply_markup: mainMenu,
+        await ctx.reply(t('welcome_back', { name }), {
+          reply_markup: Keyboards.mainMenu(lang),
         });
       }
     } catch (error) {
       console.error('Start handler error:', error);
       const t = TelegramI18n.getT('en');
-      const errorMessage = t('errors.something_wrong');
-      await ctx.reply(errorMessage);
+      await ctx.reply(t('errors.something_wrong'));
     }
   }
 }

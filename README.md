@@ -4,73 +4,68 @@ Progress:
 
 ```text
 ai-pet-video-system/
-├── backend/ #
-│   ├── package.json #
-│   ├── .env.example #
-│   ├── Dockerfile #
+├── backend/
+│   ├── package.json
+│   ├── .env.example
+│   ├── Dockerfile
 │   ├── scripts/
-│   │      └── migrate.js
+│   │   └── migrate.js
 │   ├── src/
-│   │   ├── app.js #
-│   │   ├── server.js #
+│   │   ├── app.js
+│   │   ├── server.js
 │   │   ├── config/
-│   │   │   ├── database.js #
-│   │   │   ├── aws.js #
-│   │   │   └── redis.js #
+│   │   │   ├── database.js
+│   │   │   ├── aws.js
+│   │   │   └── redis.js
 │   │   ├── models/
-│   │   │   ├── index.js #
-│   │   │   ├── User.js #
-│   │   │   ├── Request.js #
-│   │   │   └── Template.js #
+│   │   │   ├── index.js
+│   │   │   ├── User.js
+│   │   │   ├── Request.js
+│   │   │   └── Template.js
 │   │   ├── controllers/
-│   │   │   ├── userController.js #
-│   │   │   ├── requestController.js #
-│   │   │   ├── paymentController.js #
-│   │   │   └── adminController.js #
+│   │   │   ├── userController.js
+│   │   │   ├── requestController.js
+│   │   │   ├── paymentController.js
+│   │   │   └── adminController.js
 │   │   ├── routes/
-│   │   │   ├── index.js #
-│   │   │   ├── users.js #
-│   │   │   ├── requests.js #
-│   │   │   ├── payments.js #
-│   │   │   └── admin.js #
+│   │   │   ├── index.js
+│   │   │   ├── users.js
+│   │   │   ├── requests.js
+│   │   │   ├── payments.js
+│   │   │   └── admin.js
 │   │   ├── services/
-│   │   │   ├── s3Service.js #
-│   │   │   ├── emailService.js #
-│   │   │   ├── paymentService.js #
-│   │   │   ├── queueService.js #
-│   │   │   └── translationService.js #
+│   │   │   ├── s3Service.js
+│   │   │   ├── emailService.js
+│   │   │   ├── paymentService.js
+│   │   │   └── queueService.js
 │   │   ├── middleware/
-│   │   │   ├── auth.js #
-│   │   │   ├── validation.js #
-│   │   │   ├── rateLimit.js #
-│   │   │   ├── errorHandler.js #
-│   │   │   └── i18n.js #
-│   │   ├── locales/ #
-│   │   │   ├── en.json #
-│   │   │   ├── ru.json #
-│   │   │   └── index.js #
+│   │   │   ├── auth.js
+│   │   │   ├── validation.js
+│   │   │   ├── rateLimit.js
+│   │   │   ├── errorHandler.js
+│   │   │   └── i18n.js
 │   │   └── utils/
-│   │       ├── logger.js #
-│   │       ├── constants.js #
-│   │       ├── helpers.js #
-│   │       └── index.js #
-│   └── migrations/ #
-│       ├── 001-initial-schema.sql #
-│       └── 002-add-sample-data.sql #
+│   │       ├── logger.js
+│   │       ├── constants.js
+│   │       ├── helpers.js
+│   │       └── index.js
+│   └── migrations/
+│       ├── 001-initial-schema.sql
+│       └── 002-add-sample-data.sql
 │
-├── telegram-bot/ # Stage 2
-│   ├── package.json #
+├── telegram-bot/
+│   ├── package.json
 │   ├── .env.example
 │   ├── Dockerfile
 │   ├── bot.js
 │   └── src/
 │       ├── config/
-│       │   ├── i18n.js #
+│       │   ├── i18n.js
 │       │   └── redis.js
 │       ├── handlers/
-│       │   ├── start.js #
-│       │   ├── language.js #
-│       │   ├── photoUpload.js #
+│       │   ├── start.js
+│       │   ├── language.js
+│       │   ├── photoUpload.js
 │       │   ├── scriptInput.js
 │       │   ├── payment.js
 │       │   └── status.js
@@ -78,14 +73,33 @@ ai-pet-video-system/
 │       │   ├── apiService.js
 │       │   ├── sessionService.js
 │       │   └── paymentTelegram.js
-│       ├──  utils/
-│       │   ├── keyboards.js #
-│       │   └── logger.js
-│       │
-│       ├── locales/ #
-│           ├── en.json #
-│           ├── ru.json #
-│           └── index.js #
+│       └── utils/
+│             ├── keyboards.js #
+│             └── logger.js
+│
+│
+├── shared-locales/
+│   ├── index.js
+│   ├── en/
+│   │   ├── common.json
+│   │   ├── auth.json
+│   │   ├── videos.json
+│   │   ├── payments.json
+│   │   ├── errors.json
+│   │   ├── notifications.json
+│   │   ├── notifications.json
+│   │   └── telegram.json
+│   │
+│   └── ru/
+│        ├── common.json
+│        ├── auth.json
+│        ├── videos.json
+│        ├── payments.json
+│        ├── errors.json
+│        ├── notifications.json
+│        ├── notifications.json
+│        └── telegram.json
+│
 │
 ├── docker-compose.test.yml
 └── README.md
