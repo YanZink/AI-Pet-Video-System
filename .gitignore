@@ -1,6 +1,5 @@
 text.md
-
-package-lock.json
+frontend/
 
 # Dependencies
 node_modules/

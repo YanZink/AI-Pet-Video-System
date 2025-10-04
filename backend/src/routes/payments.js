@@ -24,4 +24,13 @@ paymentRouter.get(
   paymentController.getPaymentInfo
 );
 
+// Stripe Checkout (mock) - protected
+paymentRouter.post(
+  '/stripe/checkout',
+  getGeneralRateLimit(),
+  authMiddleware,
+  validateBody(paymentSchemas.createCheckout),
+  paymentController.createStripeCheckout
+);
+
 module.exports = paymentRouter;

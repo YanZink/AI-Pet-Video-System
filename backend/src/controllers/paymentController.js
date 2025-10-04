@@ -187,6 +187,51 @@ class PaymentController {
       }),
     });
   });
+
+  /**
+   * Mock Stripe Checkout session creation for web integration (Stage 3)
+   */
+  createStripeCheckout = asyncHandler(async (req, res) => {
+    const { request_id, success_url, cancel_url } = req.validatedBody;
+    const userId = req.user.id;
+
+    const request = await Request.findOne({
+      where: {
+        id: request_id,
+        user_id: userId,
+      },
+    });
+
+    if (!request) {
+      throw createError(
+        req.t('errors.request_not_found', {
+          defaultValue: 'Request not found',
+        }),
+        404,
+        ERROR_CODES.NOT_FOUND_ERROR
+      );
+    }
+
+    if (request.payment_status === 'paid') {
+      throw createError(
+        req.t('errors.already_paid', {
+          defaultValue: 'Request is already paid',
+        }),
+        400,
+        ERROR_CODES.VALIDATION_ERROR
+      );
+    }
+
+    // Mock: immediately return success_url as checkout_url
+    const checkoutUrl = success_url;
+
+    res.json({
+      checkout_url: checkoutUrl,
+      message: req.t('payment.checkout_created', {
+        defaultValue: 'Checkout session created (mock)',
+      }),
+    });
+  });
 }
 
 module.exports = new PaymentController();

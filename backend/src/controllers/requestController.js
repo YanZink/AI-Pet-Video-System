@@ -140,9 +140,30 @@ class RequestController {
     }
 
     const uploadUrls = [];
+    const useMock = process.env.MOCK_UPLOADS === 'true';
     for (let i = 0; i < file_count; i++) {
-      const urlData = s3Service.generatePresignedUploadUrl(file_type, 'photos');
-      uploadUrls.push(urlData);
+      if (useMock) {
+        // Return mock upload URL to local endpoint
+        const { v4: uuidv4 } = require('uuid');
+        const ext = file_type.split('/')[1] || 'bin';
+        const key = `photos/${uuidv4()}.${ext}`;
+        const uploadUrl = `${req.protocol}://${req.get(
+          'host'
+        )}/api/v1/uploads/mock/${key}`;
+        uploadUrls.push({
+          uploadUrl,
+          key,
+          contentType: file_type,
+          expires: new Date(Date.now() + 30 * 60 * 1000),
+          downloadUrl: uploadUrl,
+        });
+      } else {
+        const urlData = s3Service.generatePresignedUploadUrl(
+          file_type,
+          'photos'
+        );
+        uploadUrls.push(urlData);
+      }
     }
 
     res.json({

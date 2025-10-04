@@ -5,6 +5,7 @@ const userRouter = require('./users');
 const requestRouter = require('./requests');
 const paymentRouter = require('./payments');
 const adminRouter = require('./admin');
+const uploadsRouter = require('./uploads');
 
 const mainRouter = express.Router();
 
@@ -41,5 +42,6 @@ mainRouter.use('/users', userRouter);
 mainRouter.use('/requests', requestRouter);
 mainRouter.use('/payments', paymentRouter);
 mainRouter.use('/admin', adminRouter);
+mainRouter.use('/uploads', uploadsRouter);
 
 module.exports = mainRouter;
