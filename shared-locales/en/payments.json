@@ -1,11 +1,18 @@
 {
-  "order_summary": "📋 Order Summary:\n\n📸 Photos: {photoCount}\n✍️ Script: {script}\n💰 Price: {price} stars\n\nProceed with payment?",
+  "order_summary": "Order Summary:\n\n Photos: {photoCount}\n Script: {script}\n Price: {price} stars\n\nProceed with payment?",
   "no_script": "No script (surprise video)",
-  "confirm_payment": "💳 Pay {price} stars",
-  "processing": "⏳ Processing payment...",
-  "success": "✅ Payment successful! Your video request has been submitted.\n\nRequest ID: {requestId}\n\nYou'll receive notifications about status updates.",
-  "cancelled": "❌ Payment cancelled",
+  "confirm_payment": "Pay {price} stars",
+  "processing": "Processing payment...",
+  "success": "Payment successful! Your video request has been submitted.\n\nRequest ID: {requestId}\n\nYou'll receive notifications about status updates.",
+  "cancelled": "Payment cancelled",
   "price_stars": "{stars} stars (${usd})",
   "intent_created": "Payment intent created successfully",
-  "checkout_created": "Checkout session created"
+  "checkout_created": "Checkout session created",
+  "cancelled_message": "You can try again when you're ready.",
+  "status": {
+    "pending": "pending",
+    "paid": "paid",
+    "failed": "failed",
+    "refunded": "refunded"
+  }
 }

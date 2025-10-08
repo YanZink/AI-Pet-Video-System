@@ -17,7 +17,9 @@
     "received": "Photo {current}/{max} received",
     "upload_complete": "✅ {count} photos uploaded successfully!",
     "max_reached": "❌ Maximum 10 photos reached",
-    "continue": "Continue with {count} photos"
+    "continue": "Continue with {count} photos",
+    "count_one": "photo",
+    "count_other": "photos"
   },
 
   "script": {

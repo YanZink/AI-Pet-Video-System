@@ -17,7 +17,9 @@
     "received": "Получена фотография {current}/{max}",
     "upload_complete": "✅ {count} фотографий загружено успешно!",
     "max_reached": "❌ Максимум 10 фотографий",
-    "continue": "Продолжить с {count} фото"
+    "continue": "Продолжить с {count} фото",
+    "count_one": "фото",
+    "count_other": "фото"
   },
 
   "script": {

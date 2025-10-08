@@ -1,186 +1,64 @@
-# AI Pet Video
+# AI Pet Video System
 
-Progress:
+A complete platform for creating AI-generated pet videos with multi-language support and multiple payment options.
 
-```text
-ai-pet-video-system/
-├── backend/
-│   ├── package.json
-│   ├── .env.example
-│   ├── Dockerfile
-│   ├── scripts/
-│   │   └── migrate.js
-│   ├── src/
-│   │   ├── app.js
-│   │   ├── server.js
-│   │   ├── config/
-│   │   │   ├── database.js
-│   │   │   ├── aws.js
-│   │   │   └── redis.js
-│   │   ├── models/
-│   │   │   ├── index.js
-│   │   │   ├── User.js
-│   │   │   ├── Request.js
-│   │   │   └── Template.js
-│   │   ├── controllers/
-│   │   │   ├── userController.js
-│   │   │   ├── requestController.js
-│   │   │   ├── paymentController.js
-│   │   │   └── adminController.js
-│   │   ├── routes/
-│   │   │   ├── index.js
-│   │   │   ├── users.js
-│   │   │   ├── requests.js
-│   │   │   ├── payments.js
-│   │   │   └── admin.js
-│   │   ├── services/
-│   │   │   ├── s3Service.js
-│   │   │   ├── emailService.js
-│   │   │   ├── paymentService.js
-│   │   │   └── queueService.js
-│   │   ├── middleware/
-│   │   │   ├── auth.js
-│   │   │   ├── validation.js
-│   │   │   ├── rateLimit.js
-│   │   │   ├── errorHandler.js
-│   │   │   └── i18n.js
-│   │   └── utils/
-│   │       ├── logger.js
-│   │       ├── constants.js
-│   │       ├── helpers.js
-│   │       └── index.js
-│   └── migrations/
-│       ├── 001-initial-schema.sql
-│       └── 002-add-sample-data.sql
-│
-├── telegram-bot/
-│   ├── package.json
-│   ├── .env.example
-│   ├── Dockerfile
-│   ├── bot.js
-│   └── src/
-│       ├── config/
-│       │   ├── i18n.js
-│       │   └── redis.js
-│       ├── handlers/
-│       │   ├── start.js
-│       │   ├── language.js
-│       │   ├── photoUpload.js
-│       │   ├── scriptInput.js
-│       │   ├── payment.js
-│       │   └── status.js
-│       ├── services/
-│       │   ├── apiService.js
-│       │   ├── sessionService.js
-│       │   └── paymentTelegram.js
-│       └── utils/
-│             ├── keyboards.js #
-│             └── logger.js
-│
-│
-├── shared-locales/
-│   ├── index.js
-│   ├── en/
-│   │   ├── common.json
-│   │   ├── auth.json
-│   │   ├── videos.json
-│   │   ├── payments.json
-│   │   ├── errors.json
-│   │   └── notifications.json
-│   │
-│   │
-│   └── ru/
-│        ├── common.json
-│        ├── auth.json
-│        ├── videos.json
-│        ├── payments.json
-│        ├── errors.json
-│        └── notifications.json
-│
-│
-│
-├── docker-compose.test.yml
-└── README.md
-```
+## Project Status
 
-# Stage 1 Testing Guide
+✅ **Stage 1: Basic Infrastructure** - Complete  
+✅ **Stage 2: Telegram Bot** - Complete  
+✅ **Stage 3: Website** - Complete  
+🔄 **Stage 4: Admin Panel** - In Progress  
+⏳ **Stage 5: Final Integration** - Pending
 
-Prerequisites:
+## Quick Start
 
-- Docker installed
-- Node.js installed
-- Git installed
+### Prerequisites
 
-## Step 1: Clone and Setup
+- Docker and Docker Compose
+- Node.js 16+
+- Git
 
+### Local Development Setup
+
+1. **Clone and Setup Backend**
+
+```bash
 git clone <repository-url>
 cd ai-pet-video-system/backend
 npm install
+cp .env.example .env
+```
 
 ## Step 2: Start Docker Containers
 
+```bash
 docker-compose -f docker-compose.test.yml up -d
+```
 
-## Step 3: Configure Environment
+## Step 3: Setup Database
 
-Copy .env.example to .env and keep default values.
+```bash
+node scripts/migrate.js
+```
 
-## Step 4: Start Backend Server
+## Step 4: Copy Locales
 
-npm start
-Wait for message: "🚀 Server started successfully!"
+```bash
+node copy-locales.js
+```
 
-## Step 5: Test API with Postman
+## Step 5: Start Services
 
-- Health Check
+```bash
+# Backend (Terminal 1)
+cd backend && npm start
 
-GET http://localhost:3000/api/v1/health
-Expected: {"status":"OK"}
+# Frontend (Terminal 2)
+cd frontend && npm start
 
-- Create User
-
-POST http://localhost:3000/api/v1/users
-Body:
-
-json
-{
-"email": "test@example.com",
-"password": "password123",
-"username": "testuser",
-"first_name": "Test",
-"last_name": "User"
-}
-
-- Login
-
-POST http://localhost:3000/api/v1/users/login
-Body:
-
-json
-{
-"email": "test@example.com",
-"password": "password123"
-}
-Save the JWT token from response.
-
-- Create Video Request
-
-POST http://localhost:3000/api/v1/requests
-Headers: Authorization: Bearer <your-token>
-Body:
-
-json
-{
-"photos": ["photo1.jpg", "photo2.jpg"],
-"script": "Make my pet video"
-}
-
-- Check Requests
-
-GET http://localhost:3000/api/v1/requests/my
-Headers: Authorization: Bearer <your-token>
-
-Step 6: Stop Services
+# Telegram Bot (Terminal 3, optional)
+cd telegram-bot && npm start
+```
 
 # Stop backend server: Ctrl+C
 
@@ -195,80 +73,39 @@ Expected Results:
 - Redis handles rate limiting
 - No errors in console logs
 
-## Telegram Bot (Stage 2) - Ready for Testing!
+# Access Points
 
-Telegram Stars Payments Integration
+Website: http://localhost:3000
 
-Our Telegram bot is fully integrated with Telegram Stars payment system and ready for testing in the test environment.
+API: http://localhost:3001/api/v1/health
 
-Key Features Implemented:
-✅ Multi-language support (English/Russian) with i18n
+Admin Panel: http://localhost:3000/admin
 
-✅ Photo upload flow with progress tracking
+Database: localhost:5432 (postgres/password)
 
-✅ Script input with skip option
+# Project Structure
 
-✅ Telegram Stars payments with test environment setup
-
-✅ Payment handlers for pre-checkout and successful payments
-
-✅ Session management with Redis
-
-✅ Backend API integration
-
-Testing Telegram Stars Payments:
-The bot uses Telegram's test environment for Stars payments:
-
-```
-// Already configured in telegramPayment.js
-provider_token: '', // Empty string for test environment
-currency: 'XTR', // Telegram Stars currency
+```text
+ai-pet-video-system/
+├── backend/          # Node.js API server
+├── frontend/         # React.js website
+├── telegram-bot/     # Telegram bot
+├── shared-locales/   # Translation files
+└── docker-compose.test.yml
 ```
 
-To test the Telegram bot:
-Configure bot in @BotFather:
+# Next Steps
 
-```
-/setinline
-/setuserpic
-/setdescription
-```
+1. Complete Admin Panel functionality (Stage 4)
+2. Integrate AI video generation service
+3. Deploy to production environment
+4. Set up monitoring and analytics
 
-# Enable payments in bot settings
+# Support
 
-Start the bot:
+For issues and questions:
 
-```
-cd telegram-bot
-npm install
-cp .env.example .env
-# Add your TELEGRAM_BOT_TOKEN to .env
-npm start
-```
-
-Test the complete flow:
-
-- Start conversation with bot
-- Upload photos (1-10 images)
-- Add optional script or skip
-- Proceed to payment
-- Test Stars payment in test environment
-- Verify status updates
-
-Payment Flow:
-
-- Bot sends invoice via sendInvoice method
-- User confirms payment in Telegram
-- Pre-checkout query validation
-- Successful payment processing
-- Backend integration updates request status
-- User receives confirmation
-
-Ready for Production:
-To move to production:
-
-- Replace empty "provider_token" with real token
-- Switch bot from test to production mode
-- Update environment variables
-
-The Telegram bot is fully functional and ready for demonstration!
+- Check console logs for errors
+- Verify database connections
+- Ensure locale files are copied correctly
+- Confirm environment variables are set

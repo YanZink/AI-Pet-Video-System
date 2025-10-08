@@ -1,0 +1,147 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import apiService from '../services/api';
+import Header from '../components/common/Header';
+import PhotoUploader from '../components/forms/PhotoUploader';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+
+const CreateRequestPage = () => {
+  const { t } = useLanguage();
+  const [photos, setPhotos] = useState([]);
+  const [script, setScript] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (photos.length === 0) {
+      setError(t('errors:no_photos'));
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await apiService.createRequest({
+        photos,
+        script: script.trim() || null,
+      });
+
+      // Redirect to payment
+      const checkoutResponse = await apiService.createStripeCheckout(
+        response.request.id,
+        `${window.location.origin}/dashboard?payment=success`,
+        `${window.location.origin}/dashboard?payment=cancelled`
+      );
+
+      window.location.href = checkoutResponse.checkout_url;
+    } catch (err) {
+      setError(err.response?.data?.message || t('errors:request_failed'));
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 page-with-header">
+      <Header />
+
+      <div className="container mx-auto px-4 pt-32 pb-12">
+        <div className="max-w-3xl mx-auto">
+          <Card>
+            <h1 className="text-3xl font-bold text-white mb-6">
+              {t('frontend:create_request.title')}
+            </h1>
+
+            {error && (
+              <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg mb-6">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-white text-lg font-medium mb-4">
+                  {t('frontend:create_request.upload_photos')}
+                </label>
+                <PhotoUploader onPhotosUploaded={setPhotos} maxPhotos={10} />
+              </div>
+
+              <div>
+                <label className="block text-white text-lg font-medium mb-2">
+                  {t('frontend:create_request.script_label')}
+                </label>
+                <textarea
+                  value={script}
+                  onChange={(e) => setScript(e.target.value)}
+                  placeholder={t('frontend:create_request.script_placeholder')}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                  rows={4}
+                  maxLength={1000}
+                />
+                <p className="text-white/50 text-sm mt-2">
+                  {script.length}/1000{' '}
+                  {t('frontend:create_request.characters_count')
+                    .replace('{count}', script.length)
+                    .replace(`${script.length}/1000 `, '')}
+                </p>
+                <p className="text-white/60 text-sm mt-1">
+                  {t('frontend:create_request.script_hint')}
+                </p>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                <div className="flex justify-between text-white mb-2">
+                  <span>{t('frontend:create_request.price_label')}</span>
+                  <span className="font-bold">$10.00</span>
+                </div>
+                <div className="flex justify-between text-white/70 text-sm">
+                  <span>
+                    {t('frontend:create_request.processing_time_label')}
+                  </span>
+                  <span>
+                    {t('frontend:create_request.processing_time_value')}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => navigate('/dashboard')}
+                  className="flex-1"
+                >
+                  {t('frontend:common.cancel')}
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1"
+                  loading={loading}
+                  disabled={loading || photos.length === 0}
+                >
+                  {t('frontend:create_request.submit')}
+                </Button>
+              </div>
+            </form>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CreateRequestPage;

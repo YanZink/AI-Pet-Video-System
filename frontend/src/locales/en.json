@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "Home",
+    "how_it_works": "How It Works",
+    "features": "Features",
+    "contact": "Contact",
+    "get_started": "Get Started",
+    "login": "Login",
+    "dashboard": "Dashboard",
+    "admin": "Admin Panel",
+    "logout": "Logout"
+  },
+  "hero": {
+    "title": "Create Adorable AI Pet Videos",
+    "subtitle": "Bring your pets to life with AI-generated videos in seconds!",
+    "cta": "Create Video Now"
+  },
+  "steps": {
+    "title": "How It Works",
+    "upload": {
+      "title": "Upload Pet Photos",
+      "description": "Easily upload your pet's pictures"
+    },
+    "script": {
+      "title": "Create Script",
+      "description": "Choose a script idea or write your own"
+    },
+    "generate": {
+      "title": "Generate Video",
+      "description": "Get a charming AI generated video of your pet"
+    }
+  },
+  "features": {
+    "title": "Why Choose AI Pet Video Creator?",
+    "personalized": "Personalized Videos",
+    "easy": "Easy to Use",
+    "quality": "Easy to create one video",
+    "engaging": "Fun and Engaging"
+  },
+  "process": {
+    "title": "Simple 3-Step Process",
+    "step1": "Upload Pet Photos",
+    "step1_desc": "Upload a few photos of your pet",
+    "step2": "Create Script",
+    "step2_desc": "Write or select a script to the video",
+    "step3": "Generate Video",
+    "step3_desc": "Get your adorable AI-generated pet video"
+  },
+  "footer": {
+    "contact": "Contact Us",
+    "email": "Email",
+    "telegram": "Telegram"
+  },
+  "auth": {
+    "login_title": "Welcome Back",
+    "signup_title": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "login_button": "Sign In",
+    "signup_button": "Sign Up",
+    "no_account": "Don't have an account? Sign up",
+    "have_account": "Already have an account? Sign in"
+  },
+  "dashboard": {
+    "title": "My Requests",
+    "welcome": "Welcome back",
+    "create_new": "Create New Request",
+    "no_requests": "No Requests Yet",
+    "no_requests_desc": "Create your first AI pet video to get started!",
+    "payment_success": "Payment Successful!",
+    "payment_cancelled": "Payment Cancelled"
+  }
+}

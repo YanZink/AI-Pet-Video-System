@@ -1,0 +1,44 @@
+{
+  "name": "ai-pet-video-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for AI Pet Video system",
+  "dependencies": {
+    "@stripe/react-stripe-js": "^2.4.0",
+    "@stripe/stripe-js": "^2.4.0",
+    "axios": "^1.6.2",
+    "framer-motion": "^10.16.16",
+    "i18next": "^23.7.16",
+    "i18next-http-backend": "^2.7.3",
+    "lucide-react": "^0.294.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-i18next": "^13.5.0",
+    "react-router-dom": "^6.8.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "copy-locales": "node scripts/copy-locales.js",
+    "prebuild": "npm run copy-locales",
+    "prestart": "npm run copy-locales",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
