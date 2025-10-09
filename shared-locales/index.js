@@ -12,9 +12,7 @@ class LocaleManager {
     this.loadLocales();
   }
 
-  /**
-   * Load all locale files from namespace directories
-   */
+  // Load all locales
   loadLocales() {
     try {
       const localesDir = __dirname;
@@ -101,9 +99,7 @@ class LocaleManager {
     return this.fallbackTranslation(key, variables);
   }
 
-  /**
-   * Replace variables in text like {variable}
-   */
+  //  Replace variables
   replaceVariables(text, variables) {
     let result = text;
     for (const [key, value] of Object.entries(variables)) {
@@ -113,38 +109,28 @@ class LocaleManager {
     return result;
   }
 
-  /**
-   * Fallback when translation not found
-   */
+  // Fallback translation
   fallbackTranslation(key, variables) {
     console.warn(`Translation not found for key: ${key}`);
     return this.replaceVariables(key, variables);
   }
 
-  /**
-   * Check if language is supported
-   */
+  // Check if language is supported
   isLanguageSupported(language) {
     return this.locales.has(language);
   }
 
-  /**
-   * Get list of supported languages
-   */
+  // Get all supported languages
   getSupportedLanguages() {
     return Array.from(this.locales.keys());
   }
 
-  /**
-   * Get all translations for a language (for debugging)
-   */
+  // Get locale
   getLocale(language) {
     return this.locales.get(language) || {};
   }
 
-  /**
-   * Reload locales (for development)
-   */
+  // Reload all locales
   reloadLocales() {
     this.locales.clear();
     this.loadLocales();

@@ -23,7 +23,7 @@ A complete platform for creating AI-generated pet videos with multi-language sup
 1. **Clone and Setup Backend**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/YanZink/AI-Pet-Video-System
 cd ai-pet-video-system/backend
 npm install
 cp .env.example .env
@@ -59,19 +59,6 @@ cd frontend && npm start
 # Telegram Bot (Terminal 3, optional)
 cd telegram-bot && npm start
 ```
-
-# Stop backend server: Ctrl+C
-
-# Stop Docker containers
-
-docker-compose -f docker-compose.test.yml down
-
-Expected Results:
-
-- All API endpoints return success responses
-- Database stores users and requests
-- Redis handles rate limiting
-- No errors in console logs
 
 # Access Points
 

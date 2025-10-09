@@ -124,9 +124,7 @@ class PaymentController {
     });
   });
 
-  /**
-   * Create payment intent for Stripe (for future web integration)
-   */
+  // Create payment intent
   createPaymentIntent = asyncHandler(async (req, res) => {
     const { request_id } = req.validatedBody;
     const userId = req.user.id;
@@ -169,9 +167,7 @@ class PaymentController {
     });
   });
 
-  /**
-   * Mock Stripe Checkout session creation
-   */
+  // Create Stripe checkout
   createStripeCheckout = asyncHandler(async (req, res) => {
     const { request_id, success_url, cancel_url } = req.validatedBody;
     const userId = req.user.id;
