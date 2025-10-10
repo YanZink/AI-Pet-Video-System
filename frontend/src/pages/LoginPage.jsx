@@ -52,11 +52,6 @@ const LoginPage = () => {
               ? t('frontend:login.title')
               : t('frontend:login.create_account')}
           </h2>
-          <p className="text-white/70">
-            {isLogin
-              ? t('frontend:login.title')
-              : t('frontend:login.create_account')}
-          </p>
         </div>
 
         {error && (
@@ -77,6 +72,7 @@ const LoginPage = () => {
                   name="first_name"
                   value={formData.first_name}
                   onChange={handleChange}
+                  placeholder={t('frontend:login.first_name_placeholder')}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-500"
                   required={!isLogin}
                 />
@@ -90,6 +86,7 @@ const LoginPage = () => {
                   name="last_name"
                   value={formData.last_name}
                   onChange={handleChange}
+                  placeholder={t('frontend:login.last_name_placeholder')}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-500"
                   required={!isLogin}
                 />
@@ -113,12 +110,15 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <label className="block text-white mb-2">Password</label>
+            <label className="block text-white mb-2">
+              {t('frontend:login.password_label')}
+            </label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
+              placeholder={t('frontend:login.password_placeholder')}
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-500"
               required
               minLength={6}
@@ -144,7 +144,7 @@ const LoginPage = () => {
           >
             {isLogin
               ? t('frontend:login.no_account')
-              : 'Already have an account? Sign in'}
+              : t('frontend:login.have_account')}
           </button>
         </div>
 

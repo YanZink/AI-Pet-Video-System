@@ -72,15 +72,20 @@
   },
   "login": {
     "title": "Войти в аккаунт",
-    "telegram_login": "Войти через Telegram",
-    "or": "или",
+    "create_account": "Создать аккаунт",
     "email_label": "Email",
     "email_placeholder": "Введите ваш email",
-    "continue": "Продолжить",
-    "no_account": "Нет аккаунта?",
-    "create_account": "Создать сейчас",
+    "password_label": "Пароль",
+    "password_placeholder": "Введите ваш пароль",
     "first_name": "Имя",
-    "last_name": "Фамилия"
+    "first_name_placeholder": "Введите ваше имя",
+    "last_name": "Фамилия",
+    "last_name_placeholder": "Введите вашу фамилию",
+    "no_account": "Нет аккаунта? Создать сейчас",
+    "have_account": "Уже есть аккаунт? Войти",
+    "telegram_login": "Войти через Telegram",
+    "or": "или",
+    "continue": "Продолжить"
   },
   "footer": {
     "tagline": "Создавайте потрясающие AI-видео с фотографиями ваших питомцев",
