@@ -101,7 +101,6 @@ const DashboardPage = () => {
 
       <div className="flex-grow container mx-auto px-4 pt-24 pb-12">
         <div className="max-w-6xl mx-auto">
-          {/* Payment Status Notifications */}
           {searchParams.get('payment') === 'success' && (
             <div className="bg-green-500/20 border border-green-500/50 text-green-200 px-6 py-4 rounded-lg mb-6 animate-fade-in">
               <div className="flex items-center">
@@ -128,7 +127,6 @@ const DashboardPage = () => {
             </div>
           )}
 
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">
@@ -161,7 +159,6 @@ const DashboardPage = () => {
             </Button>
           </div>
 
-          {/* Requests List */}
           {requests.length === 0 ? (
             <Card>
               <div className="text-center py-16">
@@ -184,9 +181,7 @@ const DashboardPage = () => {
                 >
                   <Link to={`/request/${request.id}`}>
                     <div className="flex flex-col">
-                      {/* Header with Status and Info */}
                       <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-                        {/* Thumbnail */}
                         <div className="flex-shrink-0">
                           <div className="w-full md:w-32 h-32 bg-white/5 rounded-lg overflow-hidden">
                             {request.photos && request.photos[0] ? (
@@ -207,7 +202,6 @@ const DashboardPage = () => {
                           </div>
                         </div>
 
-                        {/* Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between mb-2">
                             <div>
@@ -247,7 +241,6 @@ const DashboardPage = () => {
                         </div>
                       </div>
 
-                      {/* Download Button */}
                       {request.status === REQUEST_STATUS.COMPLETED &&
                         request.video_url && (
                           <div className="border-t border-white/10 pt-4 mt-2 flex justify-end">

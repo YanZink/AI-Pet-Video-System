@@ -1,38 +1,21 @@
 import React from 'react';
+import styles from './Button.module.css';
 
 const Button = ({
   children,
   variant = 'primary',
-  size = 'md',
+  size = 'medium',
   className = '',
   disabled = false,
   loading = false,
   ...props
 }) => {
-  const baseClasses =
-    'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
-
-  const variants = {
-    primary:
-      'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl focus:ring-pink-500',
-    secondary:
-      'bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 focus:ring-white/50',
-    outline:
-      'border-2 border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white focus:ring-pink-500',
-    ghost: 'text-white hover:bg-white/10 focus:ring-white/50',
-  };
-
-  const sizes = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-lg',
-  };
-
   const classes = `
-    ${baseClasses}
-    ${variants[variant]}
-    ${sizes[size]}
-    ${disabled || loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+    ${styles.button}
+    ${styles[variant]}
+    ${styles[size]}
+    ${disabled || loading ? styles.disabled : ''}
+    ${loading ? styles.loading : ''}
     ${className}
   `.trim();
 

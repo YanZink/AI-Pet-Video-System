@@ -1,4 +1,7 @@
-/* Global Styles */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
@@ -40,96 +43,101 @@ body {
   padding: 0 1rem;
 }
 
-/* Gradient Background */
-.gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Text utilities */
+.hero-text {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
-.gradient-bg-alt {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
-/* Card Styles */
-.card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 1rem;
-  padding: 1.5rem;
+/* Page layout utilities */
+.page-container {
+  padding-top: 80px;
+  min-height: calc(100vh - 80px);
 }
 
-.card:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
+.admin-page {
+  padding-top: 0;
 }
 
-/* Button Styles */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  outline: none;
+.page-with-header {
+  padding-top: 80px;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-  color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-primary:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Input Styles */
-.input {
+/* Select styles */
+select {
   width: 100%;
   padding: 0.75rem 1rem;
+  padding-right: 3rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
+  border-radius: 12px;
   color: white;
   font-size: 1rem;
   outline: none;
   transition: all 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
 }
 
-.input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+select:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-.input:focus {
+select:focus {
   border-color: #ec4899;
-  background: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
 }
 
-/* Loading Spinner */
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+select option {
+  background: #4c1d95;
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.modal select {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+.modal select:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #ec4899;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes spin {
@@ -138,7 +146,7 @@ body {
   }
 }
 
-/* Status Badges */
+/* Status badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -178,116 +186,9 @@ body {
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   .container {
     padding: 0 1rem;
   }
-
-  .btn {
-    padding: 0.625rem 1.25rem;
-    font-size: 0.875rem;
-  }
-}
-/* text wrapping in hero section */
-.hero-text {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-/* header overlapping content */
-.page-container {
-  padding-top: 80px;
-  min-height: calc(100vh - 80px);
-}
-
-/* Admin pages specific padding */
-.admin-page {
-  padding-top: 0;
-}
-
-/* Ensure proper spacing for pages with header */
-.page-with-header {
-  padding-top: 80px;
-}
-
-/* Line clamp utility */
-.line-clamp-2 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-}
-
-/* Select styles */
-select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  padding-right: 3rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px; /* Increased for more rounded appearance */
-  color: white;
-  font-size: 1rem;
-  outline: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1.25rem;
-}
-
-select:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-select:focus {
-  border-color: #ec4899;
-  background-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
-}
-
-/* Select options styling - browser default mostly */
-select option {
-  background: #4c1d95;
-  color: white;
-  padding: 0.5rem 1rem;
-}
-
-/* Modal specific select styles */
-.modal select {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-}
-
-.modal select:focus {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: #ec4899;
-}
-
-/* Remove default IE arrow */
-select::-ms-expand {
-  display: none;
 }

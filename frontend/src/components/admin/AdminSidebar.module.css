@@ -1,0 +1,77 @@
+.sidebar {
+  width: 16rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.menuItem:not(.active) {
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+}
+
+.menuItem:not(.active):hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.active {
+  background: #ec4899;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.menuIcon {
+  font-size: 1.25rem;
+  margin-right: 0.75rem;
+}
+
+.menuLabel {
+  font-weight: 500;
+}
+
+.userInfo {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+}
+
+.userText {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+}
+
+.userName {
+  color: white;
+  font-weight: 500;
+}

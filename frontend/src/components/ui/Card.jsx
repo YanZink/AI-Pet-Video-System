@@ -1,11 +1,22 @@
 import React from 'react';
+import styles from './Card.module.css';
 
-const Card = ({ children, className = '', ...props }) => {
+const Card = ({
+  children,
+  className = '',
+  variant = 'glass',
+  elevated = false,
+  ...props
+}) => {
+  const classes = `
+    ${styles.card}
+    ${styles[variant]}
+    ${elevated ? styles.elevated : ''}
+    ${className}
+  `.trim();
+
   return (
-    <div
-      className={`bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 ${className}`}
-      {...props}
-    >
+    <div className={classes} {...props}>
       {children}
     </div>
   );

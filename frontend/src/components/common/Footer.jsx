@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import styles from './Footer.module.css';
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -13,32 +14,27 @@ const Footer = () => {
   };
 
   return (
-    <footer
-      id="contact"
-      className="bg-black/40 backdrop-blur-sm border-t border-white/10 py-12"
-    >
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+    <footer id="contact" className={styles.footer}>
+      <div className={styles.container}>
+        <div className={styles.grid}>
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className={styles.brand}>
+              <div className={styles.brandIcon}>
                 <span className="text-white text-xl">🐾</span>
               </div>
-              <span className="text-white text-xl font-bold">
-                AI Pet Video Creator
-              </span>
+              <span className={styles.brandText}>AI Pet Video Creator</span>
             </div>
-            <p className="text-white/70">{t('frontend:footer.tagline')}</p>
+            <p className={styles.tagline}>{t('frontend:footer.tagline')}</p>
           </div>
 
           <div>
-            <h3 className="text-white font-bold mb-4">
+            <h3 className={styles.sectionTitle}>
               {t('frontend:footer.contact_us')}
             </h3>
-            <div className="space-y-2">
+            <div className={styles.contactList}>
               <a
                 href="mailto:zinkovskii1803@gmail.com"
-                className="text-white/70 hover:text-pink-400 transition-colors flex items-center space-x-2"
+                className={styles.contactLink}
               >
                 <span>📧</span>
                 <span>zinkovskii1803@gmail.com</span>
@@ -48,7 +44,7 @@ const Footer = () => {
                 href="https://t.me/Yan_Zink"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/70 hover:text-pink-400 transition-colors flex items-center space-x-2"
+                className={styles.contactLink}
               >
                 <span>✈️</span>
                 <span>@Yan_Zink</span>
@@ -57,40 +53,40 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-white font-bold mb-4">
+            <h3 className={styles.sectionTitle}>
               {t('frontend:footer.info_title')}
             </h3>
-            <div className="text-white/70 text-sm space-y-1">
-              <p>
-                <span className="font-medium">
+            <div className={styles.infoList}>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>
                   {t('frontend:footer.price_label')}
-                </span>{' '}
-                {t('frontend:footer.price_value')}
-              </p>
-              <p>
-                <span className="font-medium">
+                </span>
+                <span>{t('frontend:footer.price_value')}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>
                   {t('frontend:footer.processing_time_label')}
-                </span>{' '}
-                {t('frontend:footer.processing_time_value')}
-              </p>
-              <p>
-                <span className="font-medium">
+                </span>
+                <span>{t('frontend:footer.processing_time_value')}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>
                   {t('frontend:footer.max_photos_label')}
-                </span>{' '}
-                {t('frontend:footer.max_photos_value')}
-              </p>
-              <p>
-                <span className="font-medium">
+                </span>
+                <span>{t('frontend:footer.max_photos_value')}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>
                   {t('frontend:footer.supported_formats_label')}
-                </span>{' '}
-                {t('frontend:footer.supported_formats_value')}
-              </p>
+                </span>
+                <span>{t('frontend:footer.supported_formats_value')}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 text-center">
-          <p className="text-white/50 text-sm">
+        <div className={styles.divider}>
+          <p className={styles.copyright}>
             © 2025 AI Pet Video Creator.{' '}
             {t('frontend:footer.all_rights_reserved')}
           </p>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import styles from './FeaturesSection.module.css';
 
 const FeaturesSection = () => {
   const { t } = useLanguage();
@@ -38,26 +39,17 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section id="features" className="py-20 relative">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl lg:text-5xl font-bold text-white text-center mb-4">
-          {t('frontend:features.title')}
-        </h2>
-        <p className="text-xl text-white/70 text-center mb-16">
-          {t('frontend:features.subtitle')}
-        </p>
+    <section id="features" className={styles.features}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>{t('frontend:features.title')}</h2>
+        <p className={styles.subtitle}>{t('frontend:features.subtitle')}</p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={styles.grid}>
           {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:from-white/20 hover:to-white/10 transition-all duration-300 transform hover:scale-105"
-            >
-              <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className="text-white text-xl font-bold mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-white/70">{feature.desc}</p>
+            <div key={index} className={styles.featureCard}>
+              <div className={styles.icon}>{feature.icon}</div>
+              <h3 className={styles.featureTitle}>{feature.title}</h3>
+              <p className={styles.featureDescription}>{feature.desc}</p>
             </div>
           ))}
         </div>

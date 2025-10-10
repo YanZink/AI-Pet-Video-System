@@ -22,7 +22,6 @@ const AdminRequests = () => {
       return;
     }
 
-    // Check for status from query params
     const statusFromUrl = searchParams.get('status');
     if (statusFromUrl) {
       setFilterStatus(statusFromUrl);
@@ -32,7 +31,6 @@ const AdminRequests = () => {
   }, [isAdmin, navigate, filterStatus]);
 
   useEffect(() => {
-    // Update filter when URL params change
     const statusFromUrl = searchParams.get('status');
     if (statusFromUrl && statusFromUrl !== filterStatus) {
       setFilterStatus(statusFromUrl);
@@ -90,7 +88,6 @@ const AdminRequests = () => {
       <AdminSidebar />
 
       <div className="flex-1 p-8 overflow-auto">
-        {/* Header with Back Button */}
         <div className="mb-8">
           <button
             onClick={() => navigate('/admin')}
@@ -117,7 +114,6 @@ const AdminRequests = () => {
           <p className="text-white/70">Manage video creation requests</p>
         </div>
 
-        {/* Filters */}
         <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
           {statusFilters.map((filter) => (
             <button
@@ -135,7 +131,6 @@ const AdminRequests = () => {
           ))}
         </div>
 
-        {/* Requests List */}
         {loading ? (
           <Loader />
         ) : (

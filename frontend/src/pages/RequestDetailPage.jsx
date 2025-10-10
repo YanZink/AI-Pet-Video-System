@@ -118,7 +118,6 @@ const RequestDetailPage = () => {
 
       <div className="container mx-auto px-4 pt-32 pb-12">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
           <div className="mb-6">
             <Link
               to="/dashboard"
@@ -144,7 +143,6 @@ const RequestDetailPage = () => {
             </h1>
           </div>
 
-          {/* Status Card */}
           <Card className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -179,26 +177,21 @@ const RequestDetailPage = () => {
             </div>
           </Card>
 
-          {/* Photos */}
           <Card className="mb-6">
             <h3 className="text-xl font-bold text-white mb-4">
               {t('frontend:request_detail.photos_title')} (
               {request.photos?.length || 0})
             </h3>
-            {/* ... */}
           </Card>
 
-          {/* Script */}
           {request.script && (
             <Card className="mb-6">
               <h3 className="text-xl font-bold text-white mb-4">
                 {t('frontend:request_detail.script_title')}
               </h3>
-              {/* ... */}
             </Card>
           )}
 
-          {/* Payment Info */}
           <Card className="mb-6">
             <h3 className="text-xl font-bold text-white mb-4">
               {t('frontend:request_detail.payment_info_title')}
@@ -226,7 +219,6 @@ const RequestDetailPage = () => {
             </div>
           </Card>
 
-          {/* Video Download */}
           {request.status === REQUEST_STATUS.COMPLETED && request.video_url && (
             <Card>
               <div className="text-center py-8">
@@ -247,7 +239,6 @@ const RequestDetailPage = () => {
             </Card>
           )}
 
-          {/* Processing Status */}
           {request.status === REQUEST_STATUS.IN_PROGRESS && (
             <Card>
               <div className="text-center py-8">

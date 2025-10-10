@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { REQUEST_STATUS } from '../../utils/constants';
+import styles from './RequestList.module.css';
 
 const RequestList = ({ requests, onStatusUpdate }) => {
   const navigate = useNavigate();
@@ -9,23 +10,23 @@ const RequestList = ({ requests, onStatusUpdate }) => {
     const statusMap = {
       [REQUEST_STATUS.CREATED]: {
         text: 'Created',
-        class: 'badge-created',
+        class: styles.badgeCreated,
       },
       [REQUEST_STATUS.PAID]: {
         text: 'Paid',
-        class: 'badge-paid',
+        class: styles.badgePaid,
       },
       [REQUEST_STATUS.IN_PROGRESS]: {
         text: 'In Progress',
-        class: 'badge-in-progress',
+        class: styles.badgeInProgress,
       },
       [REQUEST_STATUS.COMPLETED]: {
         text: 'Completed',
-        class: 'badge-completed',
+        class: styles.badgeCompleted,
       },
       [REQUEST_STATUS.CANCELLED]: {
         text: 'Cancelled',
-        class: 'badge-cancelled',
+        class: styles.badgeCancelled,
       },
     };
     return statusMap[status] || statusMap[REQUEST_STATUS.CREATED];
@@ -42,61 +43,62 @@ const RequestList = ({ requests, onStatusUpdate }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className={styles.container}>
       {requests.map((request) => {
         const statusDisplay = getStatusDisplay(request.status);
         return (
           <div
             key={request.id}
-            className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all cursor-pointer"
+            className={styles.requestItem}
             onClick={() => navigate(`/admin/requests/${request.id}`)}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-4 mb-2">
-                  <h3 className="text-white font-semibold">
+            <div className={styles.content}>
+              <div className={styles.info}>
+                <div className={styles.header}>
+                  <h3 className={styles.requestId}>
                     Request #{request.id.slice(0, 8)}
                   </h3>
-                  <span className={`badge ${statusDisplay.class}`}>
+                  <span className={`${styles.badge} ${statusDisplay.class}`}>
                     {statusDisplay.text}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <p className="text-white/60">User</p>
-                    <p className="text-white">
+                <div className={styles.details}>
+                  <div className={styles.detail}>
+                    <p className={styles.detailLabel}>User</p>
+                    <p className={styles.detailValue}>
                       {request.user?.first_name ||
                         request.user?.username ||
                         'Unknown'}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-white/60">Created</p>
-                    <p className="text-white">
+                  <div className={styles.detail}>
+                    <p className={styles.detailLabel}>Created</p>
+                    <p className={styles.detailValue}>
                       {formatDate(request.created_at)}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-white/60">Photos</p>
-                    <p className="text-white">{request.photos?.length || 0}</p>
+                  <div className={styles.detail}>
+                    <p className={styles.detailLabel}>Photos</p>
+                    <p className={styles.detailValue}>
+                      {request.photos?.length || 0}
+                    </p>
                   </div>
                 </div>
 
                 {request.script && (
-                  <div className="mt-2">
-                    <p className="text-white/60 text-sm">Script</p>
-                    <p className="text-white/80 text-sm truncate">
-                      {request.script}
-                    </p>
+                  <div className={styles.script}>
+                    <p className={styles.scriptLabel}>Script</p>
+                    <p className={styles.scriptText}>{request.script}</p>
                   </div>
                 )}
               </div>
 
-              <div className="flex-shrink-0 ml-4">
-                <button className="text-white/70 hover:text-white transition-colors">
+              <div className={styles.arrow}>
+                <div className={styles.arrowIcon}>
                   <svg
-                    className="w-5 h-5"
+                    width="20"
+                    height="20"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -108,7 +110,7 @@ const RequestList = ({ requests, onStatusUpdate }) => {
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </button>
+                </div>
               </div>
             </div>
           </div>

@@ -1,0 +1,65 @@
+.statsCard {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  transform: scale(1);
+  cursor: pointer;
+}
+
+.statsCard:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.textContent {
+  flex: 1;
+}
+
+.title {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.value {
+  color: white;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.iconContainer {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.gradientBlue {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+}
+
+.gradientPurple {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+}
+
+.gradientOrange {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+}
+
+.gradientGreen {
+  background: linear-gradient(135deg, #10b981, #059669);
+}

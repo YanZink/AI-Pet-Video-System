@@ -41,7 +41,6 @@ const CreateRequestPage = () => {
         script: script.trim() || null,
       });
 
-      // Redirect to payment
       const checkoutResponse = await apiService.createStripeCheckout(
         response.request.id,
         `${window.location.origin}/dashboard?payment=success`,

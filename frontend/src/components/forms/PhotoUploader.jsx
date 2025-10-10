@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useLanguage } from '../../contexts/LanguageContext';
 import apiService from '../../services/api';
+import styles from './PhotoUploader.module.css';
 
 const PhotoUploader = ({ onPhotosUploaded, maxPhotos = 10 }) => {
   const { t } = useLanguage();
@@ -20,18 +21,15 @@ const PhotoUploader = ({ onPhotosUploaded, maxPhotos = 10 }) => {
 
       for (const file of acceptedFiles) {
         try {
-          // Generate upload URL
           const { uploads } = await apiService.generateUploadUrls(
             file.type || 'image/jpeg',
             1
           );
           const upload = uploads[0];
 
-          // Upload to S3
           setUploadProgress((prev) => ({ ...prev, [file.name]: 0 }));
           await apiService.uploadToS3(upload.uploadUrl, file);
 
-          // Add to photos list
           setPhotos((prev) => [
             ...prev,
             {
@@ -60,7 +58,7 @@ const PhotoUploader = ({ onPhotosUploaded, maxPhotos = 10 }) => {
       'image/png': ['.png'],
       'image/webp': ['.webp'],
     },
-    maxSize: 10 * 1024 * 1024, // 10MB
+    maxSize: 10 * 1024 * 1024,
     disabled: uploading || photos.length >= maxPhotos,
   });
 
@@ -75,31 +73,32 @@ const PhotoUploader = ({ onPhotosUploaded, maxPhotos = 10 }) => {
   }, [photos, onPhotosUploaded]);
 
   return (
-    <div className="space-y-4">
-      {/* Dropzone */}
+    <div className={styles.uploader}>
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ${
-          isDragActive
-            ? 'border-pink-500 bg-pink-500/10'
-            : 'border-white/30 hover:border-pink-500/50'
-        } ${
-          uploading || photos.length >= maxPhotos
-            ? 'opacity-50 cursor-not-allowed'
-            : ''
-        }`}
+        className={`
+          ${styles.dropzone}
+          ${isDragActive ? styles.dropzoneActive : ''}
+          ${
+            uploading || photos.length >= maxPhotos
+              ? styles.dropzoneDisabled
+              : ''
+          }
+        `}
       >
         <input {...getInputProps()} />
-        <div className="text-white">
-          <div className="text-5xl mb-4">📸</div>
+        <div className={styles.dropzoneContent}>
+          <div className={styles.dropzoneIcon}>📸</div>
           {isDragActive ? (
-            <p className="text-lg">{t('frontend:create_request.uploading')}</p>
+            <p className={styles.dropzoneTitle}>
+              {t('frontend:create_request.uploading')}
+            </p>
           ) : (
             <>
-              <p className="text-lg mb-2">
+              <p className={styles.dropzoneTitle}>
                 {t('frontend:create_request.photos_hint')}
               </p>
-              <p className="text-sm text-white/60">
+              <p className={styles.dropzoneSubtitle}>
                 {photos.length}/{maxPhotos}{' '}
                 {t('frontend:create_request.photos_uploaded')
                   .replace('{count}', photos.length)
@@ -111,26 +110,25 @@ const PhotoUploader = ({ onPhotosUploaded, maxPhotos = 10 }) => {
         </div>
       </div>
 
-      {/* Photo previews */}
       {photos.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div className={styles.photosGrid}>
           {photos.map((photo, index) => (
-            <div key={index} className="relative group">
+            <div key={index} className={styles.photoItem}>
               <img
                 src={photo.preview}
                 alt={`Pet ${index + 1}`}
-                className="w-full h-32 object-cover rounded-lg"
+                className={styles.photoImage}
               />
               <button
                 onClick={() => removePhoto(index)}
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className={styles.removeButton}
               >
                 ×
               </button>
               {uploadProgress[photo.file.name] !== undefined &&
                 uploadProgress[photo.file.name] < 100 && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
-                    <div className="text-white text-sm">
+                  <div className={styles.progressOverlay}>
+                    <div className={styles.progressText}>
                       {uploadProgress[photo.file.name]}%
                     </div>
                   </div>

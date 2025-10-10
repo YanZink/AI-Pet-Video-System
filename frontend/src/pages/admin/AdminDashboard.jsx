@@ -64,7 +64,6 @@ const AdminDashboard = () => {
       <AdminSidebar />
 
       <div className="flex-1 p-8 overflow-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold text-white mb-2">Dashboard</h1>
@@ -80,7 +79,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <div
             onClick={() => handleStatsCardClick('all')}
@@ -143,7 +141,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Recent Requests */}
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white">Recent Requests</h2>

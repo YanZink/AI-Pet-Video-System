@@ -137,7 +137,6 @@ const AdminRequestDetail = () => {
       <AdminSidebar />
 
       <div className="flex-1 p-8 overflow-auto">
-        {/* Header */}
         <div className="mb-8">
           <Button
             variant="ghost"
@@ -163,9 +162,7 @@ const AdminRequestDetail = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Status */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">
                 {t('frontend:dashboard.status')}
@@ -173,7 +170,6 @@ const AdminRequestDetail = () => {
               {getStatusBadge(request.status)}
             </div>
 
-            {/* Photos */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">
                 {t('frontend:request_detail.photos_title')} (
@@ -195,7 +191,6 @@ const AdminRequestDetail = () => {
               </div>
             </div>
 
-            {/* Script */}
             {request.script && (
               <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
                 <h3 className="text-xl font-bold text-white mb-4">
@@ -207,7 +202,6 @@ const AdminRequestDetail = () => {
               </div>
             )}
 
-            {/* Admin Notes */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">Admin Notes</h3>
               <textarea
@@ -228,9 +222,7 @@ const AdminRequestDetail = () => {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
-            {/* User Info */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">User Info</h3>
               <div className="space-y-3 text-sm">
@@ -255,7 +247,6 @@ const AdminRequestDetail = () => {
               </div>
             </div>
 
-            {/* Payment Info */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">Payment</h3>
               <div className="space-y-3 text-sm">
@@ -286,7 +277,6 @@ const AdminRequestDetail = () => {
               </div>
             </div>
 
-            {/* Timestamps */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">Timeline</h3>
               <div className="space-y-3 text-sm">
@@ -319,7 +309,6 @@ const AdminRequestDetail = () => {
           </div>
         </div>
 
-        {/* Update Status Modal */}
         <Modal
           isOpen={showStatusModal}
           onClose={() => setShowStatusModal(false)}

@@ -1,0 +1,122 @@
+.steps {
+  padding: 5rem 0;
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.stepCard {
+  position: relative;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-0.5rem);
+}
+
+.iconContainer {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.875rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .iconContainer {
+  transform: scale(1.1);
+}
+
+.gradientPink {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+}
+
+.gradientPurple {
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+}
+
+.gradientBlue {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+}
+
+.stepTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.stepDescription {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.stepNumber {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.05);
+}
+
+.arrow {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: -1rem;
+  transform: translateY(-50%) translateX(50%);
+  z-index: 10;
+}
+
+.arrowIcon {
+  font-size: 1.5rem;
+  color: #ec4899;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .arrow {
+    display: block;
+  }
+}

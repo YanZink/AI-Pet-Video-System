@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import styles from './AdminSidebar.module.css';
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -17,34 +18,32 @@ const AdminSidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-white/5 backdrop-blur-sm border-r border-white/10 min-h-screen p-6">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-white flex items-center">
-          <span className="mr-2">⚙️</span>
+    <div className={styles.sidebar}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>
+          <span className={styles.menuIcon}>⚙️</span>
           Admin Panel
         </h2>
       </div>
 
-      <nav className="space-y-2">
+      <nav className={styles.nav}>
         {menuItems.map((item) => (
           <Link
             key={item.path}
             to={item.path}
-            className={`flex items-center px-4 py-3 rounded-lg transition-all ${
-              isActive(item)
-                ? 'bg-pink-500 text-white shadow-lg'
-                : 'text-white/70 hover:bg-white/10 hover:text-white'
+            className={`${styles.menuItem} ${
+              isActive(item) ? styles.active : ''
             }`}
           >
-            <span className="text-xl mr-3">{item.icon}</span>
-            <span className="font-medium">{item.label}</span>
+            <span className={styles.menuIcon}>{item.icon}</span>
+            <span className={styles.menuLabel}>{item.label}</span>
           </Link>
         ))}
       </nav>
 
-      <div className="mt-8 p-4 bg-white/5 rounded-lg">
-        <p className="text-white/60 text-sm">
-          Logged in as <span className="text-white font-medium">Admin</span>
+      <div className={styles.userInfo}>
+        <p className={styles.userText}>
+          Logged in as <span className={styles.userName}>Admin</span>
         </p>
       </div>
     </div>

@@ -1,0 +1,40 @@
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinnerSmall {
+  width: 2rem;
+  height: 2rem;
+}
+
+.spinnerMedium {
+  width: 3rem;
+  height: 3rem;
+}
+
+.spinnerLarge {
+  width: 4rem;
+  height: 4rem;
+}
+
+.text {
+  color: white;
+  margin-top: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

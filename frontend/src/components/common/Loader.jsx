@@ -1,23 +1,21 @@
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import styles from './Loader.module.css';
 
-const Loader = ({ size = 'md', text }) => {
+const Loader = ({ size = 'medium', text }) => {
   const { t } = useLanguage();
-
-  const sizes = {
-    sm: 'w-8 h-8',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16',
-  };
 
   const displayText = text || t('frontend:common.loading');
 
   return (
-    <div className="flex flex-col items-center justify-center p-8">
+    <div className={styles.loader}>
       <div
-        className={`${sizes[size]} border-4 border-white/30 border-t-white rounded-full animate-spin`}
+        className={`
+          ${styles.spinner}
+          ${styles[`spinner${size.charAt(0).toUpperCase() + size.slice(1)}`]}
+        `}
       ></div>
-      {displayText && <p className="text-white mt-4">{displayText}</p>}
+      {displayText && <p className={styles.text}>{displayText}</p>}
     </div>
   );
 };
