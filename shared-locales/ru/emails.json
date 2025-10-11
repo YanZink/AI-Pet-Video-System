@@ -1,0 +1,16 @@
+{
+  "status_update_subject": "AI Pet Video - {status}",
+  "welcome_subject": "Добро пожаловать в AI Pet Video!",
+  "status_update_title": "Статус вашей заявки на видео обновлен",
+  "hello_user": "Здравствуйте, {name},",
+  "status_updated_to": "Статус вашей заявки на видео обновлен на: <strong>{status}</strong>",
+  "request_details": "Детали заявки:",
+  "request_id": "ID заявки:",
+  "status_label": "Статус:",
+  "date_label": "Дата:",
+  "view_request_button": "Посмотреть заявку",
+  "best_regards": "С наилучшими пожеланиями,",
+  "team_signature": "Команда AI Pet Video",
+  "welcome_title": "Добро пожаловать в AI Pet Video!",
+  "welcome_message": "Мы рады помочь вам создавать удивительные видео с вашими питомцами."
+}

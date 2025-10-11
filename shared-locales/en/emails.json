@@ -1,0 +1,16 @@
+{
+  "status_update_subject": "AI Pet Video - {status}",
+  "welcome_subject": "Welcome to AI Pet Video!",
+  "status_update_title": "Your video request status has been updated",
+  "hello_user": "Hello {name},",
+  "status_updated_to": "Your video request status has been updated to: <strong>{status}</strong>",
+  "request_details": "Request Details:",
+  "request_id": "Request ID:",
+  "status_label": "Status:",
+  "date_label": "Date:",
+  "view_request_button": "View Request",
+  "best_regards": "Best regards,",
+  "team_signature": "AI Pet Video Team",
+  "welcome_title": "Welcome to AI Pet Video!",
+  "welcome_message": "We're excited to help you create amazing videos of your pets."
+}
