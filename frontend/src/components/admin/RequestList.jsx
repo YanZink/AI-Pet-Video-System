@@ -1,31 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { REQUEST_STATUS } from '../../utils/constants';
 import styles from './RequestList.module.css';
 
 const RequestList = ({ requests, onStatusUpdate }) => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const getStatusDisplay = (status) => {
     const statusMap = {
       [REQUEST_STATUS.CREATED]: {
-        text: 'Created',
+        text: t('videos:status_created'),
         class: styles.badgeCreated,
       },
       [REQUEST_STATUS.PAID]: {
-        text: 'Paid',
+        text: t('videos:status_paid'),
         class: styles.badgePaid,
       },
       [REQUEST_STATUS.IN_PROGRESS]: {
-        text: 'In Progress',
+        text: t('videos:status_in_progress'),
         class: styles.badgeInProgress,
       },
       [REQUEST_STATUS.COMPLETED]: {
-        text: 'Completed',
+        text: t('videos:status_completed'),
         class: styles.badgeCompleted,
       },
       [REQUEST_STATUS.CANCELLED]: {
-        text: 'Cancelled',
+        text: t('videos:status_cancelled'),
         class: styles.badgeCancelled,
       },
     };
@@ -56,7 +58,9 @@ const RequestList = ({ requests, onStatusUpdate }) => {
               <div className={styles.info}>
                 <div className={styles.header}>
                   <h3 className={styles.requestId}>
-                    Request #{request.id.slice(0, 8)}
+                    {t('frontend:admin.admin_request_detail_title', {
+                      id: request.id.slice(0, 8),
+                    })}
                   </h3>
                   <span className={`${styles.badge} ${statusDisplay.class}`}>
                     {statusDisplay.text}
@@ -65,21 +69,27 @@ const RequestList = ({ requests, onStatusUpdate }) => {
 
                 <div className={styles.details}>
                   <div className={styles.detail}>
-                    <p className={styles.detailLabel}>User</p>
+                    <p className={styles.detailLabel}>
+                      {t('frontend:admin.admin_request_user')}
+                    </p>
                     <p className={styles.detailValue}>
                       {request.user?.first_name ||
                         request.user?.username ||
-                        'Unknown'}
+                        t('frontend:admin.admin_request_unknown_user')}
                     </p>
                   </div>
                   <div className={styles.detail}>
-                    <p className={styles.detailLabel}>Created</p>
+                    <p className={styles.detailLabel}>
+                      {t('frontend:admin.admin_request_created')}
+                    </p>
                     <p className={styles.detailValue}>
                       {formatDate(request.created_at)}
                     </p>
                   </div>
                   <div className={styles.detail}>
-                    <p className={styles.detailLabel}>Photos</p>
+                    <p className={styles.detailLabel}>
+                      {t('frontend:admin.admin_request_photos')}
+                    </p>
                     <p className={styles.detailValue}>
                       {request.photos?.length || 0}
                     </p>
@@ -88,7 +98,9 @@ const RequestList = ({ requests, onStatusUpdate }) => {
 
                 {request.script && (
                   <div className={styles.script}>
-                    <p className={styles.scriptLabel}>Script</p>
+                    <p className={styles.scriptLabel}>
+                      {t('frontend:admin.admin_request_script')}
+                    </p>
                     <p className={styles.scriptText}>{request.script}</p>
                   </div>
                 )}

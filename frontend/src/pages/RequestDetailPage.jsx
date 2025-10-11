@@ -119,9 +119,11 @@ const RequestDetailPage = () => {
       <div className="container mx-auto px-4 pt-32 pb-12">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
-            <Link
-              to="/dashboard"
-              className="text-pink-400 hover:text-pink-300 inline-flex items-center mb-4"
+            <Button
+              variant="secondary"
+              size="medium"
+              onClick={() => navigate('/dashboard')}
+              className="mb-4"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -137,7 +139,7 @@ const RequestDetailPage = () => {
                 />
               </svg>
               {t('frontend:common.back')}
-            </Link>
+            </Button>
             <h1 className="text-3xl font-bold text-white">
               {t('frontend:dashboard.view_details')}
             </h1>
@@ -168,7 +170,9 @@ const RequestDetailPage = () => {
               </div>
               {request.completed_at && (
                 <div>
-                  <p className="text-white/70 text-sm mb-1">Completed</p>
+                  <p className="text-white/70 text-sm mb-1">
+                    {t('frontend:request_detail.completed_label')}
+                  </p>
                   <p className="text-white">
                     {formatDate(request.completed_at)}
                   </p>
@@ -228,11 +232,9 @@ const RequestDetailPage = () => {
                 </h3>
                 <Button
                   variant="primary"
-                  size="lg"
+                  size="large"
                   onClick={() => window.open(request.video_url, '_blank')}
-                  className="mx-auto"
                 >
-                  <span className="mr-2"></span>
                   {t('videos:download')}
                 </Button>
               </div>

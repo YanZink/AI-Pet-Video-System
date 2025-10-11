@@ -132,21 +132,13 @@ const DashboardPage = () => {
               <h1 className="text-4xl font-bold text-white mb-2">
                 {t('frontend:dashboard.title')}
               </h1>
-              <p className="text-white/70">
-                {t('common:welcome_back', {
-                  name: user?.first_name || user?.username || 'User',
-                }).replace(
-                  '{name}',
-                  user?.first_name || user?.username || 'User'
-                )}
-              </p>
             </div>
             <Button onClick={() => navigate('/create-request')}>
               <svg
                 className="w-5 h-5 mr-2"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
+                viewBox="0 0 35 24"
               >
                 <path
                   strokeLinecap="round"
@@ -246,14 +238,12 @@ const DashboardPage = () => {
                           <div className="border-t border-white/10 pt-4 mt-2 flex justify-end">
                             <Button
                               variant="primary"
-                              size="sm"
+                              size="medium"
                               onClick={(e) => {
                                 e.preventDefault();
                                 window.open(request.video_url, '_blank');
                               }}
-                              className="w-auto"
                             >
-                              <span className="mr-2"></span>
                               {t('videos:download')}
                             </Button>
                           </div>

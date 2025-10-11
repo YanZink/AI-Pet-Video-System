@@ -108,11 +108,13 @@ const AdminRequestDetail = () => {
 
   const getStatusDisplayName = (status) => {
     const statusNames = {
-      [REQUEST_STATUS.CREATED]: 'Created',
-      [REQUEST_STATUS.PAID]: 'Paid',
-      [REQUEST_STATUS.IN_PROGRESS]: 'In Progress',
-      [REQUEST_STATUS.COMPLETED]: 'Completed',
-      [REQUEST_STATUS.CANCELLED]: 'Cancelled',
+      [REQUEST_STATUS.CREATED]: t('frontend:admin.admin_filter_created'),
+      [REQUEST_STATUS.PAID]: t('frontend:admin.admin_filter_paid'),
+      [REQUEST_STATUS.IN_PROGRESS]: t(
+        'frontend:admin.admin_filter_in_progress'
+      ),
+      [REQUEST_STATUS.COMPLETED]: t('frontend:admin.admin_filter_completed'),
+      [REQUEST_STATUS.CANCELLED]: t('videos:status_cancelled'),
     };
     return statusNames[status] || status;
   };
@@ -139,8 +141,8 @@ const AdminRequestDetail = () => {
       <div className="flex-1 p-8 overflow-auto">
         <div className="mb-8">
           <Button
-            variant="ghost"
-            size="sm"
+            variant="secondary"
+            size="medium"
             onClick={() => navigate('/admin/requests')}
             className="mb-4"
           >
@@ -149,14 +151,18 @@ const AdminRequestDetail = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">
-                Request #{request.id.slice(0, 8)}
+                {t('frontend:admin.admin_request_detail_title', {
+                  id: request.id.slice(0, 8),
+                })}
               </h1>
               <p className="text-white/70">
-                by {request.user?.first_name || request.user?.username}
+                {t('frontend:admin.admin_request_detail_by', {
+                  name: request.user?.first_name || request.user?.username,
+                })}
               </p>
             </div>
             <Button onClick={() => setShowStatusModal(true)}>
-              Update Status
+              {t('frontend:admin.admin_request_detail_update_status')}
             </Button>
           </div>
         </div>
@@ -203,17 +209,19 @@ const AdminRequestDetail = () => {
             )}
 
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Admin Notes</h3>
+              <h3 className="text-xl font-bold text-white mb-4">
+                {t('frontend:admin.admin_notes_title')}
+              </h3>
               <textarea
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
                 rows={4}
-                placeholder="Add notes about this request..."
+                placeholder={t('frontend:admin.admin_notes_placeholder')}
               />
               <Button
-                size="sm"
-                className="mt-3"
+                size="medium"
+                className="mt-3 min-w-[120px]"
                 onClick={handleUpdateStatus}
                 loading={updating}
               >
@@ -224,21 +232,29 @@ const AdminRequestDetail = () => {
 
           <div className="space-y-6">
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4">User Info</h3>
+              <h3 className="text-xl font-bold text-white mb-4">
+                {t('frontend:admin.admin_user_info_title')}
+              </h3>
               <div className="space-y-3 text-sm">
                 <div>
-                  <p className="text-white/60">Name</p>
+                  <p className="text-white/60">
+                    {t('frontend:admin.admin_user_info_name')}
+                  </p>
                   <p className="text-white">
                     {request.user?.first_name} {request.user?.last_name}
                   </p>
                 </div>
                 <div>
-                  <p className="text-white/60">Email</p>
+                  <p className="text-white/60">
+                    {t('frontend:admin.admin_user_info_email')}
+                  </p>
                   <p className="text-white">{request.user?.email}</p>
                 </div>
                 {request.user?.telegram_id && (
                   <div>
-                    <p className="text-white/60">Telegram ID</p>
+                    <p className="text-white/60">
+                      {t('frontend:admin.admin_user_info_telegram')}
+                    </p>
                     <p className="text-white font-mono">
                       {request.user.telegram_id}
                     </p>
@@ -248,7 +264,9 @@ const AdminRequestDetail = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Payment</h3>
+              <h3 className="text-xl font-bold text-white mb-4">
+                {t('frontend:admin.admin_payment_title')}
+              </h3>
               <div className="space-y-3 text-sm">
                 <div>
                   <p className="text-white/60">
@@ -268,7 +286,9 @@ const AdminRequestDetail = () => {
                 </div>
                 {request.payment_id && (
                   <div>
-                    <p className="text-white/60">Payment ID</p>
+                    <p className="text-white/60">
+                      {t('frontend:admin.admin_payment_id')}
+                    </p>
                     <p className="text-white font-mono text-xs break-all">
                       {request.payment_id}
                     </p>
@@ -278,7 +298,9 @@ const AdminRequestDetail = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Timeline</h3>
+              <h3 className="text-xl font-bold text-white mb-4">
+                {t('frontend:admin.admin_timeline_title')}
+              </h3>
               <div className="space-y-3 text-sm">
                 <div>
                   <p className="text-white/60">
@@ -290,7 +312,9 @@ const AdminRequestDetail = () => {
                 </div>
                 {request.processing_started_at && (
                   <div>
-                    <p className="text-white/60">Processing Started</p>
+                    <p className="text-white/60">
+                      {t('frontend:admin.admin_timeline_processing_started')}
+                    </p>
                     <p className="text-white">
                       {new Date(request.processing_started_at).toLocaleString()}
                     </p>
@@ -298,7 +322,9 @@ const AdminRequestDetail = () => {
                 )}
                 {request.completed_at && (
                   <div>
-                    <p className="text-white/60">Completed</p>
+                    <p className="text-white/60">
+                      {t('frontend:admin.admin_timeline_completed')}
+                    </p>
                     <p className="text-white">
                       {new Date(request.completed_at).toLocaleString()}
                     </p>
@@ -312,7 +338,7 @@ const AdminRequestDetail = () => {
         <Modal
           isOpen={showStatusModal}
           onClose={() => setShowStatusModal(false)}
-          title="Update Request Status"
+          title={t('frontend:admin.admin_modal_update_title')}
           footer={
             <>
               <Button
@@ -322,7 +348,7 @@ const AdminRequestDetail = () => {
                 {t('frontend:common.cancel')}
               </Button>
               <Button onClick={handleUpdateStatus} loading={updating}>
-                Update Status
+                {t('frontend:admin.admin_request_detail_update_status')}
               </Button>
             </>
           }
@@ -346,7 +372,7 @@ const AdminRequestDetail = () => {
 
             {newStatus === REQUEST_STATUS.COMPLETED && (
               <Input
-                label="Video URL"
+                label={t('frontend:admin.admin_modal_video_url')}
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
                 placeholder="https://..."
@@ -355,14 +381,14 @@ const AdminRequestDetail = () => {
 
             <div>
               <label className="block text-white mb-2 font-medium">
-                Admin Notes
+                {t('frontend:admin.admin_modal_notes_label')}
               </label>
               <textarea
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
                 rows={4}
-                placeholder="Add notes..."
+                placeholder={t('frontend:admin.admin_modal_notes_placeholder')}
               />
             </div>
           </div>

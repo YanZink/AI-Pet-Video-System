@@ -3,11 +3,12 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import Button from '../ui/Button';
+import LanguageSwitcher from './LanguageSwitcher';
 import styles from './Header.module.css';
 
 const Header = () => {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
-  const { t, language, setLanguage } = useLanguage();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,6 +54,7 @@ const Header = () => {
               <span className="text-white text-xl">🐾</span>
             </div>
             <span className={styles.logoText}>AI Pet Video Creator</span>
+            <span className={styles.logoTextShort}>AI Pet Video</span>
           </Link>
 
           <nav className={styles.nav}>
@@ -80,38 +82,45 @@ const Header = () => {
           </nav>
 
           <div className={styles.actions}>
-            <div className={styles.langSwitcher}>
-              <button
-                onClick={() => setLanguage('en')}
-                className={`${styles.langButton} ${
-                  language === 'en' ? styles.active : ''
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLanguage('ru')}
-                className={`${styles.langButton} ${
-                  language === 'ru' ? styles.active : ''
-                }`}
-              >
-                RU
-              </button>
-            </div>
+            <LanguageSwitcher className={styles.languageSwitcher} />
 
             {isAuthenticated ? (
               <div className={styles.userInfo}>
                 <span className={styles.userName}>
                   {user?.first_name || user?.username || 'User'}
                 </span>
+                {isAdmin ? (
+                  <>
+                    <Button
+                      size="small"
+                      onClick={() => navigate('/dashboard')}
+                      className={`${styles.compactButton} ${styles.navButton}`}
+                    >
+                      {t('frontend:nav.dashboard')}
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={() => navigate('/admin')}
+                      className={`${styles.compactButton} ${styles.navButton}`}
+                    >
+                      {t('frontend:nav.admin')}
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    size="small"
+                    onClick={() => navigate('/dashboard')}
+                    className={`${styles.compactButton} ${styles.navButton}`}
+                  >
+                    {t('frontend:nav.dashboard')}
+                  </Button>
+                )}
                 <Button
-                  variant="secondary"
+                  variant="ghost"
                   size="small"
-                  onClick={() => navigate(isAdmin ? '/admin' : '/dashboard')}
+                  onClick={handleLogout}
+                  className={`${styles.compactButton} ${styles.logoutButton}`}
                 >
-                  {t(isAdmin ? 'frontend:nav.admin' : 'frontend:nav.dashboard')}
-                </Button>
-                <Button variant="ghost" size="small" onClick={handleLogout}>
                   {t('frontend:nav.logout')}
                 </Button>
               </div>
@@ -121,10 +130,15 @@ const Header = () => {
                   variant="ghost"
                   size="small"
                   onClick={() => navigate('/login')}
+                  className={styles.compactButton}
                 >
                   {t('frontend:nav.login')}
                 </Button>
-                <Button size="small" onClick={handleGetStarted}>
+                <Button
+                  size="small"
+                  onClick={handleGetStarted}
+                  className={styles.compactButton}
+                >
                   {t('frontend:nav.get_started')}
                 </Button>
               </div>
@@ -184,23 +198,48 @@ const Header = () => {
                 {t('frontend:nav.contact')}
               </button>
 
+              <div className={styles.mobileLanguageSwitcher}>
+                <LanguageSwitcher />
+              </div>
+
               {isAuthenticated ? (
                 <>
-                  <Button
-                    onClick={() => {
-                      navigate(isAdmin ? '/admin' : '/dashboard');
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full"
-                  >
-                    {t(
-                      isAdmin ? 'frontend:nav.admin' : 'frontend:nav.dashboard'
-                    )}
-                  </Button>
+                  {isAdmin ? (
+                    <>
+                      <Button
+                        onClick={() => {
+                          navigate('/dashboard');
+                          setIsMenuOpen(false);
+                        }}
+                        className={`w-full ${styles.compactButton}`}
+                      >
+                        {t('frontend:nav.dashboard')}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          navigate('/admin');
+                          setIsMenuOpen(false);
+                        }}
+                        className={`w-full ${styles.compactButton}`}
+                      >
+                        {t('frontend:nav.admin')}
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        navigate('/dashboard');
+                        setIsMenuOpen(false);
+                      }}
+                      className={`w-full ${styles.compactButton}`}
+                    >
+                      {t('frontend:nav.dashboard')}
+                    </Button>
+                  )}
                   <Button
                     variant="outline"
                     onClick={handleLogout}
-                    className="w-full"
+                    className={`w-full ${styles.compactButton}`}
                   >
                     {t('frontend:nav.logout')}
                   </Button>
@@ -213,7 +252,7 @@ const Header = () => {
                       navigate('/login');
                       setIsMenuOpen(false);
                     }}
-                    className="w-full"
+                    className={`w-full ${styles.compactButton}`}
                   >
                     {t('frontend:nav.login')}
                   </Button>
@@ -222,7 +261,7 @@ const Header = () => {
                       handleGetStarted();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full"
+                    className={`w-full ${styles.compactButton}`}
                   >
                     {t('frontend:nav.get_started')}
                   </Button>

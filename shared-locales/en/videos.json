@@ -16,7 +16,7 @@
   "my_videos_title": "Your Video Requests:",
   "no_requests": "You haven't created any video requests yet.\n\nClick 'Create New Video' to get started!",
   "request_item": "Request #{id}\n {date}\n Status: {status}\n\n",
-  "download": "Download Video",
+  "download": "⬇️ Download Video",
   "queue_title": "Processing Queue Status:",
   "estimated_wait": "Estimated wait time: {minutes} minutes",
   "queue_position": "Your position in queue: #{position}"
