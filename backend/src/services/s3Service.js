@@ -91,6 +91,21 @@ class S3Service {
       throw new Error('Failed to upload file');
     }
   }
+  async deleteFile(key) {
+    try {
+      const params = {
+        Bucket: this.bucketName,
+        Key: key,
+      };
+
+      await s3.deleteObject(params).promise();
+      logger.info('File deleted from S3', { key });
+      return true;
+    } catch (error) {
+      logger.error('Error deleting file from S3:', error);
+      throw new Error('Failed to delete file');
+    }
+  }
 }
 
 const s3Service = new S3Service();

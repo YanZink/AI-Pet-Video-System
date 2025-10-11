@@ -29,8 +29,7 @@ paymentRouter.post(
   '/stripe/checkout',
   getGeneralRateLimit(),
   authMiddleware,
-  validateBody(paymentSchemas.createCheckout),
-  paymentController.createStripeCheckout
+  validateBody(paymentSchemas.createCheckout)
 );
 
 module.exports = paymentRouter;

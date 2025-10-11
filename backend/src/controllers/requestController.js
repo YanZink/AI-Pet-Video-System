@@ -78,8 +78,9 @@ class RequestController {
           requestData.photos = await Promise.all(
             requestData.photos.map(async (photoKey) => {
               try {
-                const urlData =
-                  s3Service.generatePresignedDownloadUrl(photoKey);
+                const urlData = await s3Service.generatePresignedDownloadUrl(
+                  photoKey
+                );
                 return {
                   key: photoKey,
                   url: urlData.downloadUrl,
@@ -146,7 +147,7 @@ class RequestController {
           downloadUrl: uploadUrl,
         });
       } else {
-        const urlData = s3Service.generatePresignedUploadUrl(
+        const urlData = await s3Service.generatePresignedUploadUrl(
           file_type,
           'photos'
         );

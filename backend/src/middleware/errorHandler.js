@@ -71,29 +71,9 @@ const createError = (
   return error;
 };
 
-const requestLogger = (req, res, next) => {
-  const startTime = Date.now();
-
-  res.on('finish', () => {
-    const responseTime = Date.now() - startTime;
-    logger.info('HTTP Request', {
-      method: req.method,
-      url: req.originalUrl,
-      ip: req.ip,
-      userAgent: req.get('User-Agent'),
-      statusCode: res.statusCode,
-      responseTime: `${responseTime}ms`,
-      language: req.language || 'en',
-    });
-  });
-
-  next();
-};
-
 module.exports = {
   errorHandler,
   notFoundHandler,
   asyncHandler,
   createError,
-  requestLogger,
 };

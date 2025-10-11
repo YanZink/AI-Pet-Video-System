@@ -199,49 +199,6 @@ class AdminController {
       },
     });
   });
-
-  /**
-   * Get templates with localized data
-   */
-  getTemplates = asyncHandler(async (req, res) => {
-    const { language = 'en' } = req.query;
-
-    const templates = await Template.findLocalized(language, {
-      where: { is_active: true },
-    });
-
-    res.json({
-      templates,
-      language,
-    });
-  });
-
-  /**
-   * Update template translations
-   */
-  updateTemplateTranslation = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const { key, language, text } = req.body;
-
-    const template = await Template.findByPk(id);
-    if (!template) {
-      throw createError('Template not found', 404, ERROR_CODES.NOT_FOUND_ERROR);
-    }
-
-    await template.setTranslation(key, language, text);
-
-    logger.info('Template translation updated by admin', {
-      templateId: template.id,
-      key,
-      language,
-      adminId: req.user.id,
-    });
-
-    res.json({
-      message: 'Template translation updated successfully',
-      template: await template.getLocalizedData(language),
-    });
-  });
 }
 
 module.exports = new AdminController();

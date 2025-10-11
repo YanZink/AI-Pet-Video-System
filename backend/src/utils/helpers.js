@@ -88,21 +88,6 @@ const dateHelpers = {
   },
 };
 
-const errorHelpers = {
-  createAPIError: (
-    message,
-    statusCode = 500,
-    errorCode = 'INTERNAL_SERVER_ERROR',
-    details = null
-  ) => {
-    const error = new Error(message);
-    error.statusCode = statusCode;
-    error.errorCode = errorCode;
-    error.details = details;
-    return error;
-  },
-};
-
 const securityHelpers = {
   sanitizeObject: (
     obj,
@@ -123,6 +108,5 @@ module.exports = {
   fileHelpers,
   validationHelpers,
   dateHelpers,
-  errorHelpers,
   securityHelpers,
 };
