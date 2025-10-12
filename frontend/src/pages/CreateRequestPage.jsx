@@ -14,6 +14,7 @@ const CreateRequestPage = () => {
   const [script, setScript] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('stripe');
 
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -36,18 +37,26 @@ const CreateRequestPage = () => {
     setError('');
 
     try {
+      // Step 1: Create request
       const response = await apiService.createRequest({
         photos,
         script: script.trim() || null,
       });
 
-      const checkoutResponse = await apiService.createStripeCheckout(
-        response.request.id,
-        `${window.location.origin}/dashboard?payment=success`,
-        `${window.location.origin}/dashboard?payment=cancelled`
-      );
+      // Step 2: Handle payment based on selected method
+      if (paymentMethod === 'stripe') {
+        // Stripe Checkout flow
+        const checkoutResponse = await apiService.createStripeCheckout(
+          response.request.id
+        );
 
-      window.location.href = checkoutResponse.checkout_url;
+        // Redirect to Stripe Checkout
+        window.location.href = checkoutResponse.checkout_url;
+      } else if (paymentMethod === 'telegram') {
+        // Telegram Stars flow
+        setError('Telegram Stars payment not yet implemented');
+        setLoading(false);
+      }
     } catch (err) {
       setError(err.response?.data?.message || t('errors:request_failed'));
       setLoading(false);
@@ -102,6 +111,56 @@ const CreateRequestPage = () => {
                 </p>
               </div>
 
+              {/* Payment Method Selection */}
+              <div>
+                <label className="block text-white text-lg font-medium mb-4">
+                  {t('frontend:create_request.payment_method')}
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div
+                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                      paymentMethod === 'stripe'
+                        ? 'border-pink-500 bg-pink-500/10'
+                        : 'border-white/20 bg-white/5 hover:bg-white/10'
+                    }`}
+                    onClick={() => setPaymentMethod('stripe')}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        💳
+                      </div>
+                      <div>
+                        <div className="text-white font-medium">
+                          Credit Card
+                        </div>
+                        <div className="text-white/60 text-sm">Stripe</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                      paymentMethod === 'telegram'
+                        ? 'border-pink-500 bg-pink-500/10'
+                        : 'border-white/20 bg-white/5 hover:bg-white/10 opacity-50'
+                    }`}
+                    onClick={() => setPaymentMethod('telegram')}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center">
+                        ⭐
+                      </div>
+                      <div>
+                        <div className="text-white font-medium">
+                          Telegram Stars
+                        </div>
+                        <div className="text-white/60 text-sm">Coming Soon</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                 <div className="flex justify-between text-white mb-2">
                   <span>{t('frontend:create_request.price_label')}</span>
@@ -114,6 +173,10 @@ const CreateRequestPage = () => {
                   <span>
                     {t('frontend:create_request.processing_time_value')}
                   </span>
+                </div>
+                <div className="flex justify-between text-white/70 text-sm mt-1">
+                  <span>Payment Method</span>
+                  <span className="capitalize">{paymentMethod}</span>
                 </div>
               </div>
 
@@ -132,7 +195,9 @@ const CreateRequestPage = () => {
                   loading={loading}
                   disabled={loading || photos.length === 0}
                 >
-                  {t('frontend:create_request.submit')}
+                  {paymentMethod === 'stripe'
+                    ? t('frontend:create_request.pay_with_stripe')
+                    : t('frontend:create_request.submit')}
                 </Button>
               </div>
             </form>

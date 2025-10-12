@@ -27,6 +27,12 @@ class App {
   }
 
   async setupMiddleware() {
+    // Stripe webhook route MUST be before express.json()
+    this.app.use(
+      '/api/v1/payments/stripe/webhook',
+      express.raw({ type: 'application/json' })
+    );
+
     // Security middleware
     this.app.use(helmet());
     this.app.use(

@@ -6,6 +6,9 @@ const logger = require('../utils/logger');
 
 class RequestController {
   createRequest = asyncHandler(async (req, res) => {
+    console.log('CREATE REQUEST BODY:', req.validatedBody);
+    console.log('USER:', req.user);
+
     const { photos, script, template_id } = req.validatedBody;
     const userId = req.user.id;
 

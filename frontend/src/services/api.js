@@ -75,12 +75,32 @@ class ApiService {
   }
 
   // Payment methods
-  async createStripeCheckout(requestId, successUrl, cancelUrl) {
+
+  // Stripe Checkout
+  async createStripeCheckout(requestId) {
     const response = await this.client.post('/payments/stripe/checkout', {
       request_id: requestId,
-      success_url: successUrl,
-      cancel_url: cancelUrl,
     });
+    return response.data;
+  }
+
+  // Get Stripe checkout session status
+  async getStripeCheckoutStatus(sessionId) {
+    const response = await this.client.get(
+      `/payments/stripe/checkout/${sessionId}`
+    );
+    return response.data;
+  }
+
+  // Get available payment methods
+  async getAvailablePaymentMethods() {
+    const response = await this.client.get('/payments/methods');
+    return response.data;
+  }
+
+  // Get payment info for specific request
+  async getPaymentInfo(requestId) {
+    const response = await this.client.get(`/payments/info/${requestId}`);
     return response.data;
   }
 

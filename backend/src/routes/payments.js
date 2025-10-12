@@ -24,12 +24,37 @@ paymentRouter.get(
   paymentController.getPaymentInfo
 );
 
-// Stripe Checkout (mock) - protected
+// Create Stripe Checkout Session
 paymentRouter.post(
   '/stripe/checkout',
   getGeneralRateLimit(),
   authMiddleware,
-  validateBody(paymentSchemas.createCheckout)
+  validateBody(paymentSchemas.createCheckout),
+  paymentController.createStripeCheckout
+);
+
+// Get Stripe Checkout Session status
+paymentRouter.get(
+  '/stripe/checkout/:session_id',
+  getGeneralRateLimit(),
+  authMiddleware,
+  paymentController.getCheckoutSessionStatus
+);
+
+// Stripe Webhook - MUST be before express.json() middleware
+paymentRouter.post(
+  '/stripe/webhook',
+  // raw body for webhooks
+  express.raw({ type: 'application/json' }),
+  paymentController.handleStripeWebhook
+);
+
+// Get available payment methods
+paymentRouter.get(
+  '/methods',
+  getGeneralRateLimit(),
+  authMiddleware,
+  paymentController.getAvailablePaymentMethods
 );
 
 module.exports = paymentRouter;

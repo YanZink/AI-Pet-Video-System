@@ -58,6 +58,26 @@ const Request = sequelize.define(
     payment_id: {
       type: DataTypes.STRING,
       allowNull: true,
+      comment: 'Stores Telegram payment ID or Stripe session ID',
+    },
+
+    // Stripe-specific fields
+    stripe_payment_intent_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: 'Stripe Payment Intent ID',
+    },
+
+    stripe_session_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: 'Stripe Checkout Session ID',
+    },
+
+    stripe_customer_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: 'Stripe Customer ID',
     },
 
     amount: {
@@ -147,6 +167,22 @@ Request.prototype.getPublicData = function () {
   const publicData = { ...this.toJSON() };
   delete publicData.admin_notes;
   return publicData;
+};
+
+// Check if payment is via Stripe
+Request.prototype.isStripePayment = function () {
+  return this.stripe_session_id || this.stripe_payment_intent_id;
+};
+
+// Get payment provider
+Request.prototype.getPaymentProvider = function () {
+  if (this.stripe_session_id || this.stripe_payment_intent_id) {
+    return 'stripe';
+  }
+  if (this.payment_id && this.payment_id.startsWith('telegram_')) {
+    return 'telegram';
+  }
+  return 'unknown';
 };
 
 Request.getEstimatedWaitTime = async function () {

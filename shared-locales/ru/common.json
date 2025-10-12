@@ -92,5 +92,10 @@
     "upload_failed": "❌ Ошибка загрузки фото. Попробуйте еще раз.",
     "invalid_payment": "❌ Неверные данные платежа",
     "request_failed": "❌ Ошибка создания заявки"
-  }
+  },
+  "upload_urls_generated": "URL-адреса для загрузки успешно сгенерированы",
+  "continue": "Продолжить",
+  "language_selected": "Язык успешно изменен",
+  "wait_time": "Примерное время ожидания: {minutes} минут",
+  "characters_count": "{count}/1000 символов"
 }

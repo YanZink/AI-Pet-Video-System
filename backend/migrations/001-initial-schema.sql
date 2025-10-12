@@ -164,8 +164,9 @@ CREATE TRIGGER update_translations_updated_at
 
 -- Insert default data
 INSERT INTO users (
-    email, username, first_name, last_name, password_hash, role, is_active
+    id, email, username, first_name, last_name, password_hash, role, is_active
 ) VALUES (
+    uuid_generate_v4(),
     'admin@aipetvideo.com',
     'admin',
     'System',
