@@ -68,7 +68,9 @@
     "processing_time_value": "~10 минут",
     "submit": "Перейти к оплате",
     "uploading": "Загрузка...",
-    "processing": "Обработка..."
+    "processing": "Обработка...",
+    "payment_method": "Способ оплаты",
+    "pay_with_stripe": "Оплатить картой"
   },
   "login": {
     "title": "Войти в аккаунт",

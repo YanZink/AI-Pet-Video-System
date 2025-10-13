@@ -92,5 +92,11 @@
     "upload_failed": "❌ Photo upload failed. Please try again.",
     "invalid_payment": "❌ Invalid payment data",
     "request_failed": "❌ Request creation failed"
-  }
+  },
+
+  "upload_urls_generated": "Upload URLs generated successfully",
+  "continue": "Continue",
+  "language_selected": "Language updated successfully",
+  "wait_time": "Estimated wait time: {minutes} minutes",
+  "characters_count": "{count}/1000 characters"
 }

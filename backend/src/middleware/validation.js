@@ -53,8 +53,6 @@ const requestSchemas = {
 const paymentSchemas = {
   createCheckout: Joi.object({
     request_id: commonSchemas.uuid,
-    success_url: Joi.string().uri().required(),
-    cancel_url: Joi.string().uri().required(),
   }),
 
   telegramPayment: Joi.object({
