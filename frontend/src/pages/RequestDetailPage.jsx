@@ -206,8 +206,7 @@ const RequestDetailPage = () => {
                   {t('frontend:request_detail.amount_label')}
                 </p>
                 <p className="text-white text-2xl font-bold">
-                  {request.currency} $
-                  {parseFloat(request.amount || 0).toFixed(2)}
+                  ${parseFloat(request.amount || 0).toFixed(2)}
                 </p>
               </div>
               <div>

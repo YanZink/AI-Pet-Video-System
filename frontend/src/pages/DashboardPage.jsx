@@ -162,6 +162,17 @@ const DashboardPage = () => {
                 <Button onClick={() => navigate('/create-request')}>
                   {t('videos:create_video')}
                 </Button>
+                <Button
+                  size="large"
+                  onClick={() =>
+                    window.open(
+                      process.env.REACT_APP_TELEGRAM_BOT_URL,
+                      '_blank'
+                    )
+                  }
+                >
+                  {t('frontend:dashboard.create_in_telegram')}
+                </Button>
               </div>
             </Card>
           ) : (

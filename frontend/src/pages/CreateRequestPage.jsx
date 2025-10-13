@@ -126,35 +126,11 @@ const CreateRequestPage = () => {
                     onClick={() => setPaymentMethod('stripe')}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                        💳
-                      </div>
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center"></div>
                       <div>
                         <div className="text-white font-medium">
-                          Credit Card
+                          {t('frontend:create_request.credit_card')}
                         </div>
-                        <div className="text-white/60 text-sm">Stripe</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                      paymentMethod === 'telegram'
-                        ? 'border-pink-500 bg-pink-500/10'
-                        : 'border-white/20 bg-white/5 hover:bg-white/10 opacity-50'
-                    }`}
-                    onClick={() => setPaymentMethod('telegram')}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center">
-                        ⭐
-                      </div>
-                      <div>
-                        <div className="text-white font-medium">
-                          Telegram Stars
-                        </div>
-                        <div className="text-white/60 text-sm">Coming Soon</div>
                       </div>
                     </div>
                   </div>
@@ -164,7 +140,9 @@ const CreateRequestPage = () => {
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                 <div className="flex justify-between text-white mb-2">
                   <span>{t('frontend:create_request.price_label')}</span>
-                  <span className="font-bold">$10.00</span>
+                  <span className="font-bold">
+                    {t('frontend:create_request.price_value')}
+                  </span>
                 </div>
                 <div className="flex justify-between text-white/70 text-sm">
                   <span>
@@ -173,10 +151,6 @@ const CreateRequestPage = () => {
                   <span>
                     {t('frontend:create_request.processing_time_value')}
                   </span>
-                </div>
-                <div className="flex justify-between text-white/70 text-sm mt-1">
-                  <span>Payment Method</span>
-                  <span className="capitalize">{paymentMethod}</span>
                 </div>
               </div>
 

@@ -67,6 +67,15 @@ const HeroSection = () => {
             >
               {t('frontend:hero.cta_primary')}
             </Button>
+            <Button
+              variant="telegramButton"
+              size="large"
+              onClick={() =>
+                window.open(process.env.REACT_APP_TELEGRAM_BOT_URL, '_blank')
+              }
+            >
+              {t('frontend:dashboard.create_in_telegram')}
+            </Button>
           </div>
 
           <div className={styles.illustration}>

@@ -51,7 +51,8 @@
     "status": "Статус",
     "actions": "Действия",
     "view_details": "Подробнее",
-    "download": "Скачать"
+    "download": "Скачать",
+    "create_in_telegram": "Создать в Telegram"
   },
   "create_request": {
     "title": "Создать новую заявку на видео",
@@ -63,14 +64,16 @@
     "script_hint": "Например: Моя собака играет в парке, Кот мирно спит и т.д.",
     "characters_count": "{count}/1000 символов",
     "price_label": "Цена:",
-    "price_value": "$10.00",
+    "price_value": "$9.99",
     "processing_time_label": "Время обработки:",
     "processing_time_value": "~10 минут",
     "submit": "Перейти к оплате",
     "uploading": "Загрузка...",
     "processing": "Обработка...",
     "payment_method": "Способ оплаты",
-    "pay_with_stripe": "Оплатить картой"
+    "pay_with_stripe": "Оплатить картой",
+    "credit_card": "Банковская карта",
+    "payment_method_label": "Способ оплаты"
   },
   "login": {
     "title": "Войти в аккаунт",
@@ -100,7 +103,7 @@
     "all_rights_reserved": "Все права защищены",
     "info_title": "Информация",
     "price_label": "Цена:",
-    "price_value": "$10.00 за видео",
+    "price_value": "$9.99 за видео",
     "processing_time_label": "Время обработки:",
     "processing_time_value": "~10 мин",
     "max_photos_label": "Максимум фото:",
