@@ -135,7 +135,10 @@
     "processing_title": "Video is Being Created",
     "processing_message": "Please check back in a few minutes. We'll notify you when it's ready!",
     "refresh_button": "Refresh Status",
-    "completed_label": "Completed"
+    "completed_label": "Completed",
+    "payment_required": "Payment Required",
+    "payment_required_desc": "Complete payment to start video processing",
+    "retry_payment": "Pay Now"
   },
   "admin": {
     "admin_dashboard_title": "Dashboard",

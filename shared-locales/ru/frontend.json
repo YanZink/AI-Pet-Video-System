@@ -135,7 +135,10 @@
     "processing_title": "Видео создается",
     "processing_message": "Проверьте статус через несколько минут. Мы уведомим вас, когда видео будет готово!",
     "refresh_button": "Обновить статус",
-    "completed_label": "Завершено"
+    "completed_label": "Завершено",
+    "payment_required": "Требуется оплата",
+    "payment_required_desc": "Завершите оплату для начала обработки видео",
+    "retry_payment": "Оплатить сейчас"
   },
   "admin": {
     "admin_dashboard_title": "Панель управления",

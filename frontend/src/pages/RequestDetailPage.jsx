@@ -17,6 +17,7 @@ const RequestDetailPage = () => {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [processingPayment, setProcessingPayment] = useState(false); // Payment loading state
 
   useEffect(() => {
     loadRequest();
@@ -38,6 +39,22 @@ const RequestDetailPage = () => {
       setError(err.response?.data?.message || t('errors:api_error'));
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Retry payment function
+  const handleRetryPayment = async () => {
+    if (!request) return;
+
+    setProcessingPayment(true);
+    try {
+      const checkoutResponse = await apiService.createStripeCheckout(
+        request.id
+      );
+      window.location.href = checkoutResponse.checkout_url;
+    } catch (err) {
+      setError(err.response?.data?.message || t('errors:payment_failed'));
+      setProcessingPayment(false);
     }
   };
 
@@ -144,6 +161,33 @@ const RequestDetailPage = () => {
               {t('frontend:dashboard.view_details')}
             </h1>
           </div>
+
+          {/* Payment retry banner for CREATED status */}
+          {request.status === REQUEST_STATUS.CREATED && (
+            <Card className="mb-6 border-yellow-500/30 bg-yellow-500/10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div>
+                    <h3 className="text-lg font-bold text-yellow-200">
+                      {t('frontend:request_detail.payment_required')}
+                    </h3>
+                    <p className="text-yellow-100/70 text-sm">
+                      {t('frontend:request_detail.payment_required_desc')}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="primary"
+                  size="medium"
+                  onClick={handleRetryPayment}
+                  loading={processingPayment}
+                  disabled={processingPayment}
+                >
+                  {t('frontend:request_detail.retry_payment')}
+                </Button>
+              </div>
+            </Card>
+          )}
 
           <Card className="mb-6">
             <div className="flex items-center justify-between mb-4">
