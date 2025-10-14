@@ -7,8 +7,7 @@
     "login": "Войти",
     "logout": "Выйти",
     "dashboard": "Панель управления",
-    "admin": "Админ-панель",
-    "get_started": "Начать"
+    "admin": "Админ-панель"
   },
   "hero": {
     "title": "Превратите фото питомца в AI-видео",
@@ -192,5 +191,14 @@
     "admin_page_title_in_progress": "Заявки в обработке",
     "admin_page_title_completed": "Завершенные заявки",
     "admin_page_title_default": "Заявки"
+  },
+  "errors": {
+    "auth_failed": "Ошибка аутентификации",
+    "network_error": "Ошибка сети. Пожалуйста, попробуйте еще раз.",
+    "invalid_credentials": "Неверный email или пароль",
+    "email_exists": "Пользователь с таким email уже существует",
+    "validation_error": "Пожалуйста, проверьте введенные данные",
+    "login_failed": "Неверный email или пароль",
+    "registration_failed": "Ошибка регистрации"
   }
 }

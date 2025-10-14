@@ -7,8 +7,7 @@
     "login": "Login",
     "logout": "Logout",
     "dashboard": "Dashboard",
-    "admin": "Admin Panel",
-    "get_started": "Get Started"
+    "admin": "Admin Panel"
   },
   "hero": {
     "title": "Transform Your Pet Photos into Amazing AI Videos",
@@ -192,5 +191,14 @@
     "admin_page_title_in_progress": "In Progress Requests",
     "admin_page_title_completed": "Completed Requests",
     "admin_page_title_default": "Requests"
+  },
+  "errors": {
+    "auth_failed": "Authentication failed",
+    "network_error": "Network error. Please try again.",
+    "invalid_credentials": "Invalid email or password",
+    "email_exists": "User with this email already exists",
+    "validation_error": "Please check the entered data",
+    "login_failed": "Invalid email or password",
+    "registration_failed": "Registration failed"
   }
 }
