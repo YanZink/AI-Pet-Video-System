@@ -71,12 +71,6 @@ const Footer = () => {
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>
-                  {t('frontend:footer.max_photos_label')}
-                </span>
-                <span>{t('frontend:footer.max_photos_value')}</span>
-              </div>
-              <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>
                   {t('frontend:footer.supported_formats_label')}
                 </span>
                 <span>{t('frontend:footer.supported_formats_value')}</span>

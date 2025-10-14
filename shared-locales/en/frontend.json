@@ -7,8 +7,7 @@
     "login": "Login",
     "logout": "Logout",
     "dashboard": "Dashboard",
-    "admin": "Admin Panel",
-    "get_started": "Get Started"
+    "admin": "Admin Panel"
   },
   "hero": {
     "title": "Transform Your Pet Photos into Amazing AI Videos",
@@ -51,7 +50,8 @@
     "status": "Status",
     "actions": "Actions",
     "view_details": "View Details",
-    "download": "Download"
+    "download": "Download",
+    "create_in_telegram": "Create in Telegram"
   },
   "create_request": {
     "title": "Create New Video Request",
@@ -63,14 +63,16 @@
     "script_hint": "For example: My dog playing in the park, Cat sleeping peacefully, etc.",
     "characters_count": "{count}/1000 characters",
     "price_label": "Price:",
-    "price_value": "$10.00",
+    "price_value": "$9.99",
     "processing_time_label": "Processing time:",
     "processing_time_value": "~10 minutes",
     "submit": "Continue to Payment",
     "uploading": "Uploading...",
     "processing": "Processing...",
     "payment_method": "Payment Method",
-    "pay_with_stripe": "Pay with Credit Card"
+    "pay_with_stripe": "Pay with Credit Card",
+    "credit_card": "Credit Card",
+    "payment_method_label": "Payment Method"
   },
   "login": {
     "title": "Login to Your Account",
@@ -100,7 +102,7 @@
     "all_rights_reserved": "All rights reserved",
     "info_title": "Info",
     "price_label": "Price:",
-    "price_value": "$10.00 per video",
+    "price_value": "$9.99 per video",
     "processing_time_label": "Processing time:",
     "processing_time_value": "~10 min",
     "max_photos_label": "Max photos:",
@@ -132,7 +134,10 @@
     "processing_title": "Video is Being Created",
     "processing_message": "Please check back in a few minutes. We'll notify you when it's ready!",
     "refresh_button": "Refresh Status",
-    "completed_label": "Completed"
+    "completed_label": "Completed",
+    "payment_required": "Payment Required",
+    "payment_required_desc": "Complete payment to start video processing",
+    "retry_payment": "Pay Now"
   },
   "admin": {
     "admin_dashboard_title": "Dashboard",
@@ -186,5 +191,14 @@
     "admin_page_title_in_progress": "In Progress Requests",
     "admin_page_title_completed": "Completed Requests",
     "admin_page_title_default": "Requests"
+  },
+  "errors": {
+    "auth_failed": "Authentication failed",
+    "network_error": "Network error. Please try again.",
+    "invalid_credentials": "Invalid email or password",
+    "email_exists": "User with this email already exists",
+    "validation_error": "Please check the entered data",
+    "login_failed": "Invalid email or password",
+    "registration_failed": "Registration failed"
   }
 }

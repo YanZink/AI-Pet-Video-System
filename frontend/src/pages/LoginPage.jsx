@@ -30,7 +30,7 @@ const LoginPage = () => {
     if (result.success) {
       navigate('/dashboard');
     } else {
-      setError(result.error);
+      setError(t('frontend:errors.login_failed'));
     }
   };
 

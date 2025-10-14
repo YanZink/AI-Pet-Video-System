@@ -127,19 +127,11 @@ const Header = () => {
             ) : (
               <div className={styles.userInfo}>
                 <Button
-                  variant="ghost"
                   size="small"
                   onClick={() => navigate('/login')}
                   className={styles.compactButton}
                 >
                   {t('frontend:nav.login')}
-                </Button>
-                <Button
-                  size="small"
-                  onClick={handleGetStarted}
-                  className={styles.compactButton}
-                >
-                  {t('frontend:nav.get_started')}
                 </Button>
               </div>
             )}
@@ -255,15 +247,6 @@ const Header = () => {
                     className={`w-full ${styles.compactButton}`}
                   >
                     {t('frontend:nav.login')}
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleGetStarted();
-                      setIsMenuOpen(false);
-                    }}
-                    className={`w-full ${styles.compactButton}`}
-                  >
-                    {t('frontend:nav.get_started')}
                   </Button>
                 </>
               )}

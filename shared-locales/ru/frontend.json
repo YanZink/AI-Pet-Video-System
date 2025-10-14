@@ -7,8 +7,7 @@
     "login": "Войти",
     "logout": "Выйти",
     "dashboard": "Панель управления",
-    "admin": "Админ-панель",
-    "get_started": "Начать"
+    "admin": "Админ-панель"
   },
   "hero": {
     "title": "Превратите фото питомца в AI-видео",
@@ -51,7 +50,8 @@
     "status": "Статус",
     "actions": "Действия",
     "view_details": "Подробнее",
-    "download": "Скачать"
+    "download": "Скачать",
+    "create_in_telegram": "Создать в Telegram"
   },
   "create_request": {
     "title": "Создать новую заявку на видео",
@@ -63,14 +63,16 @@
     "script_hint": "Например: Моя собака играет в парке, Кот мирно спит и т.д.",
     "characters_count": "{count}/1000 символов",
     "price_label": "Цена:",
-    "price_value": "$10.00",
+    "price_value": "$9.99",
     "processing_time_label": "Время обработки:",
     "processing_time_value": "~10 минут",
     "submit": "Перейти к оплате",
     "uploading": "Загрузка...",
     "processing": "Обработка...",
     "payment_method": "Способ оплаты",
-    "pay_with_stripe": "Оплатить картой"
+    "pay_with_stripe": "Оплатить картой",
+    "credit_card": "Банковская карта",
+    "payment_method_label": "Способ оплаты"
   },
   "login": {
     "title": "Войти в аккаунт",
@@ -100,7 +102,7 @@
     "all_rights_reserved": "Все права защищены",
     "info_title": "Информация",
     "price_label": "Цена:",
-    "price_value": "$10.00 за видео",
+    "price_value": "$9.99 за видео",
     "processing_time_label": "Время обработки:",
     "processing_time_value": "~10 мин",
     "max_photos_label": "Максимум фото:",
@@ -132,7 +134,10 @@
     "processing_title": "Видео создается",
     "processing_message": "Проверьте статус через несколько минут. Мы уведомим вас, когда видео будет готово!",
     "refresh_button": "Обновить статус",
-    "completed_label": "Завершено"
+    "completed_label": "Завершено",
+    "payment_required": "Требуется оплата",
+    "payment_required_desc": "Завершите оплату для начала обработки видео",
+    "retry_payment": "Оплатить сейчас"
   },
   "admin": {
     "admin_dashboard_title": "Панель управления",
@@ -186,5 +191,14 @@
     "admin_page_title_in_progress": "Заявки в обработке",
     "admin_page_title_completed": "Завершенные заявки",
     "admin_page_title_default": "Заявки"
+  },
+  "errors": {
+    "auth_failed": "Ошибка аутентификации",
+    "network_error": "Ошибка сети. Пожалуйста, попробуйте еще раз.",
+    "invalid_credentials": "Неверный email или пароль",
+    "email_exists": "Пользователь с таким email уже существует",
+    "validation_error": "Пожалуйста, проверьте введенные данные",
+    "login_failed": "Неверный email или пароль",
+    "registration_failed": "Ошибка регистрации"
   }
 }
