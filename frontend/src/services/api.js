@@ -27,7 +27,7 @@ class ApiService {
         if (error.response?.status === 401) {
           localStorage.removeItem('auth_token');
           localStorage.removeItem('user_data');
-          //window.location.href = '/login'; // Redirect to login after logout
+          window.location.href = '/login'; // Redirect to login after logout
         }
         return Promise.reject(error);
       }

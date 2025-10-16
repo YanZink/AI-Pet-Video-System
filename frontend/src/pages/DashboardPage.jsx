@@ -159,10 +159,14 @@ const DashboardPage = () => {
                   {t('frontend:dashboard.no_requests')}
                 </h3>
                 <p className="text-white/70 mb-6">{t('videos:no_requests')}</p>
-                <Button onClick={() => navigate('/create-request')}>
+                <Button
+                  size="large"
+                  onClick={() => navigate('/create-request')}
+                >
                   {t('videos:create_video')}
                 </Button>
                 <Button
+                  variant="telegramButton"
                   size="large"
                   onClick={() =>
                     window.open(
