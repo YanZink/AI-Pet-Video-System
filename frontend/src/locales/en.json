@@ -70,5 +70,17 @@
     "no_requests_desc": "Create your first AI pet video to get started!",
     "payment_success": "Payment Successful!",
     "payment_cancelled": "Payment Cancelled"
+  },
+  "verify_email": {
+    "verifying": "Verifying your email...",
+    "success_title": "Email Verified!",
+    "error_title": "Verification Failed",
+    "resend_title": "Resend Verification Email",
+    "resend_description": "Enter your email address to receive a new verification link",
+    "resend_button": "Resend Verification Email",
+    "back_to_login": "Back to Login",
+    "redirecting": "Redirecting to dashboard...",
+    "registration_success": "Registration successful!",
+    "check_email": "Please check your email to verify your account before logging in."
   }
 }
