@@ -159,11 +159,15 @@ const DashboardPage = () => {
                   {t('frontend:dashboard.no_requests')}
                 </h3>
                 <p className="text-white/70 mb-6">{t('videos:no_requests')}</p>
-                <Button onClick={() => navigate('/create-request')}>
+                <Button
+                  size="large"
+                  onClick={() => navigate('/create-request')}
+                >
                   {t('videos:create_video')}
                 </Button>
                 <Button
                   size="large"
+                  variant="telegramButton"
                   onClick={() =>
                     window.open(
                       process.env.REACT_APP_TELEGRAM_BOT_URL,
