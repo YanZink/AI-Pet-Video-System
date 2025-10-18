@@ -66,12 +66,15 @@ class UserController {
         user.generateVerificationToken();
         await user.save();
 
-        logger.info('Sending verification email');
-        await emailService.sendVerificationEmail(
-          user,
-          user.email_verification_token
-        );
-        logger.info('Verification email sent');
+        // Temporarily commented until AWS SES production access is approved
+        // logger.info('Sending verification email');
+        // await emailService.sendVerificationEmail(
+        //   user,
+        //   user.email_verification_token
+        // );
+        // logger.info('Verification email sent');
+
+        logger.info('AWS SES Sandbox mode - email sending disabled');
       }
 
       const token = generateToken(user);
@@ -127,15 +130,15 @@ class UserController {
     }
 
     // CHECK EMAIL VERIFICATION
-    if (!user.email_verified) {
-      throw createError(
-        req.t('auth.email_not_verified', {
-          defaultValue: 'Please verify your email before logging in',
-        }),
-        401,
-        ERROR_CODES.AUTHENTICATION_ERROR
-      );
-    }
+    // if (!user.email_verified) {
+    //   throw createError(
+    //     req.t('auth.email_not_verified', {
+    //       defaultValue: 'Please verify your email before logging in',
+    //     }),
+    //     401,
+    //     ERROR_CODES.AUTHENTICATION_ERROR
+    //   );
+    // }
 
     const token = generateToken(user);
 
