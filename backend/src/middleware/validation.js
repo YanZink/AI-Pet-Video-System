@@ -27,6 +27,14 @@ const userSchemas = {
   updateLanguage: Joi.object({
     language: commonSchemas.language.required(),
   }),
+
+  verifyEmail: Joi.object({
+    token: Joi.string().required(),
+  }),
+
+  resendVerification: Joi.object({
+    email: commonSchemas.email.required(),
+  }),
 };
 
 const requestSchemas = {
