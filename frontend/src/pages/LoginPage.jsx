@@ -15,6 +15,7 @@ const LoginPage = () => {
     last_name: '',
   });
   const [error, setError] = useState('');
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
 
   const { login, register, loading } = useAuth();
   const navigate = useNavigate();
@@ -22,15 +23,21 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setShowVerificationMessage(false);
 
     const result = isLogin
       ? await login({ email: formData.email, password: formData.password })
       : await register(formData);
 
     if (result.success) {
-      navigate('/dashboard');
+      // Check if email verification is required
+      if (result.requiresEmailVerification) {
+        setShowVerificationMessage(true);
+      } else {
+        navigate('/dashboard');
+      }
     } else {
-      setError(t('frontend:errors.login_failed'));
+      setError(result.error || t('frontend:errors.login_failed'));
     }
   };
 
@@ -57,6 +64,23 @@ const LoginPage = () => {
         {error && (
           <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg mb-6">
             {error}
+          </div>
+        )}
+
+        {showVerificationMessage && (
+          <div className="bg-blue-500/20 border border-blue-500/50 text-blue-200 px-4 py-3 rounded-lg mb-6">
+            <p className="font-semibold">
+              {t('frontend:verify_email.registration_success')}
+            </p>
+            <p className="text-sm mt-1">
+              {t('frontend:verify_email.check_email')}
+            </p>
+            <button
+              onClick={() => setShowVerificationMessage(false)}
+              className="text-blue-300 hover:text-blue-200 text-sm mt-2"
+            >
+              {t('frontend:common.close')}
+            </button>
           </div>
         )}
 

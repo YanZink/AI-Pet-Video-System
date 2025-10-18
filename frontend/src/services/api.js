@@ -132,6 +132,19 @@ class ApiService {
       },
     });
   }
+
+  // Email verification
+  async verifyEmail(token) {
+    const response = await this.client.post('/users/verify-email', { token });
+    return response.data;
+  }
+
+  async resendVerification(email) {
+    const response = await this.client.post('/users/resend-verification', {
+      email,
+    });
+    return response.data;
+  }
 }
 
 export default new ApiService();

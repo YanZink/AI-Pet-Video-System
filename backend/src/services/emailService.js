@@ -1,6 +1,8 @@
 const { ses, awsConfig } = require('../config/aws');
 const logger = require('../utils/logger');
 const localeManager = require('../../../shared-locales');
+const fs = require('fs').promises;
+const path = require('path');
 
 /**
  * Email Service with real i18n support
@@ -9,6 +11,34 @@ class EmailService {
   constructor() {
     this.fromEmail = awsConfig.ses.fromEmail;
     this.localeManager = localeManager;
+    this.templatesDir = path.join(__dirname, '../email-templates');
+  }
+
+  /**
+   * Read and compile email template
+   */
+  async compileTemplate(templateName, variables) {
+    try {
+      const templatePath = path.join(this.templatesDir, `${templateName}.html`);
+      let template = await fs.readFile(templatePath, 'utf8');
+
+      // Replace variables in template
+      Object.keys(variables).forEach((key) => {
+        const placeholder = `{{${key}}}`;
+        template = template.replace(
+          new RegExp(placeholder, 'g'),
+          variables[key]
+        );
+      });
+
+      return template;
+    } catch (error) {
+      logger.error('Failed to compile email template:', {
+        templateName,
+        error: error.message,
+      });
+      throw new Error(`Failed to load email template: ${templateName}`);
+    }
   }
 
   async sendEmail({ to, subject, htmlBody, textBody = null }) {
@@ -58,7 +88,167 @@ class EmailService {
   }
 
   /**
-   * Send request status update email with real i18n support
+   * Send email verification link
+   */
+  async sendVerificationEmail(user, verificationToken) {
+    if (!user.email) {
+      return { success: false, reason: 'No email address' };
+    }
+
+    const language = user.language || 'en';
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    const verificationUrl = `${frontendUrl}/verify-email?token=${verificationToken}`;
+
+    const subject = this.localeManager.translate(
+      'emails.verify_email_subject',
+      language
+    );
+
+    const templateVariables = {
+      helloText: this.localeManager.translate('emails.hello_user', language, {
+        name: user.first_name || user.username || 'there',
+      }),
+      verifyMessage: this.localeManager.translate(
+        'emails.verify_email_message',
+        language
+      ),
+      verifyButton: this.localeManager.translate(
+        'emails.verify_email_button',
+        language
+      ),
+      verificationUrl: verificationUrl,
+      bestRegardsText: this.localeManager.translate(
+        'emails.best_regards',
+        language
+      ),
+      teamSignatureText: this.localeManager.translate(
+        'emails.team_signature',
+        language
+      ),
+    };
+
+    const htmlBody = await this.compileTemplate(
+      'verification-email',
+      templateVariables
+    );
+
+    return await this.sendEmail({
+      to: user.email,
+      subject,
+      htmlBody,
+    });
+  }
+
+  /**
+   * Send payment confirmation email
+   */
+  async sendPaymentConfirmation(user, request, paymentAmount) {
+    if (!user.email) {
+      return { success: false, reason: 'No email address' };
+    }
+
+    const language = user.language || 'en';
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+
+    const subject = this.localeManager.translate(
+      'emails.payment_confirmation_subject',
+      language
+    );
+
+    const templateVariables = {
+      helloText: this.localeManager.translate('emails.hello_user', language, {
+        name: user.first_name || user.username || 'there',
+      }),
+      paymentConfirmed: this.localeManager.translate(
+        'emails.payment_confirmed',
+        language
+      ),
+      amountText: this.localeManager.translate(
+        'emails.payment_amount',
+        language,
+        { amount: paymentAmount }
+      ),
+      requestId: request.id,
+      viewRequestUrl: `${frontendUrl}/dashboard/requests/${request.id}`,
+      viewRequestText: this.localeManager.translate(
+        'emails.view_request_button',
+        language
+      ),
+      bestRegardsText: this.localeManager.translate(
+        'emails.best_regards',
+        language
+      ),
+      teamSignatureText: this.localeManager.translate(
+        'emails.team_signature',
+        language
+      ),
+    };
+
+    const htmlBody = await this.compileTemplate(
+      'payment-confirmation',
+      templateVariables
+    );
+
+    return await this.sendEmail({
+      to: user.email,
+      subject,
+      htmlBody,
+    });
+  }
+
+  /**
+   * Send request creation confirmation
+   */
+  async sendRequestCreationConfirmation(user, request) {
+    if (!user.email) {
+      return { success: false, reason: 'No email address' };
+    }
+
+    const language = user.language || 'en';
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+
+    const subject = this.localeManager.translate(
+      'emails.request_created_subject',
+      language
+    );
+
+    const templateVariables = {
+      helloText: this.localeManager.translate('emails.hello_user', language, {
+        name: user.first_name || user.username || 'there',
+      }),
+      requestCreated: this.localeManager.translate(
+        'emails.request_created',
+        language
+      ),
+      viewRequestUrl: `${frontendUrl}/dashboard/requests/${request.id}`,
+      viewRequestText: this.localeManager.translate(
+        'emails.view_request_button',
+        language
+      ),
+      bestRegardsText: this.localeManager.translate(
+        'emails.best_regards',
+        language
+      ),
+      teamSignatureText: this.localeManager.translate(
+        'emails.team_signature',
+        language
+      ),
+    };
+
+    const htmlBody = await this.compileTemplate(
+      'request-created',
+      templateVariables
+    );
+
+    return await this.sendEmail({
+      to: user.email,
+      subject,
+      htmlBody,
+    });
+  }
+
+  /**
+   * Send request status update email
    */
   async sendRequestStatusUpdate(user, request, newStatus) {
     if (!user.email) {
@@ -80,13 +270,53 @@ class EmailService {
       { status: statusText }
     );
 
-    const htmlBody = this.generateStatusUpdateEmail({
-      user,
-      request,
+    const templateVariables = {
+      helloText: this.localeManager.translate('emails.hello_user', language, {
+        name: user.first_name || user.username || 'there',
+      }),
+      statusUpdatedText: this.localeManager.translate(
+        'emails.status_updated_to',
+        language,
+        { status: statusText }
+      ),
+      requestDetailsText: this.localeManager.translate(
+        'emails.request_details',
+        language
+      ),
+      requestIdText: this.localeManager.translate(
+        'emails.request_id',
+        language
+      ),
+      statusLabelText: this.localeManager.translate(
+        'emails.status_label',
+        language
+      ),
+      dateLabelText: this.localeManager.translate(
+        'emails.date_label',
+        language
+      ),
+      requestId: request.id,
       statusMessage: statusText,
-      frontendUrl,
-      language,
-    });
+      requestDate: new Date(request.created_at).toLocaleDateString(),
+      frontendUrl: frontendUrl,
+      viewRequestText: this.localeManager.translate(
+        'emails.view_request_button',
+        language
+      ),
+      bestRegardsText: this.localeManager.translate(
+        'emails.best_regards',
+        language
+      ),
+      teamSignatureText: this.localeManager.translate(
+        'emails.team_signature',
+        language
+      ),
+    };
+
+    const htmlBody = await this.compileTemplate(
+      'status-update',
+      templateVariables
+    );
 
     return await this.sendEmail({
       to: user.email,
@@ -96,104 +326,7 @@ class EmailService {
   }
 
   /**
-   * Generate HTML email with localized content
-   */
-  generateStatusUpdateEmail(params) {
-    const { user, request, statusMessage, frontendUrl, language } = params;
-    const helloText = this.localeManager.translate(
-      'emails.hello_user',
-      language,
-      { name: user.first_name || user.username || 'there' }
-    );
-
-    const statusTitle = this.localeManager.translate(
-      'emails.status_update_title',
-      language
-    );
-    const statusUpdatedText = this.localeManager.translate(
-      'emails.status_updated_to',
-      language,
-      { status: statusMessage }
-    );
-
-    const requestDetailsText = this.localeManager.translate(
-      'emails.request_details',
-      language
-    );
-    const requestIdText = this.localeManager.translate(
-      'emails.request_id',
-      language
-    );
-    const statusLabelText = this.localeManager.translate(
-      'emails.status_label',
-      language
-    );
-    const dateLabelText = this.localeManager.translate(
-      'emails.date_label',
-      language
-    );
-    const viewRequestText = this.localeManager.translate(
-      'emails.view_request_button',
-      language
-    );
-    const bestRegardsText = this.localeManager.translate(
-      'emails.best_regards',
-      language
-    );
-    const teamSignatureText = this.localeManager.translate(
-      'emails.team_signature',
-      language
-    );
-
-    return `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>AI Pet Video</title>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; }
-          .header { color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px; margin-bottom: 20px; }
-          .details { background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; }
-          .button { background: #4A90E2; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
-          .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>AI Pet Video</h1>
-          </div>
-          
-          <p>${helloText}</p>
-          
-          <p>${statusUpdatedText}</p>
-          
-          <div class="details">
-            <h3>${requestDetailsText}</h3>
-            <p><strong>${requestIdText}</strong> ${request.id}</p>
-            <p><strong>${statusLabelText}</strong> ${statusMessage}</p>
-            <p><strong>${dateLabelText}</strong> ${new Date(
-      request.created_at
-    ).toLocaleDateString()}</p>
-          </div>
-          
-          <a href="${frontendUrl}" class="button">
-            ${viewRequestText}
-          </a>
-          
-          <div class="footer">
-            <p>${bestRegardsText}<br>${teamSignatureText}</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
-  }
-
-  /**
-   * Send welcome email to new users with i18n
+   * Send welcome email to new users
    */
   async sendWelcomeEmail(user) {
     if (!user.email) {
@@ -206,69 +339,39 @@ class EmailService {
       'emails.welcome_subject',
       language
     );
-    const htmlBody = this.generateWelcomeEmail(user, language);
+
+    const templateVariables = {
+      helloText: this.localeManager.translate('emails.hello_user', language, {
+        name: user.first_name || user.username || 'there',
+      }),
+      welcomeTitle: this.localeManager.translate(
+        'emails.welcome_title',
+        language
+      ),
+      welcomeMessage: this.localeManager.translate(
+        'emails.welcome_message',
+        language
+      ),
+      bestRegardsText: this.localeManager.translate(
+        'emails.best_regards',
+        language
+      ),
+      teamSignatureText: this.localeManager.translate(
+        'emails.team_signature',
+        language
+      ),
+    };
+
+    const htmlBody = await this.compileTemplate(
+      'welcome-email',
+      templateVariables
+    );
 
     return await this.sendEmail({
       to: user.email,
       subject,
       htmlBody,
     });
-  }
-
-  /**
-   * Generate welcome email HTML with localized content
-   */
-  generateWelcomeEmail(user, language) {
-    const helloText = this.localeManager.translate(
-      'emails.hello_user',
-      language,
-      { name: user.first_name || user.username || 'there' }
-    );
-
-    const welcomeTitle = this.localeManager.translate(
-      'emails.welcome_title',
-      language
-    );
-    const welcomeMessage = this.localeManager.translate(
-      'emails.welcome_message',
-      language
-    );
-    const bestRegardsText = this.localeManager.translate(
-      'emails.best_regards',
-      language
-    );
-    const teamSignatureText = this.localeManager.translate(
-      'emails.team_signature',
-      language
-    );
-
-    return `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>${welcomeTitle}</title>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; }
-          .header { color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px; margin-bottom: 20px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>${welcomeTitle}</h1>
-          </div>
-          
-          <p>${helloText}</p>
-          
-          <p>${welcomeMessage}</p>
-          
-          <p>${bestRegardsText}<br>${teamSignatureText}</p>
-        </div>
-      </body>
-      </html>
-    `;
   }
 }
 

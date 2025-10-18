@@ -3,6 +3,7 @@ const s3Service = require('../services/s3Service');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
 const logger = require('../utils/logger');
+const emailService = require('../services/emailService');
 
 class RequestController {
   createRequest = asyncHandler(async (req, res) => {
@@ -51,6 +52,16 @@ class RequestController {
       photosCount: photos.length,
       language: req.language,
     });
+
+    try {
+      await emailService.sendRequestCreationConfirmation(req.user, request);
+    } catch (emailError) {
+      logger.error('Failed to send request creation email:', {
+        requestId: request.id,
+        error: emailError.message,
+      });
+      // Don't fail the request if email fails
+    }
 
     res.status(201).json({
       message: req.t('common.continue'),

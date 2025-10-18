@@ -38,6 +38,21 @@ userRouter.get(
   userController.getSupportedLanguages
 );
 
+// Email verification routes
+userRouter.post(
+  '/verify-email',
+  getAuthRateLimit(),
+  validateBody(userSchemas.verifyEmail),
+  userController.verifyEmail
+);
+
+userRouter.post(
+  '/resend-verification',
+  getAuthRateLimit(),
+  validateBody(userSchemas.resendVerification),
+  userController.resendVerification
+);
+
 // Protected routes
 userRouter.get(
   '/me',

@@ -22,5 +22,11 @@
   "authentication_error": "Ошибка аутентификации",
   "admin_required": "Требуются права администратора",
   "not_found": "Маршрут не найден",
-  "validation_error": "Ошибка валидации"
+  "validation_error": "Ошибка валидации",
+  "verification_failed": "Ошибка подтверждения email",
+  "email_required": "Email обязателен",
+  "email_not_verified": "Пожалуйста, подтвердите ваш email перед входом",
+  "invalid_verification_token": "Неверный или просроченный токен верификации",
+  "verification_token_expired": "Токен верификации истек",
+  "email_already_verified": "Электронная почта уже подтверждена"
 }

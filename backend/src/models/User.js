@@ -71,6 +71,20 @@ const User = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    email_verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
+    email_verification_token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    email_verification_sent_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: 'users',
@@ -110,6 +124,7 @@ User.prototype.checkPassword = async function (password) {
 User.prototype.getPublicData = function () {
   const publicData = { ...this.toJSON() };
   delete publicData.password_hash;
+  delete publicData.email_verification_token;
   return publicData;
 };
 
@@ -128,5 +143,24 @@ User.findByEmail = async function (email) {
     where: { email: email.toLowerCase(), is_active: true },
   });
 };
+User.prototype.generateVerificationToken = function () {
+  this.email_verification_token = crypto.randomBytes(32).toString('hex');
+  this.email_verification_sent_at = new Date();
+  return this.email_verification_token;
+};
 
+User.prototype.isVerificationTokenExpired = function () {
+  if (!this.email_verification_sent_at) return true;
+  const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  return new Date() - this.email_verification_sent_at > twentyFourHours;
+};
+
+User.findByVerificationToken = async function (token) {
+  return await this.findOne({
+    where: {
+      email_verification_token: token,
+      email_verified: false, // only unverified users
+    },
+  });
+};
 module.exports = User;

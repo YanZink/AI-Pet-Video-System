@@ -4,6 +4,8 @@ const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
 const localeManager = require('../../../shared-locales');
 const logger = require('../utils/logger');
+const emailService = require('../services/emailService');
+const crypto = require('crypto');
 
 class UserController {
   createUser = asyncHandler(async (req, res) => {
@@ -28,7 +30,20 @@ class UserController {
     const user = await User.create({
       ...userData,
       password_hash: userData.password,
+      email_verified: false, // Email not verified initially
     });
+
+    // Generate verification token for email users
+    if (user.email) {
+      user.generateVerificationToken();
+      await user.save();
+
+      // Send verification email
+      await emailService.sendVerificationEmail(
+        user,
+        user.email_verification_token
+      );
+    }
 
     const token = generateToken(user);
 
@@ -36,14 +51,17 @@ class UserController {
       userId: user.id,
       method: userData.telegram_id ? 'telegram' : 'email',
       language: user.language,
+      emailVerified: user.email_verified,
     });
 
     res.status(201).json({
       message: req.t('auth.created_success', {
-        defaultValue: 'User created successfully',
+        defaultValue:
+          'User created successfully. Please check your email to verify your account.',
       }),
       user: user.getPublicData(),
       token,
+      requiresEmailVerification: !!user.email, // Frontend should know if verification is needed
     });
   });
 
@@ -66,6 +84,17 @@ class UserController {
       throw createError(
         req.t('auth.invalid_credentials', {
           defaultValue: 'Invalid credentials',
+        }),
+        401,
+        ERROR_CODES.AUTHENTICATION_ERROR
+      );
+    }
+
+    // CHECK EMAIL VERIFICATION
+    if (!user.email_verified) {
+      throw createError(
+        req.t('auth.email_not_verified', {
+          defaultValue: 'Please verify your email before logging in',
         }),
         401,
         ERROR_CODES.AUTHENTICATION_ERROR
@@ -188,6 +217,122 @@ class UserController {
     res.json({
       languages,
       default_language: 'en',
+    });
+  });
+  /**
+   * Verify user email
+   */
+  verifyEmail = asyncHandler(async (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+      throw createError(
+        req.t('auth.verification_token_required', {
+          defaultValue: 'Verification token is required',
+        }),
+        400,
+        ERROR_CODES.VALIDATION_ERROR
+      );
+    }
+
+    const user = await User.findByVerificationToken(token);
+    if (!user) {
+      throw createError(
+        req.t('auth.invalid_verification_token', {
+          defaultValue: 'Invalid or expired verification token',
+        }),
+        400,
+        ERROR_CODES.VALIDATION_ERROR
+      );
+    }
+
+    if (user.isVerificationTokenExpired()) {
+      throw createError(
+        req.t('auth.verification_token_expired', {
+          defaultValue: 'Verification token has expired',
+        }),
+        400,
+        ERROR_CODES.VALIDATION_ERROR
+      );
+    }
+
+    // Mark email as verified and clear token
+    await user.update({
+      email_verified: true,
+      email_verification_token: null,
+      email_verification_sent_at: null,
+    });
+
+    logger.info('User email verified', {
+      userId: user.id,
+      email: user.email,
+    });
+
+    res.json({
+      message: req.t('auth.email_verified_success', {
+        defaultValue: 'Email verified successfully',
+      }),
+      user: user.getPublicData(),
+    });
+  });
+
+  /**
+   * Resend verification email
+   */
+  resendVerification = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+      throw createError(
+        req.t('auth.email_required', {
+          defaultValue: 'Email is required',
+        }),
+        400,
+        ERROR_CODES.VALIDATION_ERROR
+      );
+    }
+
+    const user = await User.findByEmail(email);
+    if (!user) {
+      // Don't reveal if user exists or not
+      return res.json({
+        message: req.t('auth.verification_email_sent', {
+          defaultValue:
+            'If your email exists in our system, you will receive a verification email shortly',
+        }),
+      });
+    }
+
+    if (user.email_verified) {
+      throw createError(
+        req.t('auth.email_already_verified', {
+          defaultValue: 'Email is already verified',
+        }),
+        400,
+        ERROR_CODES.VALIDATION_ERROR
+      );
+    }
+
+    // Generate new verification token
+    user.generateVerificationToken();
+    await user.save();
+
+    // Send verification email
+    await emailService.sendVerificationEmail(
+      user,
+      user.email_verification_token
+    );
+
+    logger.info('Verification email resent', {
+      userId: user.id,
+      email: user.email,
+    });
+
+    res.json({
+      message: req.t('auth.verification_email_sent', {
+        defaultValue:
+          'If your email exists in our system, you will receive a verification email shortly',
+      }),
     });
   });
 }

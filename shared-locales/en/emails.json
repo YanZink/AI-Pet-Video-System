@@ -12,5 +12,13 @@
   "best_regards": "Best regards,",
   "team_signature": "AI Pet Video Team",
   "welcome_title": "Welcome to AI Pet Video!",
-  "welcome_message": "We're excited to help you create amazing videos of your pets."
+  "welcome_message": "We're excited to help you create amazing videos of your pets.",
+  "verify_email_subject": "Verify Your Email Address - AI Pet Video",
+  "verify_email_message": "Please verify your email address by clicking the button below:",
+  "verify_email_button": "Verify Email",
+  "payment_confirmation_subject": "Payment Confirmed - AI Pet Video",
+  "payment_confirmed": "Your payment has been confirmed successfully.",
+  "payment_amount": "Amount: ${amount}",
+  "request_created_subject": "Your Request Has Been Created - AI Pet Video",
+  "request_created": "Your video request has been created successfully and is now in processing."
 }

@@ -6,6 +6,7 @@ const queueService = require('../services/queueService');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
 const logger = require('../utils/logger');
+const emailService = require('../services/emailService');
 
 class PaymentController {
   // Handle Telegram payment
@@ -82,6 +83,22 @@ class PaymentController {
       newStatus: 'paid',
       language: request.user.language || 'en',
     });
+
+    try {
+      if (request.user && request.user.email) {
+        await emailService.sendPaymentConfirmation(
+          request.user,
+          request,
+          paymentInfo.amount
+        );
+      }
+    } catch (emailError) {
+      logger.error('Failed to send payment confirmation email:', {
+        requestId: request_id,
+        error: emailError.message,
+      });
+      // Don't fail the payment if email fails
+    }
 
     res.json({
       success: true,
@@ -282,6 +299,22 @@ class PaymentController {
       newStatus: 'paid',
       language: request.user.language || 'en',
     });
+
+    try {
+      if (request.user && request.user.email) {
+        await emailService.sendPaymentConfirmation(
+          request.user,
+          request,
+          amount
+        );
+      }
+    } catch (emailError) {
+      logger.error('Failed to send payment confirmation email:', {
+        requestId: request.id,
+        error: emailError.message,
+      });
+      // Don't fail the payment if email fails
+    }
 
     logger.info('Payment completed via Stripe checkout', {
       requestId: request_id,
