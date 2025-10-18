@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const { sequelize } = require('../config/database');
 const { SUPPORTED_LANGUAGES, USER_ROLES } = require('../utils/constants');
+const crypto = require('crypto');
 
 const User = sequelize.define(
   'User',

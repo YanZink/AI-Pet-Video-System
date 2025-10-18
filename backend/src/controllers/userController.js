@@ -9,62 +9,98 @@ const crypto = require('crypto');
 
 class UserController {
   createUser = asyncHandler(async (req, res) => {
+    console.log('=== REGISTRATION ATTEMPT ===', new Date().toISOString());
+    console.log('Email:', req.body.email);
+
     const userData = req.validatedBody;
+
+    logger.info('Starting user registration', {
+      email: userData.email,
+      hasTelegram: !!userData.telegram_id,
+    });
 
     let existingUser = null;
 
-    if (userData.telegram_id) {
-      existingUser = await User.findByTelegramId(userData.telegram_id);
-    } else if (userData.email) {
-      existingUser = await User.findByEmail(userData.email);
+    try {
+      if (userData.telegram_id) {
+        logger.info('Checking Telegram user');
+        existingUser = await User.findByTelegramId(userData.telegram_id);
+      } else if (userData.email) {
+        logger.info('Checking email user', { email: userData.email });
+        existingUser = await User.findByEmail(userData.email);
+      }
+
+      logger.info('User lookup completed', {
+        existingUser: !!existingUser,
+        email: userData.email,
+      });
+
+      if (existingUser) {
+        logger.warn('User already exists', {
+          email: userData.email,
+          telegramId: userData.telegram_id,
+        });
+        throw createError(
+          req.t('auth.user_exists', { defaultValue: 'User already exists' }),
+          409,
+          ERROR_CODES.DUPLICATE_ERROR
+        );
+      }
+
+      logger.info('Creating new user in database');
+      const user = await User.create({
+        ...userData,
+        password_hash: userData.password,
+        email_verified: false,
+      });
+
+      logger.info('User created successfully', {
+        userId: user.id,
+        email: user.email,
+      });
+
+      // Generate verification token for email users
+      if (user.email) {
+        logger.info('Generating verification token for email user');
+
+        user.generateVerificationToken();
+        await user.save();
+
+        logger.info('Sending verification email');
+        await emailService.sendVerificationEmail(
+          user,
+          user.email_verification_token
+        );
+        logger.info('Verification email sent');
+      }
+
+      const token = generateToken(user);
+
+      logger.info('User registration completed successfully', {
+        userId: user.id,
+        method: userData.telegram_id ? 'telegram' : 'email',
+        email: user.email,
+        requiresVerification: !!user.email,
+      });
+
+      res.status(201).json({
+        message: req.t('auth.created_success', {
+          defaultValue: 'User created successfully.',
+        }),
+        user: user.getPublicData(),
+        token,
+        requiresEmailVerification: !!user.email,
+      });
+    } catch (error) {
+      logger.error('ERROR in user registration:', {
+        error: error.message,
+        stack: error.stack,
+        email: userData.email,
+        step: 'createUser',
+      });
+      throw error;
     }
-
-    if (existingUser) {
-      throw createError(
-        req.t('auth.user_exists', { defaultValue: 'User already exists' }),
-        409,
-        ERROR_CODES.DUPLICATE_ERROR
-      );
-    }
-
-    const user = await User.create({
-      ...userData,
-      password_hash: userData.password,
-      email_verified: false, // Email not verified initially
-    });
-
-    // Generate verification token for email users
-    if (user.email) {
-      user.generateVerificationToken();
-      await user.save();
-
-      // Send verification email
-      await emailService.sendVerificationEmail(
-        user,
-        user.email_verification_token
-      );
-    }
-
-    const token = generateToken(user);
-
-    logger.info('New user created', {
-      userId: user.id,
-      method: userData.telegram_id ? 'telegram' : 'email',
-      language: user.language,
-      emailVerified: user.email_verified,
-    });
-
-    res.status(201).json({
-      message: req.t('auth.created_success', {
-        defaultValue:
-          'User created successfully. Please check your email to verify your account.',
-      }),
-      user: user.getPublicData(),
-      token,
-      requiresEmailVerification: !!user.email, // Frontend should know if verification is needed
-    });
   });
-
   loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.validatedBody;
 
