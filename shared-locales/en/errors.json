@@ -22,5 +22,11 @@
   "authentication_error": "Authentication error",
   "admin_required": "Admin access required",
   "not_found": "Route not found",
-  "validation_error": "Validation error"
+  "validation_error": "Validation error",
+  "verification_failed": "Email verification failed",
+  "email_required": "Email is required",
+  "email_not_verified": "Please verify your email before logging in",
+  "invalid_verification_token": "Invalid or expired verification token",
+  "verification_token_expired": "Verification token has expired",
+  "email_already_verified": "Email is already verified"
 }

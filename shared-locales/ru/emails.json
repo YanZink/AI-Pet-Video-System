@@ -12,5 +12,13 @@
   "best_regards": "С наилучшими пожеланиями,",
   "team_signature": "Команда AI Pet Video",
   "welcome_title": "Добро пожаловать в AI Pet Video!",
-  "welcome_message": "Мы рады помочь вам создавать удивительные видео с вашими питомцами."
+  "welcome_message": "Мы рады помочь вам создавать удивительные видео с вашими питомцами.",
+  "verify_email_subject": "Подтвердите Ваш Email - AI Pet Video",
+  "verify_email_message": "Пожалуйста, подтвердите ваш email, нажав на кнопку ниже:",
+  "verify_email_button": "Подтвердить Email",
+  "payment_confirmation_subject": "Платеж Подтвержден - AI Pet Video",
+  "payment_confirmed": "Ваш платеж был успешно подтвержден.",
+  "payment_amount": "Сумма: ${amount}",
+  "request_created_subject": "Ваша Заявка Создана - AI Pet Video",
+  "request_created": "Ваша заявка на видео была успешно создана и сейчас обрабатывается."
 }

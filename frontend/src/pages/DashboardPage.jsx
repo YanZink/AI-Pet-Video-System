@@ -168,6 +168,7 @@ const DashboardPage = () => {
                 <Button
                   variant="telegramButton"
                   size="large"
+                  variant="telegramButton"
                   onClick={() =>
                     window.open(
                       process.env.REACT_APP_TELEGRAM_BOT_URL,

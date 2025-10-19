@@ -39,11 +39,53 @@ export const AuthProvider = ({ children }) => {
       const response = await apiService.register(userData);
       authService.setAuth(response.token, response.user);
       setUser(response.user);
-      return { success: true };
+
+      return {
+        success: true,
+        requiresEmailVerification: response.requiresEmailVerification,
+      };
     } catch (error) {
       return {
         success: false,
         error: error.response?.data?.message || 'Registration failed',
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Verify email
+  const verifyEmail = async (token) => {
+    setLoading(true);
+    try {
+      const response = await apiService.verifyEmail(token);
+
+      // Update user data if verification successful
+      if (response.user) {
+        authService.setAuth(authService.getToken(), response.user);
+        setUser(response.user);
+      }
+
+      return { success: true, message: response.message };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Verification failed',
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendVerification = async (email) => {
+    setLoading(true);
+    try {
+      const response = await apiService.resendVerification(email);
+      return { success: true, message: response.message };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to resend verification',
       };
     } finally {
       setLoading(false);
@@ -59,6 +101,8 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     register,
+    verifyEmail,
+    resendVerification,
     logout,
     loading,
     isAuthenticated: !!user,

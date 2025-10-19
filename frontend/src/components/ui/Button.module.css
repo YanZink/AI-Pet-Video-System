@@ -71,13 +71,12 @@
   background: #0088cc;
   color: white;
   box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
-  transition: all 0.2s ease-in-out;
-  transform: scale(1);
+  transition: all 0.2s ease;
 }
 
 .telegramButton:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 136, 204, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+  transform: translateY(-2px);
 }
 
 .ghost {

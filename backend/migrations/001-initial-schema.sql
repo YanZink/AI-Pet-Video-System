@@ -174,15 +174,14 @@ INSERT INTO users (
     '$2b$12$LQv3c1yqBWVH.5LnU1z8e.E7y6c6t7b8n9z0c1d2e3f4g5h6i7j8k',
     'admin',
     TRUE
-) ON CONFLICT (email) DO NOTHING;
+);
 
 -- Insert default templates with translations
 INSERT INTO templates (name, description, category, duration_seconds, max_photos, sort_order) VALUES
 ('Happy Pet', 'A joyful video of your pet playing', 'general', 30, 5, 1),
 ('Sleepy Time', 'A peaceful video of your pet resting', 'general', 25, 3, 2),
 ('Adventure Time', 'Your pet on an epic adventure', 'adventure', 35, 7, 3),
-('Birthday Party', 'Celebrate your pet birthday', 'celebration', 20, 4, 4)
-ON CONFLICT (name) DO NOTHING;
+('Birthday Party', 'Celebrate your pet birthday', 'celebration', 20, 4, 4);
 
 -- Insert template translations
 INSERT INTO translations (entity_type, entity_id, translation_key, language, translation_text)
@@ -203,8 +202,7 @@ SELECT
     'en',
     t.description
 FROM templates t
-WHERE t.description IS NOT NULL
-ON CONFLICT DO NOTHING;
+WHERE t.description IS NOT NULL;
 
 -- Insert Russian template translations
 INSERT INTO translations (entity_type, entity_id, translation_key, language, translation_text) VALUES
@@ -222,8 +220,7 @@ INSERT INTO translations (entity_type, entity_id, translation_key, language, tra
 
 -- Birthday Party Russian
 ((SELECT 'template'), (SELECT id FROM templates WHERE name = 'Birthday Party'), 'name', 'ru', 'День рождения'),
-((SELECT 'template'), (SELECT id FROM templates WHERE name = 'Birthday Party'), 'description', 'ru', 'Празднуем день рождения питомца')
-ON CONFLICT DO NOTHING;
+((SELECT 'template'), (SELECT id FROM templates WHERE name = 'Birthday Party'), 'description', 'ru', 'Празднуем день рождения питомца');
 
 -- Insert system translations
 INSERT INTO translations (entity_type, entity_id, translation_key, language, translation_text) VALUES
