@@ -7,6 +7,7 @@ import Footer from '../components/common/Footer';
 import Loader from '../components/common/Loader';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import PhotoGallery from '../components/forms/PhotoGallery';
 import { REQUEST_STATUS } from '../utils/constants';
 
 const RequestDetailPage = () => {
@@ -17,7 +18,7 @@ const RequestDetailPage = () => {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [processingPayment, setProcessingPayment] = useState(false); // Payment loading state
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   useEffect(() => {
     loadRequest();
@@ -42,7 +43,6 @@ const RequestDetailPage = () => {
     }
   };
 
-  // Retry payment function
   const handleRetryPayment = async () => {
     if (!request) return;
 
@@ -100,7 +100,7 @@ const RequestDetailPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 page-with-header">
         <Header />
-        <div className="container mx-auto px-4 pt-32 pb-12">
+        <div className="container mx-auto px-4 pt-12 pb-12">
           <Loader />
         </div>
       </div>
@@ -111,10 +111,9 @@ const RequestDetailPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 page-with-header">
         <Header />
-        <div className="container mx-auto px-4 pt-32 pb-12">
+        <div className="container mx-auto px-4 pt-12 pb-12">
           <Card>
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">😢</div>
               <h2 className="text-2xl font-bold text-white mb-4">
                 {error || t('errors:not_found')}
               </h2>
@@ -133,7 +132,7 @@ const RequestDetailPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 page-with-header">
       <Header />
 
-      <div className="container mx-auto px-4 pt-32 pb-12">
+      <div className="container mx-auto px-4 pt-12 pb-12">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
             <Button
@@ -162,7 +161,6 @@ const RequestDetailPage = () => {
             </h1>
           </div>
 
-          {/* Payment retry banner for CREATED status */}
           {request.status === REQUEST_STATUS.CREATED && (
             <Card className="mb-6 border-yellow-500/30 bg-yellow-500/10">
               <div className="flex items-center justify-between">
@@ -230,6 +228,7 @@ const RequestDetailPage = () => {
               {t('frontend:request_detail.photos_title')} (
               {request.photos?.length || 0})
             </h3>
+            <PhotoGallery photos={request.photos} />
           </Card>
 
           {request.script && (
@@ -237,6 +236,9 @@ const RequestDetailPage = () => {
               <h3 className="text-xl font-bold text-white mb-4">
                 {t('frontend:request_detail.script_title')}
               </h3>
+              <p className="text-white/80 whitespace-pre-wrap">
+                {request.script}
+              </p>
             </Card>
           )}
 
@@ -269,7 +271,6 @@ const RequestDetailPage = () => {
           {request.status === REQUEST_STATUS.COMPLETED && request.video_url && (
             <Card>
               <div className="text-center py-8">
-                <div className="text-6xl mb-4">🎉</div>
                 <h3 className="text-2xl font-bold text-white mb-2">
                   {t('frontend:request_detail.completed_title')}
                 </h3>
@@ -287,7 +288,6 @@ const RequestDetailPage = () => {
           {request.status === REQUEST_STATUS.IN_PROGRESS && (
             <Card>
               <div className="text-center py-8">
-                <div className="text-6xl mb-4 animate-pulse">⚙️</div>
                 <h3 className="text-2xl font-bold text-white mb-2">
                   {t('frontend:request_detail.processing_title')}
                 </h3>

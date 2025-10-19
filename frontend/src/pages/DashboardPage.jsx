@@ -87,7 +87,7 @@ const DashboardPage = () => {
     return (
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 page-with-header">
         <Header />
-        <div className="flex-grow container mx-auto px-4 pt-24 pb-12">
+        <div className="flex-grow container mx-auto px-4 pb-12">
           <Loader />
         </div>
         <Footer />
@@ -99,7 +99,7 @@ const DashboardPage = () => {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 page-with-header">
       <Header />
 
-      <div className="flex-grow container mx-auto px-4 pt-24 pb-12">
+      <div className="flex-grow container mx-auto px-4 pb-12">
         <div className="max-w-6xl mx-auto">
           {searchParams.get('payment') === 'success' && (
             <div className="bg-green-500/20 border border-green-500/50 text-green-200 px-6 py-4 rounded-lg mb-6 animate-fade-in">
