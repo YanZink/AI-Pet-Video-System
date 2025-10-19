@@ -8,6 +8,7 @@ import Loader from '../../components/common/Loader';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
 import Input from '../../components/ui/Input';
+import PhotoGallery from '../../components/forms/PhotoGallery';
 import { REQUEST_STATUS } from '../../utils/constants';
 
 const AdminRequestDetail = () => {
@@ -181,20 +182,7 @@ const AdminRequestDetail = () => {
                 {t('frontend:request_detail.photos_title')} (
                 {request.photos?.length || 0})
               </h3>
-              <div className="grid grid-cols-3 gap-4">
-                {request.photos?.map((photoKey, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square bg-white/5 rounded-lg overflow-hidden"
-                  >
-                    <img
-                      src={`https://ai-pet-video-bucket.s3.amazonaws.com/${photoKey}`}
-                      alt={`Photo ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
+              <PhotoGallery photos={request.photos} />
             </div>
 
             {request.script && (

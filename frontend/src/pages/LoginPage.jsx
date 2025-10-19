@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import LanguageSwitcher from '../components/common/LanguageSwitcher';
 
 const LoginPage = () => {
   const { t } = useLanguage();
@@ -49,11 +50,9 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 flex items-center justify-center p-4 page-with-header">
       <Card className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white text-2xl">🐾</span>
-            </div>
-          </Link>
+          <div className="flex justify-center mb-8">
+            <LanguageSwitcher />
+          </div>
           <h2 className="text-3xl font-bold text-white mb-2">
             {isLogin
               ? t('frontend:login.title')
