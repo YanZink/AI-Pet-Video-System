@@ -1,5 +1,6 @@
 const { Request, User, Template } = require('../models');
 const queueService = require('../services/queueService');
+const s3Service = require('../services/s3Service');
 const { ERROR_CODES } = require('../utils/constants');
 const { createError, asyncHandler } = require('../middleware/errorHandler');
 const localeManager = require('../../../shared-locales');
@@ -44,8 +45,40 @@ class AdminController {
       offset: (parseInt(page) - 1) * parseInt(limit),
     });
 
+    // Get presigned URLs for photos
+    const requestsWithUrls = await Promise.all(
+      requests.rows.map(async (request) => {
+        const requestData = request.toJSON();
+
+        if (requestData.photos && Array.isArray(requestData.photos)) {
+          requestData.photos = await Promise.all(
+            requestData.photos.map(async (photoKey) => {
+              try {
+                const urlData = await s3Service.generatePresignedDownloadUrl(
+                  photoKey
+                );
+                return {
+                  key: photoKey,
+                  url: urlData.downloadUrl,
+                  expires: urlData.expires,
+                };
+              } catch (error) {
+                return {
+                  key: photoKey,
+                  url: null,
+                  error: 'Failed to generate URL',
+                };
+              }
+            })
+          );
+        }
+
+        return requestData;
+      })
+    );
+
     res.json({
-      requests: requests.rows,
+      requests: requestsWithUrls,
       pagination: {
         total: requests.count,
         page: parseInt(page),
