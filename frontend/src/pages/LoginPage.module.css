@@ -1,0 +1,37 @@
+.logoIcon {
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  position: relative;
+}
+
+.logoIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f1b0';
+  color: white;
+  font-size: 2rem;
+}
+
+.backIcon {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  position: relative;
+}
+
+.backIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f060';
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}

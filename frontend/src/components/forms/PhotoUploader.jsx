@@ -76,19 +76,15 @@ const PhotoUploader = ({ onPhotosUploaded, maxPhotos = 10 }) => {
     <div className={styles.uploader}>
       <div
         {...getRootProps()}
-        className={`
-          ${styles.dropzone}
-          ${isDragActive ? styles.dropzoneActive : ''}
-          ${
-            uploading || photos.length >= maxPhotos
-              ? styles.dropzoneDisabled
-              : ''
-          }
-        `}
+        className={`${styles.dropzone} ${
+          isDragActive ? styles.dropzoneActive : ''
+        } ${
+          uploading || photos.length >= maxPhotos ? styles.dropzoneDisabled : ''
+        }`}
       >
         <input {...getInputProps()} />
         <div className={styles.dropzoneContent}>
-          <div className={styles.dropzoneIcon}>📸</div>
+          <div className={styles.dropzoneIcon}></div>
           {isDragActive ? (
             <p className={styles.dropzoneTitle}>
               {t('frontend:create_request.uploading')}
@@ -123,7 +119,7 @@ const PhotoUploader = ({ onPhotosUploaded, maxPhotos = 10 }) => {
                 onClick={() => removePhoto(index)}
                 className={styles.removeButton}
               >
-                ×
+                <div className={styles.removeIcon}></div>
               </button>
               {uploadProgress[photo.file.name] !== undefined &&
                 uploadProgress[photo.file.name] < 100 && (

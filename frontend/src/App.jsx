@@ -8,6 +8,7 @@ import {
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import './styles/index.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';

@@ -7,6 +7,7 @@ import Header from '../components/common/Header';
 import PhotoUploader from '../components/forms/PhotoUploader';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import styles from './CreateRequestPage.module.css';
 
 const CreateRequestPage = () => {
   const { t } = useLanguage();
@@ -37,23 +38,17 @@ const CreateRequestPage = () => {
     setError('');
 
     try {
-      // Step 1: Create request
       const response = await apiService.createRequest({
         photos,
         script: script.trim() || null,
       });
 
-      // Step 2: Handle payment based on selected method
       if (paymentMethod === 'stripe') {
-        // Stripe Checkout flow
         const checkoutResponse = await apiService.createStripeCheckout(
           response.request.id
         );
-
-        // Redirect to Stripe Checkout
         window.location.href = checkoutResponse.checkout_url;
       } else if (paymentMethod === 'telegram') {
-        // Telegram Stars flow
         setError('Telegram Stars payment not yet implemented');
         setLoading(false);
       }
@@ -111,22 +106,21 @@ const CreateRequestPage = () => {
                 </p>
               </div>
 
-              {/* Payment Method Selection */}
               <div>
                 <label className="block text-white text-lg font-medium mb-4">
                   {t('frontend:create_request.payment_method')}
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <div
-                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                    className={`${styles.paymentOption} ${
                       paymentMethod === 'stripe'
-                        ? 'border-pink-500 bg-pink-500/10'
-                        : 'border-white/20 bg-white/5 hover:bg-white/10'
+                        ? styles.paymentOptionActive
+                        : ''
                     }`}
                     onClick={() => setPaymentMethod('stripe')}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center"></div>
+                      <div className={styles.creditCardIcon}></div>
                       <div>
                         <div className="text-white font-medium">
                           {t('frontend:create_request.credit_card')}

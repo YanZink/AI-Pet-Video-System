@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for AI Pet Video system",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^2.4.0",
     "axios": "^1.6.2",

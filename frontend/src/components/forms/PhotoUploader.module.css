@@ -11,10 +11,12 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .dropzone:hover {
   border-color: rgba(236, 72, 153, 0.5);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .dropzoneActive {
@@ -32,13 +34,24 @@
 }
 
 .dropzoneIcon {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  position: relative;
+}
+
+.dropzoneIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f030';
+  color: rgba(255, 255, 255, 0.7);
   font-size: 3rem;
-  margin-bottom: 1rem;
 }
 
 .dropzoneTitle {
   font-size: 1.125rem;
   margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .dropzoneSubtitle {
@@ -56,11 +69,13 @@
   border-radius: 0.5rem;
   overflow: hidden;
   cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  aspect-ratio: 1;
 }
 
 .photoImage {
   width: 100%;
-  height: 8rem;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -80,8 +95,21 @@
   transition: opacity 0.2s ease;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
+}
+
+.removeIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  position: relative;
+}
+
+.removeIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f00d';
+  color: white;
+  font-size: 0.75rem;
+  line-height: 1;
 }
 
 .photoItem:hover .removeButton {
@@ -101,6 +129,7 @@
 .progressText {
   color: white;
   font-size: 0.875rem;
+  font-weight: 600;
 }
 
 @media (min-width: 640px) {

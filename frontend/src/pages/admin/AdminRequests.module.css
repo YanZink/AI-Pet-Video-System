@@ -1,0 +1,98 @@
+.filterContainer {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.filterButton:not(.filterButtonActive) {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.filterButton:not(.filterButtonActive):hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.filterButtonActive {
+  background: #ec4899;
+  color: white;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+.backIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+  position: relative;
+}
+
+.backIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f060';
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+.iconAll,
+.iconCreated,
+.iconPaid,
+.iconInProgress,
+.iconCompleted {
+  width: 1rem;
+  height: 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconAll::before,
+.iconCreated::before,
+.iconPaid::before,
+.iconInProgress::before,
+.iconCompleted::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 0.875rem;
+  line-height: 1;
+  display: block;
+}
+
+.iconAll::before {
+  content: '\f022';
+}
+
+.iconCreated::before {
+  content: '\f15b';
+}
+
+.iconPaid::before {
+  content: '\f09d';
+}
+
+.iconInProgress::before {
+  content: '\f085';
+}
+
+.iconCompleted::before {
+  content: '\f00c';
+}

@@ -53,8 +53,50 @@
 }
 
 .icon {
-  font-size: 2.25rem;
+  width: 3rem;
+  height: 3rem;
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.icon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: white;
+}
+
+.iconBolt::before {
+  content: '\f0e7';
+  color: #f59e0b;
+}
+
+.iconRocket::before {
+  content: '\f135';
+  color: #ef4444;
+}
+
+.iconStar::before {
+  content: '\f005';
+  color: #fbbf24;
+}
+
+.iconMobile::before {
+  content: '\f3cd';
+  color: #3b82f6;
+}
+
+.iconLock::before {
+  content: '\f023';
+  color: #10b981;
+}
+
+.iconComments::before {
+  content: '\f086';
+  color: #c1c1c1;
 }
 
 .featureTitle {

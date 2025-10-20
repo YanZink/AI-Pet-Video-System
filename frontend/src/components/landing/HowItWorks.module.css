@@ -1,5 +1,5 @@
 .howItWorks {
-  padding: 5rem 0;
+  padding: 3rem 0;
   position: relative;
 }
 
@@ -10,24 +10,24 @@
 }
 
 .title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: white;
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .robotWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .robot {
   position: relative;
-  width: 16rem;
-  height: 16rem;
+  width: 12rem;
+  height: 12rem;
   margin-bottom: 2rem;
 }
 
@@ -42,23 +42,39 @@
 
 .robotFace {
   position: absolute;
-  inset: 2rem;
+  inset: 1.5rem;
   background: linear-gradient(135deg, #8b5cf6, #3b82f6);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
+}
+
+.robotIcon {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.robotIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f544';
+  color: rgb(205, 75, 205);
+  font-size: 3rem;
+  line-height: 1;
 }
 
 .photoCard {
   position: absolute;
-  bottom: -1rem;
-  right: -1rem;
+  bottom: -0.75rem;
+  right: -0.75rem;
   background: white;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-radius: 0.375rem;
+  padding: 0.375rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   transform: rotate(12deg);
   transition: transform 0.3s ease;
 }
@@ -68,86 +84,161 @@
 }
 
 .photo {
-  width: 6rem;
-  height: 6rem;
+  width: 4.5rem;
+  height: 4.5rem;
   background: linear-gradient(135deg, #fda4af, #fb923c);
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-}
-
-.stepsGrid {
-  display: grid;
-  gap: 2rem;
-  max-width: 64rem;
-  margin: 0 auto;
-}
-
-.step {
-  text-align: center;
+  border-radius: 0.375rem;
   position: relative;
 }
 
-.stepIcon {
-  width: 5rem;
-  height: 5rem;
-  margin: 0 auto 1rem;
-  border-radius: 50%;
+.photo::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f1b0';
+  color: white;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/* Styles for step cards */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.stepCard {
+  position: relative;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.875rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-0.25rem);
+}
+
+.iconContainer {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+  position: relative;
 }
 
-.gradientPurple {
-  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+.iconContainer::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.iconCamera::before {
+  content: '\f030';
+}
+
+.iconMessage::before {
+  content: '\f075';
+}
+
+.iconVideo::before {
+  content: '\f03d';
+}
+
+.card:hover .iconContainer {
+  transform: scale(1.05);
 }
 
 .gradientPink {
-  background: linear-gradient(135deg, #f9a8d4, #ec4899);
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+}
+
+.gradientPurple {
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
 }
 
 .gradientBlue {
-  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
 }
 
 .stepTitle {
   font-size: 1.25rem;
   font-weight: 700;
   color: white;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .stepDescription {
   color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  flex-grow: 1;
+  font-size: 0.9rem;
+}
+
+.stepNumber {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.05);
 }
 
 .arrow {
   display: none;
   position: absolute;
-  left: 100%;
   top: 50%;
+  right: -1.5rem;
   transform: translateY(-50%);
-  font-size: 1.5rem;
+  z-index: 10;
+}
+
+.arrowIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  position: relative;
+}
+
+.arrowIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f061';
   color: #ec4899;
+  font-size: 1.25rem;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%,
   100% {
-    opacity: 0.2;
+    opacity: 1;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.5;
   }
 }
 
 @media (min-width: 768px) {
-  .stepsGrid {
+  .grid {
     grid-template-columns: repeat(3, 1fr);
+    position: relative;
   }
 
   .arrow {
@@ -156,7 +247,57 @@
 }
 
 @media (min-width: 1024px) {
+  .howItWorks {
+    padding: 4rem 0;
+  }
+
   .title {
-    font-size: 3.75rem;
+    font-size: 3rem;
+  }
+
+  .robot {
+    width: 14rem;
+    height: 14rem;
+  }
+
+  .robotFace {
+    inset: 2rem;
+  }
+
+  .robotIcon {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .robotIcon::before {
+    font-size: 3.5rem;
+  }
+
+  .card {
+    min-height: 240px;
+    padding: 2rem;
+  }
+
+  .stepTitle {
+    font-size: 1.375rem;
+  }
+
+  .stepDescription {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .howItWorks {
+    padding: 5rem 0;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .robot {
+    width: 16rem;
+    height: 16rem;
   }
 }

@@ -16,7 +16,7 @@
   "my_videos_title": "Ваши заявки на видео:",
   "no_requests": "У вас пока нет заявок на видео.\n\nНажмите 'Создать видео' чтобы начать!",
   "request_item": "Заявка #{id}\n {date}\n Статус: {status}\n\n",
-  "download": "⬇️ Скачать видео",
+  "download": "Скачать видео",
   "queue_title": "Статус очереди обработки:",
   "estimated_wait": "Примерное время ожидания: {minutes} минут",
   "queue_position": "Ваша позиция в очереди: #{position}"

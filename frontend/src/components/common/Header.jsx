@@ -50,9 +50,7 @@ const Header = () => {
       <div className={styles.container}>
         <div className={styles.content}>
           <Link to="/" className={styles.logo} onClick={handleHomeClick}>
-            <div className={styles.logoIcon}>
-              <span className="text-white text-xl">🐾</span>
-            </div>
+            <div className={styles.logoIcon}></div>
             <span className={styles.logoText}>AI Pet Video Creator</span>
             <span className={styles.logoTextShort}>AI Pet Video</span>
           </Link>
@@ -141,20 +139,7 @@ const Header = () => {
             className={styles.menuButton}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <svg
-              width="24"
-              height="24"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+            <div className={styles.menuIcon}></div>
           </button>
         </div>
 

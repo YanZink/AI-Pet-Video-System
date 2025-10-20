@@ -1,0 +1,18 @@
+.backIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  position: relative;
+  margin-right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f060';
+  color: white;
+  font-size: 1rem;
+  line-height: 1;
+}

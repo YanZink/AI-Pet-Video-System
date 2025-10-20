@@ -8,6 +8,7 @@ import Loader from '../components/common/Loader';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import PhotoGallery from '../components/forms/PhotoGallery';
+import styles from './RequestDetailPage.module.css';
 import { REQUEST_STATUS } from '../utils/constants';
 
 const RequestDetailPage = () => {
@@ -141,19 +142,7 @@ const RequestDetailPage = () => {
               onClick={() => navigate('/dashboard')}
               className="mb-4"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <div className={styles.backIcon}></div>
               {t('frontend:common.back')}
             </Button>
             <h1 className="text-3xl font-bold text-white">
@@ -165,6 +154,7 @@ const RequestDetailPage = () => {
             <Card className="mb-6 border-yellow-500/30 bg-yellow-500/10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
+                  <div className={styles.warningIcon}></div>
                   <div>
                     <h3 className="text-lg font-bold text-yellow-200">
                       {t('frontend:request_detail.payment_required')}
@@ -279,6 +269,7 @@ const RequestDetailPage = () => {
                   size="large"
                   onClick={() => window.open(request.video_url, '_blank')}
                 >
+                  <div className={styles.downloadIcon}></div>
                   {t('videos:download')}
                 </Button>
               </div>
@@ -295,19 +286,7 @@ const RequestDetailPage = () => {
                   {t('videos:status_in_progress')}
                 </p>
                 <Button variant="secondary" onClick={loadRequest}>
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                  </svg>
+                  <div className={styles.refreshIcon}></div>
                   {t('frontend:request_detail.refresh_button')}
                 </Button>
               </div>

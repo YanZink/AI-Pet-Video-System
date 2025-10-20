@@ -92,7 +92,7 @@ const AdminDashboard = () => {
               value={
                 stats?.summary?.total_requests || stats?.total_requests || 0
               }
-              icon="📊"
+              icon="chartBar"
               color="blue"
             />
           </div>
@@ -103,7 +103,7 @@ const AdminDashboard = () => {
             <StatsCard
               title={t('frontend:admin.admin_stats_created')}
               value={stats?.summary?.created_requests || stats?.created || 0}
-              icon="📝"
+              icon="file"
               color="purple"
             />
           </div>
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
             <StatsCard
               title={t('frontend:admin.admin_stats_in_progress')}
               value={stats?.summary?.in_progress || stats?.in_progress || 0}
-              icon="⚙️"
+              icon="gears"
               color="orange"
             />
           </div>
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
             <StatsCard
               title={t('frontend:admin.admin_stats_paid')}
               value={stats?.summary?.paid_requests || stats?.paid_requests || 0}
-              icon="💳"
+              icon="creditCard"
               color="green"
             />
           </div>
@@ -138,7 +138,7 @@ const AdminDashboard = () => {
               value={
                 stats?.summary?.completed_requests || stats?.completed || 0
               }
-              icon="✅"
+              icon="check"
               color="green"
             />
           </div>
