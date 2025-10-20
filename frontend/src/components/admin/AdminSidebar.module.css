@@ -21,6 +21,26 @@
   align-items: center;
 }
 
+.settingsIcon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.75rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settingsIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f013';
+  color: white;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: block;
+}
+
 .nav {
   display: flex;
   flex-direction: column;
@@ -54,12 +74,35 @@
 }
 
 .menuIcon {
-  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
   margin-right: 0.75rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.menuIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 1rem;
+  line-height: 1;
+  display: block;
+}
+
+.iconDashboard::before {
+  content: '\f080';
+}
+
+.iconRequests::before {
+  content: '\f022';
 }
 
 .menuLabel {
   font-weight: 500;
+  line-height: 1.2;
 }
 
 .userInfo {

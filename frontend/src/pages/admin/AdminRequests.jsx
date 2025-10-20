@@ -8,6 +8,7 @@ import RequestList from '../../components/admin/RequestList';
 import Loader from '../../components/common/Loader';
 import LanguageSwitcher from '../../components/common/LanguageSwitcher';
 import { REQUEST_STATUS } from '../../utils/constants';
+import styles from './AdminRequests.module.css';
 
 const AdminRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -28,7 +29,7 @@ const AdminRequests = () => {
     const statusFromUrl = searchParams.get('status');
     if (statusFromUrl && statusFromUrl !== filterStatus) {
       setFilterStatus(statusFromUrl);
-      return; // Не загружаем данные здесь, они загрузятся при изменении filterStatus
+      return;
     }
 
     loadRequests();
@@ -51,27 +52,27 @@ const AdminRequests = () => {
     {
       value: 'all',
       label: t('frontend:admin.admin_filter_all'),
-      icon: '📋',
+      icon: 'iconAll',
     },
     {
       value: REQUEST_STATUS.CREATED,
       label: t('frontend:admin.admin_filter_created'),
-      icon: '📝',
+      icon: 'iconCreated',
     },
     {
       value: REQUEST_STATUS.PAID,
       label: t('frontend:admin.admin_filter_paid'),
-      icon: '💳',
+      icon: 'iconPaid',
     },
     {
       value: REQUEST_STATUS.IN_PROGRESS,
       label: t('frontend:admin.admin_filter_in_progress'),
-      icon: '⚙️',
+      icon: 'iconInProgress',
     },
     {
       value: REQUEST_STATUS.COMPLETED,
       label: t('frontend:admin.admin_filter_completed'),
-      icon: '✅',
+      icon: 'iconCompleted',
     },
   ];
 
@@ -103,19 +104,7 @@ const AdminRequests = () => {
               onClick={() => navigate('/admin')}
               className="flex items-center text-white/70 hover:text-white mb-4 transition-colors"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <div className={styles.backIcon}></div>
               {t('frontend:admin.admin_dashboard_back')}
             </button>
             <h1 className="text-4xl font-bold text-white mb-2">
@@ -127,7 +116,7 @@ const AdminRequests = () => {
           </div>
         </div>
 
-        <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
+        <div className={styles.filterContainer}>
           {statusFilters.map((filter) => (
             <button
               key={filter.value}
@@ -137,13 +126,11 @@ const AdminRequests = () => {
                   replace: true,
                 });
               }}
-              className={`px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
-                filterStatus === filter.value
-                  ? 'bg-pink-500 text-white shadow-lg'
-                  : 'bg-white/10 text-white/70 hover:bg-white/20'
+              className={`${styles.filterButton} ${
+                filterStatus === filter.value ? styles.filterButtonActive : ''
               }`}
             >
-              <span className="mr-2">{filter.icon}</span>
+              <span className={styles[filter.icon]}></span>
               {filter.label}
             </button>
           ))}

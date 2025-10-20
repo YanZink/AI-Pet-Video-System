@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import HeroSection from '../components/landing/HeroSection';
-import StepsSection from '../components/landing/StepsSection';
 import FeaturesSection from '../components/landing/FeaturesSection';
 import HowItWorks from '../components/landing/HowItWorks';
 
@@ -33,7 +32,6 @@ const LandingPage = () => {
       <div id="features">
         <FeaturesSection />
       </div>
-      <StepsSection />
       <Footer />
     </div>
   );

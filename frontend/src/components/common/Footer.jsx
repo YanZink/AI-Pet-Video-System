@@ -19,9 +19,7 @@ const Footer = () => {
         <div className={styles.grid}>
           <div>
             <div className={styles.brand}>
-              <div className={styles.brandIcon}>
-                <span className="text-white text-xl">🐾</span>
-              </div>
+              <div className={styles.brandIcon}></div>
               <span className={styles.brandText}>AI Pet Video Creator</span>
             </div>
             <p className={styles.tagline}>{t('frontend:footer.tagline')}</p>
@@ -36,7 +34,7 @@ const Footer = () => {
                 href="mailto:zinkovskii1803@gmail.com"
                 className={styles.contactLink}
               >
-                <span>📧</span>
+                <span className={styles.emailIcon}></span>
                 <span>zinkovskii1803@gmail.com</span>
               </a>
 
@@ -46,7 +44,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className={styles.contactLink}
               >
-                <span>✈️</span>
+                <span className={styles.telegramIcon}></span>
                 <span>@Yan_Zink</span>
               </a>
             </div>

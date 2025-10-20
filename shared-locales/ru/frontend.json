@@ -51,7 +51,8 @@
     "actions": "Действия",
     "view_details": "Подробнее",
     "download": "Скачать",
-    "create_in_telegram": "Создать в Telegram"
+    "create_in_telegram": "Создать в Telegram",
+    "video_discription": "Описание видео: "
   },
   "create_request": {
     "title": "Создать новую заявку на видео",

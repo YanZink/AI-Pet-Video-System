@@ -40,6 +40,15 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
+}
+
+.logoIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f1b0';
+  color: white;
+  font-size: 1rem;
 }
 
 .logoText {
@@ -121,7 +130,6 @@
   word-break: break-word;
 }
 
-/* Style for navigation-like buttons (Dashboard and Admin) */
 .navButton {
   background: transparent;
   border: none;
@@ -139,7 +147,6 @@
   box-shadow: none;
 }
 
-/* Style for logout button (with background) */
 .logoutButton {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -159,6 +166,25 @@
   cursor: pointer;
   flex-shrink: 0;
   padding: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  position: relative;
+}
+
+.menuIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f0c9';
+  color: white;
+  font-size: 1.5rem;
 }
 
 .mobileMenu {
@@ -208,6 +234,10 @@
   .logoIcon {
     width: 2.5rem;
     height: 2.5rem;
+  }
+
+  .logoIcon::before {
+    font-size: 1.2rem;
   }
 
   .logoTextShort {

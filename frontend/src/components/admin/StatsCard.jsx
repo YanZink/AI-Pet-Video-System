@@ -21,7 +21,7 @@ const StatsCard = ({ title, value, icon, color, onClick }) => {
             colorClasses[color] || colorClasses.blue
           }`}
         >
-          {icon}
+          <div className={styles[icon]}></div>
         </div>
       </div>
     </div>

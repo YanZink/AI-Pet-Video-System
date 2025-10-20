@@ -45,7 +45,52 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.chartBar,
+.file,
+.gears,
+.creditCard,
+.check {
+  width: 2rem;
+  height: 2rem;
+  position: relative;
+}
+
+.chartBar::before,
+.file::before,
+.gears::before,
+.creditCard::before,
+.check::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
   font-size: 1.5rem;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.chartBar::before {
+  content: '\f080';
+}
+
+.file::before {
+  content: '\f15b';
+}
+
+.gears::before {
+  content: '\f085';
+}
+
+.creditCard::before {
+  content: '\f09d';
+}
+
+.check::before {
+  content: '\f00c';
 }
 
 .gradientBlue {

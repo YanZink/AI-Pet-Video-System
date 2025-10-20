@@ -7,19 +7,19 @@ const StepsSection = () => {
 
   const steps = [
     {
-      icon: '📸',
+      icon: 'iconCamera',
       title: t('frontend:steps.step_1_title'),
       description: t('frontend:steps.step_1_desc'),
       gradient: styles.gradientPink,
     },
     {
-      icon: '💬',
+      icon: 'iconMessage',
       title: t('frontend:steps.step_2_title'),
       description: t('frontend:steps.step_2_desc'),
       gradient: styles.gradientPurple,
     },
     {
-      icon: '🎬',
+      icon: 'iconVideo',
       title: t('frontend:steps.step_3_title'),
       description: t('frontend:steps.step_3_desc'),
       gradient: styles.gradientBlue,
@@ -33,9 +33,11 @@ const StepsSection = () => {
           {steps.map((step, index) => (
             <div key={index} className={styles.stepCard}>
               <div className={styles.card}>
-                <div className={`${styles.iconContainer} ${step.gradient}`}>
-                  {step.icon}
-                </div>
+                <div
+                  className={`${styles.iconContainer} ${step.gradient} ${
+                    styles[step.icon]
+                  }`}
+                ></div>
 
                 <h3 className={styles.stepTitle}>{step.title}</h3>
                 <p className={styles.stepDescription}>{step.description}</p>
@@ -45,7 +47,7 @@ const StepsSection = () => {
 
               {index < steps.length - 1 && (
                 <div className={styles.arrow}>
-                  <div className={styles.arrowIcon}>→</div>
+                  <div className={styles.arrowIcon}></div>
                 </div>
               )}
             </div>

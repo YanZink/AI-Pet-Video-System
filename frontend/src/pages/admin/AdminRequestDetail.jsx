@@ -10,6 +10,7 @@ import Modal from '../../components/ui/Modal';
 import Input from '../../components/ui/Input';
 import PhotoGallery from '../../components/forms/PhotoGallery';
 import { REQUEST_STATUS } from '../../utils/constants';
+import styles from './AdminRequestDetail.module.css';
 
 const AdminRequestDetail = () => {
   const { t } = useLanguage();
@@ -147,7 +148,8 @@ const AdminRequestDetail = () => {
             onClick={() => navigate('/admin/requests')}
             className="mb-4"
           >
-            ← {t('frontend:common.back')}
+            <div className={styles.backIcon}></div>
+            {t('frontend:common.back')}
           </Button>
           <div className="flex items-center justify-between">
             <div>
@@ -349,6 +351,7 @@ const AdminRequestDetail = () => {
               <select
                 value={newStatus}
                 onChange={(e) => setNewStatus(e.target.value)}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-pink-500"
               >
                 {Object.values(REQUEST_STATUS).map((status) => (
                   <option key={status} value={status}>

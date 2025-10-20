@@ -51,7 +51,8 @@
     "actions": "Actions",
     "view_details": "View Details",
     "download": "Download",
-    "create_in_telegram": "Create in Telegram"
+    "create_in_telegram": "Create in Telegram",
+    "video_discription": "Video description: "
   },
   "create_request": {
     "title": "Create New Video Request",

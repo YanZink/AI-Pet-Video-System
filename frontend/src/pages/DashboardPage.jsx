@@ -9,6 +9,7 @@ import Loader from '../components/common/Loader';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import { REQUEST_STATUS } from '../utils/constants';
+import styles from './DashboardPage.module.css';
 
 const DashboardPage = () => {
   const [requests, setRequests] = useState([]);
@@ -104,7 +105,7 @@ const DashboardPage = () => {
           {searchParams.get('payment') === 'success' && (
             <div className="bg-green-500/20 border border-green-500/50 text-green-200 px-6 py-4 rounded-lg mb-6 animate-fade-in">
               <div className="flex items-center">
-                <span className="text-2xl mr-3">✅</span>
+                <div className={styles.successIcon}></div>
                 <div>
                   <h4 className="font-bold">{t('payments:success')}</h4>
                   <p className="text-sm">{t('videos:status_paid')}</p>
@@ -116,7 +117,7 @@ const DashboardPage = () => {
           {searchParams.get('payment') === 'cancelled' && (
             <div className="bg-yellow-500/20 border border-yellow-500/50 text-yellow-200 px-6 py-4 rounded-lg mb-6 animate-fade-in">
               <div className="flex items-center">
-                <span className="text-2xl mr-3">⚠️</span>
+                <div className={styles.warningIcon}></div>
                 <div>
                   <h4 className="font-bold">{t('payments:cancelled')}</h4>
                   <p className="text-sm">
@@ -134,19 +135,7 @@ const DashboardPage = () => {
               </h1>
             </div>
             <Button onClick={() => navigate('/create-request')}>
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 35 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <div className={styles.plusIcon}></div>
               {t('frontend:dashboard.create_new')}
             </Button>
           </div>
@@ -154,7 +143,7 @@ const DashboardPage = () => {
           {requests.length === 0 ? (
             <Card>
               <div className="text-center py-16">
-                <div className="text-6xl mb-4">🎬</div>
+                <div className={styles.emptyIcon}></div>
                 <h3 className="text-2xl font-bold text-white mb-2">
                   {t('frontend:dashboard.no_requests')}
                 </h3>
@@ -202,9 +191,7 @@ const DashboardPage = () => {
                                 }}
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-4xl">
-                                🐾
-                              </div>
+                              <div className={styles.placeholderIcon}></div>
                             )}
                           </div>
                         </div>
@@ -225,21 +212,23 @@ const DashboardPage = () => {
 
                           {request.script && (
                             <p className="text-white/70 text-sm mb-2 line-clamp-2">
+                              {t('frontend:dashboard.video_discription')}
                               {request.script}
                             </p>
                           )}
 
                           <div className="flex items-center gap-4 text-sm text-white/60">
-                            <span>
-                              📸 {request.photos?.length || 0}{' '}
+                            <span className={styles.photoCount}>
+                              <div className={styles.cameraIcon}></div>
+                              {request.photos?.length || 0}{' '}
                               {t(
                                 `common:photos.count_${
                                   request.photos?.length === 1 ? 'one' : 'other'
                                 }`
                               )}
                             </span>
-                            <span>
-                              💰 $
+                            <span className={styles.amount}>
+                              <div className={styles.moneyIcon}></div>$
                               {request.amount
                                 ? parseFloat(request.amount).toFixed(2)
                                 : '0.00'}
@@ -259,6 +248,7 @@ const DashboardPage = () => {
                                 window.open(request.video_url, '_blank');
                               }}
                             >
+                              <div className={styles.downloadIcon}></div>
                               {t('videos:download')}
                             </Button>
                           </div>

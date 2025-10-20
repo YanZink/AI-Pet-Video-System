@@ -10,13 +10,13 @@ const AdminSidebar = () => {
   const menuItems = [
     {
       path: '/admin',
-      icon: '📊',
+      icon: 'iconDashboard',
       label: t('frontend:admin.admin_sidebar_dashboard'),
       exact: true,
     },
     {
       path: '/admin/requests',
-      icon: '📋',
+      icon: 'iconRequests',
       label: t('frontend:admin.admin_sidebar_requests'),
     },
   ];
@@ -32,7 +32,7 @@ const AdminSidebar = () => {
     <div className={styles.sidebar}>
       <div className={styles.header}>
         <h2 className={styles.title}>
-          <span className={styles.menuIcon}>⚙️</span>
+          <span className={styles.settingsIcon}></span>
           {t('frontend:admin.admin_sidebar_title')}
         </h2>
       </div>
@@ -46,7 +46,7 @@ const AdminSidebar = () => {
               isActive(item) ? styles.active : ''
             }`}
           >
-            <span className={styles.menuIcon}>{item.icon}</span>
+            <span className={`${styles.menuIcon} ${styles[item.icon]}`}></span>
             <span className={styles.menuLabel}>{item.label}</span>
           </Link>
         ))}

@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import LanguageSwitcher from '../components/common/LanguageSwitcher';
+import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
   const { t } = useLanguage();
@@ -31,7 +32,6 @@ const LoginPage = () => {
       : await register(formData);
 
     if (result.success) {
-      // Check if email verification is required
       if (result.requiresEmailVerification) {
         setShowVerificationMessage(true);
       } else {
@@ -50,6 +50,7 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 flex items-center justify-center p-4 page-with-header">
       <Card className="w-full max-w-md">
         <div className="text-center mb-8">
+          <div className={styles.logoIcon}></div>
           <div className="flex justify-center mb-8">
             <LanguageSwitcher />
           </div>
@@ -176,7 +177,8 @@ const LoginPage = () => {
             to="/"
             className="block text-center text-white/70 hover:text-white transition-colors"
           >
-            ← {t('frontend:common.back')}
+            <div className={styles.backIcon}></div>
+            {t('frontend:common.back')}
           </Link>
         </div>
       </Card>

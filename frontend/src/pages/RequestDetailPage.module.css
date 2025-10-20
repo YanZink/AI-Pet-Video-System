@@ -1,0 +1,50 @@
+.backIcon,
+.warningIcon,
+.downloadIcon,
+.refreshIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  position: relative;
+  margin-right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backIcon::before,
+.warningIcon::before,
+.downloadIcon::before,
+.refreshIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 1rem;
+  line-height: 1;
+  display: block;
+}
+
+.backIcon::before {
+  content: '\f060';
+  color: white;
+}
+
+.warningIcon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 1rem;
+}
+
+.warningIcon::before {
+  content: '\f071';
+  color: #f59e0b;
+  font-size: 1.5rem;
+}
+
+.downloadIcon::before {
+  content: '\f019';
+  color: white;
+}
+
+.refreshIcon::before {
+  content: '\f021';
+  color: white;
+}

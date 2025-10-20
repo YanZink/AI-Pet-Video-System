@@ -43,9 +43,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.875rem;
   margin-bottom: 1.5rem;
   transition: transform 0.3s ease;
+  position: relative;
+}
+
+.iconContainer::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.iconCamera::before {
+  content: '\f030';
+}
+
+.iconMessage::before {
+  content: '\f075';
+}
+
+.iconVideo::before {
+  content: '\f03d';
 }
 
 .card:hover .iconContainer {
@@ -90,30 +109,34 @@
   display: none;
   position: absolute;
   top: 50%;
-  right: -1rem;
-  transform: translateY(-50%) translateX(50%);
+  right: -2rem;
+  transform: translateY(-50%);
   z-index: 10;
 }
 
 .arrowIcon {
-  font-size: 1.5rem;
-  color: #ec4899;
-  animation: pulse 2s ease-in-out infinite;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: relative;
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+.arrowIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f061';
+  color: #ec4899;
+  font-size: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
+    position: relative;
+  }
+
+  .stepCard {
+    position: relative;
   }
 
   .arrow {

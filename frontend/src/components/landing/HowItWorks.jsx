@@ -5,6 +5,27 @@ import styles from './HowItWorks.module.css';
 const HowItWorks = () => {
   const { t } = useLanguage();
 
+  const steps = [
+    {
+      icon: 'iconCamera',
+      title: t('frontend:steps.step_1_title'),
+      description: t('frontend:steps.step_1_desc'),
+      gradient: styles.gradientPink,
+    },
+    {
+      icon: 'iconMessage',
+      title: t('frontend:steps.step_2_title'),
+      description: t('frontend:steps.step_2_desc'),
+      gradient: styles.gradientPurple,
+    },
+    {
+      icon: 'iconVideo',
+      title: t('frontend:steps.step_3_title'),
+      description: t('frontend:steps.step_3_desc'),
+      gradient: styles.gradientBlue,
+    },
+  ];
+
   return (
     <section id="how-it-works" className={styles.howItWorks}>
       <div className={styles.container}>
@@ -14,45 +35,35 @@ const HowItWorks = () => {
           <div className={styles.robot}>
             <div className={styles.robotGlow}></div>
             <div className={styles.robotFace}>
-              <div className="text-6xl">🤖</div>
+              <div className={styles.robotIcon}></div>
             </div>
-
             <div className={styles.photoCard}>
-              <div className={styles.photo}>🐕</div>
+              <div className={styles.photo}></div>
             </div>
           </div>
         </div>
 
-        <div className={styles.stepsGrid}>
-          {[
-            {
-              icon: '📷',
-              title: t('frontend:steps.step_1_title'),
-              desc: t('frontend:steps.step_1_desc'),
-              gradient: styles.gradientPurple,
-            },
-            {
-              icon: '✏️',
-              title: t('frontend:steps.step_2_title'),
-              desc: t('frontend:steps.step_2_desc'),
-              gradient: styles.gradientPink,
-            },
-            {
-              icon: '🎬',
-              title: t('frontend:steps.step_3_title'),
-              desc: t('frontend:steps.step_3_desc'),
-              gradient: styles.gradientBlue,
-            },
-          ].map((step, index) => (
-            <div key={index} className={styles.step}>
-              <div className={`${styles.stepIcon} ${step.gradient}`}>
-                {step.icon}
+        <div className={styles.grid}>
+          {steps.map((step, index) => (
+            <div key={index} className={styles.stepCard}>
+              <div className={styles.card}>
+                <div
+                  className={`${styles.iconContainer} ${step.gradient} ${
+                    styles[step.icon]
+                  }`}
+                ></div>
+
+                <h3 className={styles.stepTitle}>{step.title}</h3>
+                <p className={styles.stepDescription}>{step.description}</p>
+
+                <div className={styles.stepNumber}>{index + 1}</div>
               </div>
 
-              <h3 className={styles.stepTitle}>{step.title}</h3>
-              <p className={styles.stepDescription}>{step.desc}</p>
-
-              {index < 2 && <div className={styles.arrow}>➜</div>}
+              {index < steps.length - 1 && (
+                <div className={styles.arrow}>
+                  <div className={styles.arrowIcon}></div>
+                </div>
+              )}
             </div>
           ))}
         </div>

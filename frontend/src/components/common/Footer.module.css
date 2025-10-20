@@ -32,6 +32,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.brandIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f1b0';
+  color: white;
+  font-size: 1.2rem;
 }
 
 .brandText {
@@ -66,6 +75,39 @@
 }
 
 .contactLink:hover {
+  color: #ec4899;
+}
+
+.emailIcon,
+.telegramIcon {
+  width: 1rem;
+  height: 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emailIcon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  content: '\f0e0';
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.telegramIcon::before {
+  font-family: 'Font Awesome 6 Brands';
+  font-weight: 400;
+  content: '\f2c6';
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.contactLink:hover .emailIcon::before,
+.contactLink:hover .telegramIcon::before {
   color: #ec4899;
 }
 
