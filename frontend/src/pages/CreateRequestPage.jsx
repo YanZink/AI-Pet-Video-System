@@ -62,7 +62,7 @@ const CreateRequestPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-purple-800 page-with-header">
       <Header />
 
-      <div className="container mx-auto px-4 pt-32 pb-12">
+      <div className="container mx-auto px-4 pt-12 pb-12">
         <div className="max-w-3xl mx-auto">
           <Card>
             <h1 className="text-3xl font-bold text-white mb-6">
