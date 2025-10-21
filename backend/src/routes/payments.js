@@ -3,6 +3,8 @@ const { authMiddleware } = require('../middleware/auth');
 const { validateBody } = require('../middleware/validation');
 const { paymentSchemas } = require('../middleware/validation');
 const { getGeneralRateLimit } = require('../middleware/rateLimit');
+const { apiKeyMiddleware } = require('../middleware/apiKey');
+const { sanitizeRequestBody } = require('../middleware/sanitization');
 const paymentController = require('../controllers/paymentController');
 
 const paymentRouter = express.Router();
@@ -12,6 +14,8 @@ paymentRouter.post(
   '/telegram',
   getGeneralRateLimit(),
   authMiddleware,
+  apiKeyMiddleware.frontendWeb,
+  sanitizeRequestBody,
   validateBody(paymentSchemas.telegramPayment),
   paymentController.handleTelegramPayment
 );
@@ -21,6 +25,7 @@ paymentRouter.get(
   '/info/:request_id',
   getGeneralRateLimit(),
   authMiddleware,
+  apiKeyMiddleware.frontendWeb,
   paymentController.getPaymentInfo
 );
 
@@ -29,6 +34,8 @@ paymentRouter.post(
   '/stripe/checkout',
   getGeneralRateLimit(),
   authMiddleware,
+  apiKeyMiddleware.frontendWeb,
+  sanitizeRequestBody,
   validateBody(paymentSchemas.createCheckout),
   paymentController.createStripeCheckout
 );
@@ -38,6 +45,7 @@ paymentRouter.get(
   '/stripe/checkout/:session_id',
   getGeneralRateLimit(),
   authMiddleware,
+  apiKeyMiddleware.frontendWeb,
   paymentController.getCheckoutSessionStatus
 );
 
@@ -54,6 +62,7 @@ paymentRouter.get(
   '/methods',
   getGeneralRateLimit(),
   authMiddleware,
+  apiKeyMiddleware.frontendWeb,
   paymentController.getAvailablePaymentMethods
 );
 
