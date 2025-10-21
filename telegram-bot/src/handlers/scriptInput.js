@@ -1,7 +1,7 @@
 const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
-const SanitizationMiddleware = require('../middleware/sanitization');
+const { sanitizeText, validateScript } = require('../middleware/sanitization');
 
 class ScriptInputHandler {
   constructor(bot, userSessions) {
@@ -66,10 +66,10 @@ class ScriptInputHandler {
       }
 
       // Sanitize script input to prevent XSS and injection attacks
-      script = SanitizationMiddleware.sanitizeText(script);
+      script = sanitizeText(script);
 
       // Validate script for suspicious content
-      if (!SanitizationMiddleware.validateScript(script)) {
+      if (!validateScript(script)) {
         const invalidScript = t('errors.invalid_script_content');
         await ctx.reply(invalidScript);
         return;
