@@ -1,4 +1,4 @@
-const DOMPurify = require('isomorphic-dompurify');
+const sanitizeHtml = require('sanitize-html');
 
 // Sanitize text input to prevent XSS attacks
 const sanitizeText = (text) => {
@@ -6,18 +6,19 @@ const sanitizeText = (text) => {
     return text;
   }
 
-  // Remove potentially dangerous characters and tags
-  const sanitized = DOMPurify.sanitize(text, {
-    ALLOWED_TAGS: [], // Remove all HTML tags
-    ALLOWED_ATTR: [], // Remove all attributes
-    KEEP_CONTENT: true, // Keep text content
+  // Remove potentially dangerous characters and tags using sanitize-html
+  const sanitized = sanitizeHtml(text, {
+    allowedTags: [], // Remove all HTML tags
+    allowedAttributes: {}, // Remove all attributes
+    textFilter: function (text) {
+      return text.trim();
+    },
   });
 
-  return sanitized.trim();
+  return sanitized;
 };
 
 // Validate script content for suspicious patterns
-
 const validateScript = (script) => {
   if (!script) return true;
 
@@ -31,20 +32,12 @@ const validateScript = (script) => {
     /window\./gi,
     /alert\s*\(/gi,
 
-    // SQL injection patterns - strict validation
+    // SQL injection patterns
     /(\bDROP\s+TABLE\b|\bDELETE\s+FROM\b|\bINSERT\s+INTO\b|\bUPDATE\s+\w+\s+SET\b)/gi,
     /(\bUNION\s+SELECT\b|\bSELECT\s+\*\s+FROM\b)/gi,
-    /(\bWHERE\s+1=1\b|\bOR\s+1=1\b)/gi,
-    /(\bEXEC\s*\(\s*'|\bEXECUTE\s*\(\s*')/gi,
-    /(\bWAITFOR\s+DELAY\b|\bSLEEP\s*\(\s*)/gi,
-    /(\bSHUTDOWN\b|\bSHUTDOWN\s+WITH\s+NOWAIT\b)/gi,
-    /(\bxp_cmdshell\b|\bsp_configure\b)/gi,
-
-    // Common SQL injection techniques
-    /';.*--/gi, // SQL comment injection
-    /';.*#/gi, // MySQL comment injection
-    /'\s*OR\s*'1'='1/gi, // Basic OR injection
-    /'\s*UNION\s+ALL\s+SELECT/gi,
+    /';.*--/gi,
+    /';.*#/gi,
+    /'\s*OR\s*'1'='1/gi,
   ];
 
   for (const pattern of suspiciousPatterns) {
