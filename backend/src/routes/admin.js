@@ -3,6 +3,7 @@ const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 const { validateBody, validateUUIDParam } = require('../middleware/validation');
 const { requestSchemas } = require('../middleware/validation');
 const { apiKeyMiddleware } = require('../middleware/apiKey');
+const { sanitizeRequestBody } = require('../middleware/sanitization');
 const adminController = require('../controllers/adminController');
 
 const adminRouter = express.Router();
@@ -20,6 +21,7 @@ adminRouter.get('/requests', adminController.getAllRequests);
 adminRouter.patch(
   '/requests/:id/status',
   validateUUIDParam(),
+  sanitizeRequestBody,
   validateBody(requestSchemas.updateRequestStatus),
   adminController.updateRequestStatus
 );
@@ -28,6 +30,7 @@ adminRouter.patch(
 adminRouter.post(
   '/telegram/notify',
   apiKeyMiddleware.telegramBot, // Require telegram bot API key
+  sanitizeRequestBody,
   async (req, res) => {
     try {
       const { userId, requestId, status, language = 'en' } = req.body;
