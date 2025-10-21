@@ -1,7 +1,7 @@
 const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
-const SanitizationMiddleware = require('../middleware/sanitization');
+const { validateMimeType } = require('../middleware/sanitization');
 
 class PhotoUploadHandler {
   constructor(bot, apiService, userSessions) {
@@ -77,7 +77,7 @@ class PhotoUploadHandler {
 
       // Validate MIME type (Telegram photos are typically JPEG)
       const mimeType = 'image/jpeg'; // Telegram compresses photos to JPEG
-      if (!SanitizationMiddleware.validateMimeType(mimeType)) {
+      if (!validateMimeType(mimeType)) {
         const invalidType = t('errors.invalid_file_type');
         await ctx.reply(invalidType);
         return;
