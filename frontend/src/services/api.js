@@ -2,12 +2,18 @@ import axios from 'axios';
 
 class ApiService {
   constructor() {
+    // Validate API key is configured
+    if (!process.env.REACT_APP_FRONTEND_API_KEY) {
+      console.error('REACT_APP_FRONTEND_API_KEY is not configured!');
+    }
+
     this.client = axios.create({
       baseURL:
         process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000/api/v1',
       timeout: parseInt(process.env.REACT_APP_API_TIMEOUT) || 30000,
       headers: {
         'Content-Type': 'application/json',
+        'X-API-Key': process.env.REACT_APP_FRONTEND_API_KEY, // Add API key
       },
     });
 
@@ -27,8 +33,15 @@ class ApiService {
         if (error.response?.status === 401) {
           localStorage.removeItem('auth_token');
           localStorage.removeItem('user_data');
-          window.location.href = '/login'; // Redirect to login after logout
+          window.location.href = '/login';
         }
+
+        // Log API key errors
+        if (error.response?.status === 403) {
+          console.error('API Key validation failed!');
+          console.error('Check REACT_APP_FRONTEND_API_KEY configuration');
+        }
+
         return Promise.reject(error);
       }
     );

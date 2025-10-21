@@ -1,6 +1,7 @@
 const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
+const SanitizationMiddleware = require('../middleware/sanitization');
 
 class PhotoUploadHandler {
   constructor(bot, apiService, userSessions) {
@@ -67,9 +68,18 @@ class PhotoUploadHandler {
 
       const photo = ctx.message.photo[ctx.message.photo.length - 1];
 
+      // Check file size
       if (photo.file_size > this.maxFileSize) {
         const fileTooLarge = t('errors.file_too_large');
         await ctx.reply(fileTooLarge);
+        return;
+      }
+
+      // Validate MIME type (Telegram photos are typically JPEG)
+      const mimeType = 'image/jpeg'; // Telegram compresses photos to JPEG
+      if (!SanitizationMiddleware.validateMimeType(mimeType)) {
+        const invalidType = t('errors.invalid_file_type');
+        await ctx.reply(invalidType);
         return;
       }
 
@@ -84,6 +94,7 @@ class PhotoUploadHandler {
           telegramFileId: photo.file_id,
           s3Key: simulatedS3Key,
           size: photo.file_size,
+          mimeType: mimeType,
           simulated: true,
         });
 
