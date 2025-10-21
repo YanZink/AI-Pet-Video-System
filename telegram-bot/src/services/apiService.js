@@ -4,14 +4,48 @@ class ApiService {
   constructor() {
     this.baseURL = process.env.API_BASE_URL || 'http://localhost:3000/api/v1';
     this.timeout = parseInt(process.env.API_TIMEOUT) || 30000;
+    this.apiKey = process.env.TELEGRAM_BOT_API_KEY;
+
+    // Validate API key is configured
+    if (!this.apiKey) {
+      console.error('TELEGRAM_BOT_API_KEY is not configured!');
+      throw new Error('TELEGRAM_BOT_API_KEY environment variable is required');
+    }
 
     this.client = axios.create({
       baseURL: this.baseURL,
       timeout: this.timeout,
       headers: {
         'Content-Type': 'application/json',
+        'X-API-Key': this.apiKey, // Add API key to all requests
       },
     });
+
+    // Add request interceptor for logging
+    this.client.interceptors.request.use(
+      (config) => {
+        console.log(
+          `API Request: ${config.method.toUpperCase()} ${config.url}`
+        );
+        return config;
+      },
+      (error) => {
+        console.error('API Request Error:', error);
+        return Promise.reject(error);
+      }
+    );
+
+    // Add response interceptor for error handling
+    this.client.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          console.error('API Authentication/Authorization failed!');
+          console.error('Check if TELEGRAM_BOT_API_KEY is correct');
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 
   // Register or login Telegram user
@@ -190,33 +224,28 @@ class ApiService {
   // Upload photo to S3 using signed URL
   async uploadPhoto(uploadUrl, photoBuffer, contentType) {
     try {
-      // SIMULATED UPLOAD - для тестирования без реального S3
-      console.log('📸 Simulating S3 upload...');
+      console.log('Uploading photo to S3...', {
+        url: uploadUrl.substring(0, 50) + '...',
+        contentLength: photoBuffer.length,
+        contentType: contentType,
+      });
 
-      // Вместо реальной загрузки, просто возвращаем успех
-      // В реальном продакшене здесь будет axios.put
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await axios.put(uploadUrl, photoBuffer, {
+        headers: {
+          'Content-Type': contentType,
+        },
+        timeout: 60000,
+      });
 
-      console.log('✅ Photo upload simulated successfully');
+      console.log('Photo uploaded successfully to S3', {
+        status: response.status,
+        statusText: response.statusText,
+      });
+
       return {
         success: true,
-        statusCode: 200,
-        simulated: true, // Добавляем флаг что это симуляция
+        statusCode: response.status,
       };
-
-      /* Реальный код (закомментирован для тестирования):
-    const response = await axios.put(uploadUrl, photoBuffer, {
-      headers: {
-        'Content-Type': contentType
-      },
-      timeout: 60000
-    });
-
-    return {
-      success: true,
-      statusCode: response.status
-    };
-    */
     } catch (error) {
       console.error(
         'S3 Upload Error:',
@@ -224,7 +253,9 @@ class ApiService {
       );
       return {
         success: false,
-        error: 'Photo upload failed',
+        error: 'Photo upload failed to S3',
+        statusCode: error.response?.status,
+        details: error.message,
       };
     }
   }
