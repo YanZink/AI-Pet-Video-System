@@ -1,10 +1,13 @@
 const Joi = require('joi');
 const { ERROR_CODES } = require('../utils/constants');
+const VALIDATION_LIMITS = require('../config/validation');
 
 const commonSchemas = {
   uuid: Joi.string().uuid().required(),
-  email: Joi.string().email().min(5).max(255),
-  password: Joi.string().min(6).max(128),
+  email: Joi.string().email().min(5).max(VALIDATION_LIMITS.EMAIL_MAX_LENGTH),
+  password: Joi.string()
+    .min(VALIDATION_LIMITS.PASSWORD_MIN_LENGTH)
+    .max(VALIDATION_LIMITS.PASSWORD_MAX_LENGTH),
   language: Joi.string().valid('ru', 'en').default('en'),
 };
 
@@ -12,7 +15,10 @@ const userSchemas = {
   createUser: Joi.object({
     telegram_id: Joi.number().integer().positive().optional(),
     email: commonSchemas.email.optional(),
-    username: Joi.string().min(3).max(50).optional(),
+    username: Joi.string()
+      .min(VALIDATION_LIMITS.USERNAME_MIN_LENGTH)
+      .max(VALIDATION_LIMITS.USERNAME_MAX_LENGTH)
+      .optional(),
     first_name: Joi.string().min(1).max(100).optional(),
     last_name: Joi.string().min(1).max(100).optional(),
     password: commonSchemas.password.optional(),
@@ -41,10 +47,14 @@ const requestSchemas = {
   createRequest: Joi.object({
     photos: Joi.array()
       .items(Joi.string().min(1).max(500))
-      .min(1)
-      .max(10)
+      .min(VALIDATION_LIMITS.PHOTOS_MIN_COUNT)
+      .max(VALIDATION_LIMITS.PHOTOS_MAX_COUNT)
       .required(),
-    script: Joi.string().max(1000).optional().allow('').allow(null),
+    script: Joi.string()
+      .max(VALIDATION_LIMITS.SCRIPT_MAX_LENGTH)
+      .optional()
+      .allow('')
+      .allow(null),
     template_id: Joi.string().max(50).optional().allow(null),
   }),
 
@@ -52,7 +62,10 @@ const requestSchemas = {
     status: Joi.string()
       .valid('created', 'paid', 'in_progress', 'completed', 'cancelled')
       .required(),
-    admin_notes: Joi.string().max(2000).optional().allow(''),
+    admin_notes: Joi.string()
+      .max(VALIDATION_LIMITS.ADMIN_NOTES_MAX_LENGTH)
+      .optional()
+      .allow(''),
     video_url: Joi.string().uri().optional(),
     cancellation_reason: Joi.string().max(500).optional(),
   }),
