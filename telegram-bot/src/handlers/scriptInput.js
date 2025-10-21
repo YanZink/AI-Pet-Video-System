@@ -1,11 +1,13 @@
 const TelegramI18n = require('../config/i18n');
 const Keyboards = require('../utils/keyboards');
 const sessionService = require('../services/sessionService');
+const SanitizationMiddleware = require('../middleware/sanitization');
 
 class ScriptInputHandler {
   constructor(bot, userSessions) {
     this.bot = bot;
     this.sessions = userSessions;
+    this.scriptMaxLength = parseInt(process.env.SCRIPT_MAX_LENGTH) || 1000;
   }
 
   async handleScriptSkip(ctx) {
@@ -53,12 +55,23 @@ class ScriptInputHandler {
         return;
       }
 
-      const script = ctx.message.text.trim();
+      let script = ctx.message.text.trim();
       const t = TelegramI18n.getT(session.language);
 
-      if (script.length > 1000) {
+      // Use configurable script length limit
+      if (script.length > this.scriptMaxLength) {
         const scriptTooLong = t('errors.script_too_long');
         await ctx.reply(scriptTooLong);
+        return;
+      }
+
+      // Sanitize script input to prevent XSS and injection attacks
+      script = SanitizationMiddleware.sanitizeText(script);
+
+      // Validate script for suspicious content
+      if (!SanitizationMiddleware.validateScript(script)) {
+        const invalidScript = t('errors.invalid_script_content');
+        await ctx.reply(invalidScript);
         return;
       }
 
