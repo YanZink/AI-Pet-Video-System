@@ -32,14 +32,14 @@ requestRouter.get(
   requestController.getTemplate
 );
 
-// User routes (protected)
+// User routes (protected) - allow both frontend and telegram bot
 requestRouter.post(
   '/',
   getGeneralRateLimit(),
   authMiddleware,
-  apiKeyMiddleware.frontendWeb,
-  validateScriptBody, // VALIDATION FIRST - block dangerous content
-  sanitizeRequestBody, // SANITIZATION AFTER - clean safe content
+  apiKeyMiddleware.frontendOrTelegram,
+  validateScriptBody,
+  sanitizeRequestBody,
   validateBody(requestSchemas.createRequest),
   requestController.createRequest
 );
@@ -48,7 +48,7 @@ requestRouter.get(
   '/my',
   getGeneralRateLimit(),
   authMiddleware,
-  apiKeyMiddleware.frontendWeb,
+  apiKeyMiddleware.frontendOrTelegram,
   requestController.getUserRequests
 );
 
@@ -56,7 +56,7 @@ requestRouter.post(
   '/upload-urls',
   getGeneralRateLimit(),
   authMiddleware,
-  apiKeyMiddleware.frontendWeb,
+  apiKeyMiddleware.frontendOrTelegram,
   requestController.generateUploadUrls
 );
 

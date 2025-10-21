@@ -19,7 +19,6 @@ const IP_WHITELISTS = {
 };
 
 // Extract client IP from request (handles proxies)
-
 const getClientIP = (req) => {
   return (
     req.headers['x-forwarded-for']?.split(',')[0].trim() ||
@@ -140,8 +139,67 @@ const validateApiKey = (clientType, options = {}) => {
   };
 };
 
-// Pre-configured middleware for different client types
+//Middleware to allow both frontend and telegram bot API keys
+const frontendOrTelegram = (req, res, next) => {
+  try {
+    const providedKey = req.headers['x-api-key'];
 
+    if (!providedKey) {
+      logger.warn('API request without API key', {
+        ip: getClientIP(req),
+        path: req.path,
+      });
+
+      return res.status(401).json({
+        error: 'API key required',
+        code: ERROR_CODES.AUTHENTICATION_ERROR,
+        message: 'X-API-Key header is required',
+      });
+    }
+
+    // Check if key matches frontend web API key
+    if (providedKey === API_KEYS.FRONTEND_WEB) {
+      logger.info('API key validated', {
+        clientType: 'FRONTEND_WEB',
+        ip: getClientIP(req),
+        path: req.path,
+      });
+      req.apiClient = 'FRONTEND_WEB';
+      return next();
+    }
+
+    // Check if key matches telegram bot API key
+    if (providedKey === API_KEYS.TELEGRAM_BOT) {
+      logger.info('API key validated', {
+        clientType: 'TELEGRAM_BOT',
+        ip: getClientIP(req),
+        path: req.path,
+      });
+      req.apiClient = 'TELEGRAM_BOT';
+      return next();
+    }
+
+    // Invalid key
+    logger.warn('Invalid API key attempt', {
+      ip: getClientIP(req),
+      path: req.path,
+    });
+
+    return res.status(403).json({
+      error: 'Invalid API key',
+      code: ERROR_CODES.AUTHORIZATION_ERROR,
+      message: 'The provided API key is invalid',
+    });
+  } catch (error) {
+    logger.error('API key validation error:', error);
+    res.status(500).json({
+      error: 'Authentication error',
+      code: ERROR_CODES.INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+// Pre-configured middleware for different client types
 const apiKeyMiddleware = {
   // For Telegram bot requests
   telegramBot: validateApiKey('TELEGRAM_BOT', { ipWhitelist: true }),
@@ -151,6 +209,9 @@ const apiKeyMiddleware = {
 
   // For admin panel requests (with IP whitelist check)
   adminPanel: validateApiKey('ADMIN_PANEL', { ipWhitelist: true }),
+
+  // For routes accessible by both frontend and telegram bot
+  frontendOrTelegram: frontendOrTelegram,
 };
 
 module.exports = {
