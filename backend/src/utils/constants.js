@@ -35,8 +35,8 @@ const ERROR_CODES = {
 };
 
 const FILE_LIMITS = {
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
-  MAX_FILES_PER_REQUEST: 10,
+  MAX_FILE_SIZE: parseInt(process.env.MAX_FILE_SIZE) || 10 * 1024 * 1024, // 10MB
+  MAX_FILES_PER_REQUEST: parseInt(process.env.MAX_FILES_PER_REQUEST) || 10,
   ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
 };
 
