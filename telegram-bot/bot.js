@@ -73,6 +73,8 @@ class AIPetVideoBot {
 
     // Photo upload
     this.bot.on('photo', (ctx) => this.photoHandler.handlePhoto(ctx));
+    this.bot.on('document', (ctx) => this.photoHandler.handleDocument(ctx));
+
     this.bot.action('photos_continue', (ctx) =>
       this.photoHandler.handlePhotoContinue(ctx)
     );
