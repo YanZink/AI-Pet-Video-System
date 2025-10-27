@@ -2,7 +2,6 @@ const express = require('express');
 const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 const { validateBody, validateUUIDParam } = require('../middleware/validation');
 const { requestSchemas } = require('../middleware/validation');
-const { apiKeyMiddleware } = require('../middleware/apiKey');
 const { sanitizeRequestBody } = require('../middleware/sanitization');
 const adminController = require('../controllers/adminController');
 
@@ -29,7 +28,7 @@ adminRouter.patch(
 // Telegram bot webhook endpoint for notifications
 adminRouter.post(
   '/telegram/notify',
-  apiKeyMiddleware.telegramBot, // Require telegram bot API key
+  //DELETE DOUBLE CHECK AUTH
   sanitizeRequestBody,
   async (req, res) => {
     try {
