@@ -1,0 +1,36 @@
+module.exports = {
+  testEnvironment: 'node',
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  collectCoverageFrom: [
+    'src/**/*.js',
+    '!bot.js',
+    '!src/**/*.test.js',
+    '!src/config/redis.js',
+    '!src/utils/logger.js',
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 40,
+      functions: 40,
+      lines: 40,
+      statements: 40,
+    },
+  },
+  testMatch: ['**/__tests__/**/*.test.js', '**/tests/**/*.test.js'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  moduleDirectories: ['node_modules', 'src'],
+  testTimeout: 10000,
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true,
+  verbose: true,
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+    '/coverage/',
+    'logger.js',
+    'redis.js',
+  ],
+};
