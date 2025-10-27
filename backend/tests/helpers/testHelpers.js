@@ -4,8 +4,8 @@ const { User, Request, Template } = require('../../src/models');
 class TestHelpers {
   static async createTestUser(overrides = {}) {
     const defaultUser = {
-      email: 'test@example.com',
-      username: 'testuser',
+      email: `test${Date.now()}@example.com`,
+      username: `testuser${Date.now()}`,
       first_name: 'Test',
       last_name: 'User',
       password_hash: '$2b$12$hashedpassword',
@@ -14,10 +14,6 @@ class TestHelpers {
       is_active: true,
       ...overrides,
     };
-
-    if (!overrides.email) {
-      defaultUser.email = `test${Date.now()}@example.com`;
-    }
 
     return await User.create(defaultUser);
   }
@@ -50,7 +46,7 @@ class TestHelpers {
 
   static async createTestTemplate(overrides = {}) {
     return await Template.create({
-      name: 'Test Template',
+      name: `Test Template ${Date.now()}`,
       description: 'Test template description',
       category: 'general',
       duration_seconds: 30,
@@ -63,50 +59,13 @@ class TestHelpers {
 
   static async cleanupTestData() {
     try {
-      const { User, Request, Template } = require('../../src/models');
-
       await Request.destroy({ where: {}, force: true });
       await Template.destroy({ where: {}, force: true });
       await User.destroy({ where: {}, force: true });
     } catch (error) {
-      if (!error.message.includes('no such table')) {
-        console.warn('Cleanup warning:', error.message);
-      }
+      // Ignore errors during cleanup in tests
+      console.warn('Cleanup warning:', error.message);
     }
-  }
-
-  static mockRequest(language = 'en', user = null, body = {}) {
-    return {
-      body,
-      user,
-      language,
-      headers: {
-        'accept-language': language,
-      },
-      t: (key, variables = {}) => {
-        let result = key;
-        Object.keys(variables).forEach((variable) => {
-          result = result.replace(
-            new RegExp(`{${variable}}`, 'g'),
-            variables[variable]
-          );
-        });
-        return result;
-      },
-    };
-  }
-
-  static mockResponse() {
-    const res = {};
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res);
-    res.redirect = jest.fn().mockReturnValue(res);
-    return res;
-  }
-
-  static mockNext() {
-    return jest.fn();
   }
 }
 

@@ -15,6 +15,25 @@ process.env.TELEGRAM_BOT_API_KEY = 'test_telegram_bot_api_key';
 process.env.FRONTEND_WEB_API_KEY = 'test_frontend_web_api_key';
 process.env.ADMIN_PANEL_API_KEY = 'test_admin_panel_api_key';
 process.env.REDIS_URL = 'redis://localhost:6379';
+
+// Mock database connection
+jest.mock('./src/config/database', () => {
+  const { Sequelize } = require('sequelize');
+
+  // Use SQLite for testing
+  const testSequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: ':memory:',
+    logging: false,
+  });
+
+  return {
+    sequelize: testSequelize,
+    testConnection: jest.fn().mockResolvedValue(true),
+    syncDatabase: jest.fn().mockResolvedValue(true),
+  };
+});
+
 // Mock Redis connection
 jest.mock('./src/config/redis', () => {
   const mockClient = {
@@ -36,6 +55,7 @@ jest.mock('./src/config/redis', () => {
     },
   };
 });
+
 // Mock logger to avoid console noise during tests
 jest.mock('./src/utils/logger', () => ({
   info: jest.fn(),
@@ -45,6 +65,7 @@ jest.mock('./src/utils/logger', () => ({
   logRequest: jest.fn(),
   logError: jest.fn(),
 }));
+
 // Mock rate limiter
 jest.mock('./src/middleware/rateLimit', () => ({
   initializeRateLimiters: jest.fn().mockResolvedValue(),
